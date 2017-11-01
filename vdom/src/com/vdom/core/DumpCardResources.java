@@ -7,7 +7,7 @@ import com.vdom.api.Card;
 public class DumpCardResources {
     public static void main(String[] args) throws Exception {
         Game game = new Game();
-        game.initGameBoard();
+   //     game.initGameBoard();
         
         ArrayList<Card> cards = new ArrayList<Card>();
         cards.add(Cards.copper);
