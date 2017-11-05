@@ -65,7 +65,7 @@ public class Game {
     public static GameType gameType = GameType.Random;
     public static List<Expansion> randomExpansions = null;
     public static List<Expansion> randomExcludedExpansions = null;
-    public static String gameTypeStr = null;
+
     public static boolean showUsage = false;
 
     public static boolean sheltersNotPassedIn = false;
@@ -189,51 +189,24 @@ public class Game {
         Util.debug("");
 
         // Start game(s)
-        if (gameTypeStr != null) {
-            gameType = GameType.valueOf(gameTypeStr);
-            new Game().start();
-        } else {
-            for (String[] className : playerClassesAndJars) {
-                overallWins.put(className[0], 0.0);
-            }
-
-            for (GameType p : GameType.values()) {
-                gameType = p;
-                new Game().start();
-            }
-
-            if (test) {
-                for (int i = 0; i < 5; i++) {
-                    gameType = GameType.RandomBaseGame;
-                    new Game().start();
-                }
-                for (int i = 0; i < 5; i++) {
-                    gameType = GameType.RandomIntrigue;
-                    new Game().start();
-                }
-                for (int i = 0; i < 5; i++) {
-                    gameType = GameType.RandomSeaside;
-                    new Game().start();
-                }
-                for (int i = 0; i < 5; i++) {
-                    gameType = GameType.RandomDarkAges;
-                    new Game().start();
-                }
-                for (int i = 0; i < 5; i++) {
-                    gameType = GameType.Random;
-                    new Game().start();
-                }
-            }
-            if (!debug && !test) {
-                Util.log("----------------------------------------------------");
-            }
-            printStats(overallWins, numGames * GameType.values().length, "Total");
-            printStats(GAME_TYPE_WINS, GameType.values().length, "Types");
+        for (String[] className : playerClassesAndJars) {
+          overallWins.put(className[0], 0.0);
         }
+
+        // Select Game Type
+        gameType = GameType.Random;
+        new Game().start();
+
+        if (!debug && !test) {
+          Util.log("----------------------------------------------------");
+        }
+
+        printStats(overallWins, numGames * GameType.values().length, "Total");
+        printStats(GAME_TYPE_WINS, GameType.values().length, "Types");
+
         if (test) {
             printGameTypeStats();
         }
-
 
         FrameworkEvent frameworkEvent = new FrameworkEvent(FrameworkEvent.Type.AllDone);
         FrameworkEventHelper.broadcastEvent(frameworkEvent);
@@ -1462,13 +1435,10 @@ public class Game {
     }
 
     public static void processArgs(String[] args) throws ExitException {
-        // dont remove tabs in following to keep easy upstream-mergeability
-        // processNewGameArgs(args);
-        //processUserPrefArgs(args);
 
-        //Copied all the
         numPlayers = 2;
-        numGames = 5;
+        numGames = 1;
+
         cardsSpecifiedAtLaunch = null;
         overallWins.clear();
         GAME_TYPE_WINS.clear();
@@ -1505,313 +1475,7 @@ public class Game {
         disableAi = false;
         debug = true; //to print move info
         test = true; //to print stats
-    }
 
-    public static void processNewGameArgs(String[] args) throws ExitException {
-        numPlayers = 0;
-        cardsSpecifiedAtLaunch = null;
-        overallWins.clear();
-        GAME_TYPE_WINS.clear();
-        gameTypeStats.clear();
-        playerClassesAndJars.clear();
-        playerCache.clear();
-        numRandomEvents = 0;
-        randomIncludesEvents = false;
-        randomIncludesLandmarks = false;
-        splitMaxEventsAndLandmarks = false;
-        randomExpansions = null;
-        randomExcludedExpansions = null;
-
-        if (args == null) return;
-
-        String gameCountArg = "-count";
-        String debugArg = "-debug";
-        String showEventsArg = "-showevents";
-        String gameTypeArg = "-type";
-        String numRandomEventsArg = "-eventcards";
-        String numRandomLandmarksArg = "-landmarkcards";
-        String randomExcludesArg = "-randomexcludes";
-        String splitMaxEventsAndLandmarksArg = "-splitmaxeventslandmarks";
-        String gameTypeStatsArg = "-test";
-        String ignorePlayerErrorsArg = "-ignore";
-        String showPlayersArg = "-showplayers";
-        String siteArg = "-site=";
-        String cardArg = "-cards=";
-
-        for (String arg : args) {
-            if (arg == null) {
-                continue;
-            }
-
-            if (arg.startsWith("#")) {
-                continue;
-            }
-
-            if (arg.startsWith("-")) {
-
-                if (arg.toLowerCase().equals(debugArg)) {
-                    debug = true;
-                    if (showEvents.isEmpty()) {
-                        for (GameEvent.EventType eventType : GameEvent.EventType.values()) {
-                            showEvents.add(eventType);
-                        }
-                    }
-                } else if (arg.toLowerCase().startsWith(showEventsArg)) {
-                    String showEventsString = arg.substring(showEventsArg.length() + 1);
-                    for (String event : showEventsString.split(",")) {
-                        showEvents.add(GameEvent.EventType.valueOf(event));
-                    }
-                } else if (arg.toLowerCase().startsWith(showPlayersArg)) {
-                    String showPlayersString = arg.substring(showPlayersArg.length() + 1);
-                    for (String player : showPlayersString.split(",")) {
-                        showPlayers.add(player);
-                    }
-                } else if (arg.toLowerCase().startsWith(ignorePlayerErrorsArg)) {
-                    if (arg.trim().toLowerCase().equals(ignorePlayerErrorsArg)) {
-                        ignoreAllPlayerErrors = true;
-                    } else {
-                        ignoreSomePlayerErrors = true;
-
-                        try {
-                            String player = arg.substring(ignorePlayerErrorsArg.length()).trim();
-                            ignoreList.add(player);
-                        } catch (Exception e) {
-                            Util.log(e);
-                            throw new ExitException();
-                        }
-                    }
-                } else if (arg.toLowerCase().equals(gameTypeStatsArg)) {
-                    test = true;
-                } else if (arg.toLowerCase().startsWith(gameCountArg)) {
-                    try {
-                        numGames = Integer.parseInt(arg.substring(gameCountArg.length()));
-                    } catch (Exception e) {
-                        Util.log(e);
-                        throw new ExitException();
-                    }
-                } else if (arg.toLowerCase().startsWith(cardArg)) {
-                    try {
-                        cardsSpecifiedAtLaunch = arg.substring(cardArg.length()).split("-");
-                    } catch (Exception e) {
-                        Util.log(e);
-                        throw new ExitException();
-                    }
-                } else if (arg.toLowerCase().startsWith(siteArg)) {
-                    try {
-                        // UI.downloadSite =
-                        // arg.substring(siteArg.length());
-                    } catch (Exception e) {
-                        Util.log(e);
-                        throw new ExitException();
-                    }
-                } else if (arg.toLowerCase().startsWith(numRandomEventsArg)) {
-                    try {
-                        int num = Integer.parseInt(arg.substring(numRandomEventsArg.length()));
-                        if (num != 0) {
-                            randomIncludesEvents = true;
-                            numRandomEvents = num;
-                        }
-                    } catch (Exception e) {
-                        Util.log(e);
-                        throw new ExitException();
-                    }
-                } else if (arg.toLowerCase().startsWith(numRandomLandmarksArg)) {
-                    try {
-                        int num = Integer.parseInt(arg.substring(numRandomLandmarksArg.length()));
-                        if (num != 0) {
-                            randomIncludesLandmarks = true;
-                            numRandomLandmarks = num;
-                        }
-                    } catch (Exception e) {
-                        Util.log(e);
-                        throw new ExitException();
-                    }
-                } else if (arg.toLowerCase().equals(splitMaxEventsAndLandmarksArg)) {
-                    splitMaxEventsAndLandmarks = true;
-                } else if (arg.toLowerCase().startsWith(gameTypeArg)) {
-                    try {
-                        gameTypeStr = arg.substring(gameTypeArg.length());
-                        String[] parts = gameTypeStr.split("-");
-                        if (parts.length > 0) {
-                            gameTypeStr = parts[0];
-                            randomExpansions = new ArrayList<Expansion>();
-                            for (int i = 1; i < parts.length; ++i) {
-                                randomExpansions.add(Expansion.valueOf(parts[i]));
-                            }
-                        }
-                    } catch (Exception e) {
-                        Util.log(e);
-                        throw new ExitException();
-                    }
-
-                } else if (arg.toLowerCase().startsWith(randomExcludesArg)) {
-                    try {
-                        String exclusions = arg.substring(randomExcludesArg.length());
-                        String[] parts = exclusions.split("-");
-                        if (parts.length > 0) {
-                            randomExcludedExpansions = new ArrayList<Expansion>();
-                            for (int i = 1; i < parts.length; ++i) {
-                                randomExcludedExpansions.add(Expansion.valueOf(parts[i]));
-                            }
-                        }
-                    } catch (Exception e) {
-                        Util.log(e);
-                        throw new ExitException();
-                    }
-                }
-            } else {
-                String options = "";
-                String name = null;
-                int starIndex = arg.indexOf("*");
-                if (starIndex != -1) {
-                    name = arg.substring(starIndex + 1);
-                    arg = arg.substring(0, starIndex);
-                }
-                if (arg.endsWith(QUICK_PLAY)) {
-                    arg = arg.substring(0, arg.length() - QUICK_PLAY.length());
-                    options += "q";
-                }
-                int atIndex = arg.indexOf("@");
-                String className = arg;
-                String jar = null;
-                if (atIndex != -1) {
-                    className = className.substring(0, atIndex);
-                    jar = arg.substring(atIndex + 1);
-                }
-                playerClassesAndJars.add(new String[]{className, jar, name, options});
-            }
-        }
-
-        numPlayers = playerClassesAndJars.size();
-
-        if (numPlayers < 1 || numPlayers > 6 || showUsage) {
-            Util.log("Usage: [-debug][-ignore(playername)][-count(# of Games)][-type(Game type)] class1 class2 [class3] [class4]");
-            throw new ExitException();
-        }
-
-        if (gameTypeStr == null) {
-            if (debug) {
-                gameTypeStr = "FirstGame";
-            }
-        }
-
-        if (numGames == -1) {
-            numGames = 1;
-        }
-
-    }
-
-    public static void processUserPrefArgs(String[] args) throws ExitException {
-        quickPlay = false;
-        sortCards = false;
-        maskPlayerNames = false;
-        actionChains = false;
-        suppressRedundantReactions = false;
-        chanceForPlatColony = -1;
-        chanceForShelters = -1;
-        equalStartHands = false;
-        blackMarketOnlyCardsFromUsedExpansions = false;
-        blackMarketSplitPileOptions = BlackMarketSplitPileOptions.NONE;
-        errataMasqueradeAlwaysAffects = false;
-        errataMineForced = false;
-        errataMoneylenderForced = false;
-        errataPossessedTakesTokens = false;
-        errataThroneRoomForced = false;
-        errataShuffleDeckEmptyOnly = false;
-        startGuildsCoinTokens = false; //only for testing
-        lessProvinces = false; //only for testing
-        noCards = false;
-        godMode = false; //only for testing
-        controlAi = false; //only for testing
-        disableAi = false;
-
-        if (args == null) return;
-
-        String quickPlayArg = "-quickplay";
-        String maskPlayerNamesArg = "-masknames";
-        String sortCardsArg = "-sortcards";
-        String actionChainsArg = "-actionchains";
-        String suppressRedundantReactionsArg = "-suppressredundantreactions";
-        String platColonyArg = "-platcolony";
-        String useSheltersArg = "-useshelters";
-        String blackMarketCountArg = "-blackmarketcount";
-        String bmSplitPileArg = "-blackmarketsplitpiles-";
-        String bmOnlyUsedExpArg = "-blackmarketonlycardsfromusedexpansions";
-        String equalStartHandsArg = "-equalstarthands";
-        String errataThroneRoomForcedArg = "-erratathroneroomforced";
-        String errataMasqueradeAlwaysAffectsArg = "-erratamasqueradealwaysaffects";
-        String errataMineForcedArg = "-erratamineforced";
-        String errataMoneylenderForcedArg = "-erratamoneylenderforced";
-        String errataPossessionArg = "-erratapossessedtakestokens";
-        String errataShuffleDeckEmptyOnlyArg = "-erratashuffledeckemptyonly";
-        String startGuildsCoinTokensArg = "-startguildscointokens"; //only for testing
-        String lessProvincesArg = "-lessprovinces"; //only for testing
-        String noCardsArg = "-nocards";
-        String godModeArg = "-godmode";
-        String disableAiArg = "-disableai";
-        String controlAiArg = "-controlai";
-
-        for (String arg : args) {
-
-            if (arg == null) {
-                continue;
-            }
-
-            if (arg.startsWith("#")) {
-                continue;
-            }
-
-            if (arg.startsWith("-")) {
-
-                if (arg.toLowerCase().equals(quickPlayArg)) {
-                    quickPlay = true;
-                } else if (arg.toLowerCase().equals(sortCardsArg)) {
-                    sortCards = true;
-                } else if (arg.toLowerCase().equals(maskPlayerNamesArg)) {
-                    maskPlayerNames = true;
-                } else if (arg.toLowerCase().equals(actionChainsArg)) {
-                    actionChains = true;
-                } else if (arg.toLowerCase().equals(suppressRedundantReactionsArg)) {
-                    suppressRedundantReactions = true;
-                } else if (arg.toLowerCase().startsWith(platColonyArg)) {
-                    chanceForPlatColony = Integer.parseInt(arg.toLowerCase().substring(platColonyArg.length())) / 100.0;
-                } else if (arg.toLowerCase().startsWith(useSheltersArg)) {
-                    chanceForShelters = Integer.parseInt(arg.toLowerCase().substring(useSheltersArg.length())) / 100.0;
-                } else if (arg.toLowerCase().startsWith(blackMarketCountArg)) {
-                    blackMarketCount = Integer.parseInt(arg.toLowerCase().substring(blackMarketCountArg.length()));
-                } else if (arg.toLowerCase().startsWith(bmSplitPileArg)) {
-                    blackMarketSplitPileOptions = BlackMarketSplitPileOptions.valueOf(arg.substring(bmSplitPileArg.length()).toUpperCase());
-                } else if (arg.toLowerCase().startsWith(bmOnlyUsedExpArg)) {
-                    blackMarketOnlyCardsFromUsedExpansions = true;
-                } else if (arg.toLowerCase().equals(equalStartHandsArg)) {
-                    equalStartHands = true;
-                } else if (arg.toLowerCase().equals(startGuildsCoinTokensArg)) {
-                    startGuildsCoinTokens = true; //only for testing
-                } else if (arg.toLowerCase().equals(noCardsArg)) {
-                    noCards = true; //only for testing
-                } else if (arg.toLowerCase().equals(godModeArg)) {
-                    godMode = true; //only for testing
-                } else if (arg.toLowerCase().equals(disableAiArg)) {
-                    disableAi = true; //only for testing
-                } else if (arg.toLowerCase().equals(controlAiArg)) {
-                    controlAi = true; //only for testing
-                } else if (arg.toLowerCase().equals(lessProvincesArg)) {
-                    lessProvinces = true; //only for testing
-                } else if (arg.toLowerCase().equals(errataMasqueradeAlwaysAffectsArg)) {
-                    errataMasqueradeAlwaysAffects = true;
-                } else if (arg.toLowerCase().equals(errataMineForcedArg)) {
-                    errataMineForced = true;
-                } else if (arg.toLowerCase().equals(errataMoneylenderForcedArg)) {
-                    errataMoneylenderForced = true;
-                } else if (arg.toLowerCase().equals(errataPossessionArg)) {
-                    errataPossessedTakesTokens = true;
-                } else if (arg.toLowerCase().equals(errataThroneRoomForcedArg)) {
-                    errataThroneRoomForced = true;
-                } else if (arg.toLowerCase().equals(errataShuffleDeckEmptyOnlyArg)) {
-                    errataShuffleDeckEmptyOnly = true;
-                }
-            }
-        }
     }
 
     public boolean isValidAction(MoveContext context, Card action) {
