@@ -3,6 +3,7 @@ package com.vdom.api;
 import java.util.ArrayList;
 
 public class FrameworkEventHelper {
+
     private static ArrayList<FrameworkEventListener> listeners = new ArrayList<FrameworkEventListener>();
 
     public static void addFrameworkListener(FrameworkEventListener listener) {
