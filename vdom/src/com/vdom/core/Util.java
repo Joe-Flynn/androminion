@@ -52,7 +52,7 @@ public class Util {
 
         return str;
     }
-    
+
     public static void log(String s) {
         System.out.println("<VDOM CORE> " + s);
     }
@@ -116,7 +116,7 @@ public class Util {
      * but it still seems to make sense to use the term.
      */
     public static void debug(Player player, String msg, boolean interactiveAsWell) {
-        debug(player.getPlayerName() + ":" + msg, interactiveAsWell);
+        debug(player.getPlayerName() + ": " + msg, interactiveAsWell);
     }
 
     /**
@@ -211,9 +211,9 @@ public class Util {
             cost++;
         }
         log("");
-        log("Deck:" + player.getDeckSize() + " PirateShip:" + player.getPirateShipTreasure() 
+        log("Deck:" + player.getDeckSize() + " PirateShip:" + player.getPirateShipTreasure()
         		+ " NativeVillage:" + cardArrayToString(player.getNativeVillage())
-            + " Island:" + cardArrayToString(player.getIsland()) + " Prince:" + cardArrayToString(player.getPrince()) 
+            + " Island:" + cardArrayToString(player.getIsland()) + " Prince:" + cardArrayToString(player.getPrince())
             + " Summon:" + cardArrayToString(player.getSummon()) + " Inheritance:" + player.getInheritance());
         log("");
     }
@@ -254,24 +254,24 @@ public class Util {
 
         if (game.hasLighthouse(player)) {
             defended = true;
-            
+
             GameEvent event = new GameEvent(GameEvent.EventType.PlayerDefended, context);
             event.card = Cards.lighthouse;
             game.broadcastEvent(event);
         }
         if (game.countChampionsInPlay(player) > 0) {
             defended = true;
-            
+
             GameEvent event = new GameEvent(GameEvent.EventType.PlayerDefended, context);
             event.card = Cards.champion;
             game.broadcastEvent(event);
         }
-        
+
         Card reactionCard = null;
         Card reactionCardAbility = null;
         while ((reactionCard = player.controlPlayer.getAttackReaction(context, responsible, defended, reactionCardAbility)) != null) {
         	//TODO: error check reactionCard
-        	
+
             GameEvent event = new GameEvent(GameEvent.EventType.CardRevealed, context);
             event.card = reactionCard;
             game.broadcastEvent(event);
@@ -280,7 +280,7 @@ public class Util {
             if (reactionCard.equals(Cards.estate)) {
             	reactionCardAbility = player.getInheritance();
             }
-            
+
         	if (reactionCardAbility.equals(Cards.secretChamber))
                 doSecretChamber(context, game, player, responsible, reactionCard);
         	else if (reactionCardAbility.equals(Cards.horseTraders))
@@ -293,7 +293,7 @@ public class Util {
                 doDiplomat(context, game, player, responsible, reactionCard);
         	else if (reactionCardAbility.equals(Cards.moat)) {
                 defended = true;
-                
+
                 event = new GameEvent(GameEvent.EventType.PlayerDefended, context);
                 event.card = reactionCard;
                 game.broadcastEvent(event);
@@ -380,7 +380,7 @@ public class Util {
                 beggar = card;
             }
         }
-        
+
         if (beggar != null) {
             if (player.controlPlayer.beggar_shouldDiscard(context, responsible)) {
                 player.hand.remove(player.hand.indexOf(beggar), false);
@@ -472,7 +472,7 @@ public class Util {
 
         return copy;
     }
-    
+
     public static ArrayList<Card> copy(Iterable<Card> cards) {
         if (cards == null) {
             return null;
@@ -517,12 +517,12 @@ public class Util {
         }
         return count;
     }
-    
+
 
 	public static boolean areCardsInHand(Card[] cards, MoveContext context) {
 		return areCardsInList(cards, context.getPlayer().getHand());
 	}
-	
+
 	public static boolean areCardsInList(Card[] cards, Iterable<Card> list) {
 		boolean bad = false;
         if (cards == null) {
@@ -538,7 +538,7 @@ public class Util {
         }
 		return !bad;
 	}
-	    
+
     public static Card getLeastExpensiveCard(Card[] cards) {
         if (cards == null || cards.length == 0) {
             return null;
@@ -556,7 +556,7 @@ public class Util {
         Arrays.sort(cards, new CardCostComparator());
         return cards[cards.length - 1];
     }
-    
+
     public static Card randomCard(ArrayList<Card> list) {
         if(list == null || list.size() == 0) {
             return null;
@@ -570,7 +570,7 @@ public class Util {
         }
         return list.get(Game.rand.nextInt(list.size()));
     }
-    
+
     public static Card randomCard(Card[] list) {
         if(list == null || list.length == 0) {
             return null;
@@ -586,11 +586,11 @@ public class Util {
 	 */
     static public class MultilevelComparator<T> implements Comparator<T> {
     	private List<Comparator<T>> comps;
-    	
+
     	public MultilevelComparator(List<Comparator<T>> comparators) {
     		comps = comparators;
     	}
-    	
+
 		@Override
 		public int compare(T arg0, T arg1) {
 			int ret = 0;
@@ -604,7 +604,7 @@ public class Util {
 		}
     }
 
-    public static <K, V extends Comparable<? super V>> Map<K, V> 
+    public static <K, V extends Comparable<? super V>> Map<K, V>
     	sortByValue( Map<K, V> map )
 	{
 	    List<Map.Entry<K, V>> list =
@@ -616,7 +616,7 @@ public class Util {
 	            return (o1.getValue()).compareTo( o2.getValue() );
 	        }
 	    } );
-	
+
 	    Map<K, V> result = new LinkedHashMap<K, V>();
 	    for (Map.Entry<K, V> entry : list)
 	    {
@@ -644,7 +644,7 @@ public class Util {
 			}
 		}
 	}
-	
+
 	static public class CardCostComparatorDesc implements Comparator<Card> {
 		@Override
 		public int compare(Card card0, Card card1) {
@@ -652,11 +652,11 @@ public class Util {
 			return comp.compare(card1, card0);
 		}
 	}
-	
+
 	static public class CardValueComparator implements Comparator<Card> {
 		@Override
 		public int compare(Card card0, Card card1) {
-			if ( !(card0.is(Type.Treasure, null)) || !(card1.is(Type.Treasure, null)) ) 
+			if ( !(card0.is(Type.Treasure, null)) || !(card1.is(Type.Treasure, null)) )
 				return 0;
 			if (card0.getAddGold() < card1.getAddGold()) {
 				return -1;
@@ -667,7 +667,7 @@ public class Util {
 			}
 		}
 	}
-	
+
 	static public class CardValueComparatorDesc implements Comparator<Card> {
 		@Override
 		public int compare(Card card0, Card card1) {
@@ -675,7 +675,7 @@ public class Util {
 			return comp.compare(card1, card0);
 		}
 	}
-	
+
 	static public class CardPotionComparator implements Comparator<Card> {
 		@Override
 		public int compare(Card card0, Card card1) {
@@ -692,7 +692,7 @@ public class Util {
 			}
 		}
 	}
-	
+
 	static public class CardTypeComparator implements Comparator<Card> {
 		@Override
 		public int compare(Card card0, Card card1) {
@@ -725,7 +725,7 @@ public class Util {
 			}
 		}
 	}
-	
+
 	/**
 	 * Comparator for sorting cards.
 	 * Traveller cards first, rest unsortet
@@ -752,7 +752,7 @@ public class Util {
 			}
 		}
 	}
-	
+
 	/**
 	 * Comparator used for sorting cards into groups of utility on Tavern mat.
 	 * Cards you'll want to look at the most often end up first.
@@ -763,7 +763,7 @@ public class Util {
 			return getTavernCompareVal(card0) - getTavernCompareVal(card1);
 		}
 	}
-	
+
 	private static int getTavernCompareVal(Card c) {
 		if (c == null) return Integer.MAX_VALUE;
 		if (c.equals(Cards.duplicate)) {
@@ -780,7 +780,7 @@ public class Util {
 		}
 		return 5;
 	}
-	
+
 	/**
 	 * Comparator for sorting cards by cost and then by name
 	 * Used for sorting on table
@@ -795,7 +795,7 @@ public class Util {
 			super(cmps);
 		}
 	}
-	
+
 	/**
 	 * Comparator for sorting cards in hand.
 	 * Sort by type then by cost and last by name
@@ -812,7 +812,7 @@ public class Util {
 			super(cmps);
 		}
 	}
-	
+
 	/**
 	 * Comparator for sorting cards on Tavern mat.
 	 * Sort by utility of looking at them on Tavern mat, then by cost, last by name;

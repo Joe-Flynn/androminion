@@ -245,7 +245,7 @@ public class Game {
       // Set up Player's Turn Information
       playersTurn = 0;
       turnCount = 1;
-      Util.debug("Turn " + turnCount);
+      Util.debug("Turn " + turnCount + " ----------");
       Queue<ExtraTurnInfo> extraTurnsInfo = new LinkedList<ExtraTurnInfo>();
 
       // Play until Game Ends
@@ -353,14 +353,14 @@ public class Game {
 
 
   /*
-  ** setPlayersTurn - Sets up Turn for the Next Player
+  ** setPlayersTurn - Sets up turn for the Next Player
   */
   public void setPlayersTurn(boolean takeAnotherTurn) {
     if (!takeAnotherTurn && consecutiveTurnCounter > 0) {
       consecutiveTurnCounter = 0;
       if (++playersTurn >= numPlayers) {
         playersTurn = 0;
-        Util.debug("Turn " + ++turnCount, true);
+        Util.debug("Turn " + (++turnCount) + " ----------", true);
       }
     }
   }
@@ -512,7 +512,7 @@ public class Game {
     int index = 0;
     for (Player player : players) {
       int vp = vps[index++];
-      Util.debug(player.getPlayerName() + ":Victory Points=" + vp, true);
+      Util.debug(player.getPlayerName() + ": Victory Points = " + vp, true);
       GameEvent event = new GameEvent(GameEvent.EventType.VictoryPoints, null);
       event.setPlayer(player);
       event.setComment(":" + vp);
@@ -1300,6 +1300,9 @@ public class Game {
     || card.equals(Cards.crown);
   }
 
+  /*
+  ** printStats - Prints Results of Playing Games
+  */
   private static void printStats(HashMap<String, Double> wins, int gameCount, String gameType) {
 
     if (!test || gameCount == 1) {
@@ -3310,7 +3313,7 @@ public class Game {
 
         if (!showEvents.contains(event.getType()) && shouldShow) {
           StringBuilder msg = new StringBuilder();
-          msg.append(event.getPlayer().getPlayerName() + ":" + event.getType());
+          msg.append(event.getPlayer().getPlayerName() + ": " + event.getType());
           if (event.card != null) {
             msg.append(":" + event.card.getName());
             if (event.card.getControlCard() != event.card) {
