@@ -97,7 +97,6 @@ public class Game {
   public static boolean errataPossessedTakesTokens = false; //Errata introduced May 2016 - true enables old behavior
   public static boolean errataThroneRoomForced = false; //Errata introduced Oct 2016 - true enables old behavior
   public static boolean errataShuffleDeckEmptyOnly = false; //Errata introduced Oct 2016 - true enables old behavior
-  public static boolean startGuildsCoinTokens = false; //only for testing
   public static boolean maskPlayerNames = false;
 
   static boolean test = false;
@@ -113,6 +112,7 @@ public class Game {
   public ArrayList<GameEventListener> listeners = new ArrayList<GameEventListener>();
   public GameEventListener gameListener;
 
+  // Tracks Overall Wins per each Player type (i.e. ClassName)
   static HashMap<String, Double> overallWins = new HashMap<String, Double>();
 
   public static Random rand = new Random(System.currentTimeMillis());
@@ -245,7 +245,7 @@ public class Game {
       Util.debug("Turn " + turnCount + " --------------------");
       Queue<ExtraTurnInfo> extraTurnsInfo = new LinkedList<ExtraTurnInfo>();
 
-      // Play until Game Ends
+      // Play Turns until Game Ends
       while (!gameOver) {
 
         Player player = players[playersTurn];
@@ -272,6 +272,7 @@ public class Game {
 
         } while (context.returnToActionPhase);
 
+        // Broadcast No-Buy Event
         if (context.totalCardsBoughtThisTurn + context.totalEventsBoughtThisTurn == 0) {
           GameEvent event = new GameEvent(GameEvent.EventType.NoBuy, context);
           broadcastEvent(event);
@@ -303,7 +304,7 @@ public class Game {
         }
       }
 
-      // Update aggregate game stats
+      // Update Aggregate Game Stats
       turnCountTotal += turnCount;
       int vps[] = gameOver(gameTypeSpecificWins);
       for (int i = 0; i < vps.length; i++) {
@@ -313,16 +314,15 @@ public class Game {
 
     }
 
-    // Mark Game Winner and print Results
+    // Mark Game Winner and Print Results
     Util.log("");
     Util.log("RESULTS: -----------------------");
     markWinner(gameTypeSpecificWins);
     printStats(gameTypeSpecificWins, numGames, gameType.toString());
     Util.log("--------------------------------");
 
-
+    // Update Game Stats (stats)
     if (test) {
-
       ArrayList<Card> gameCards = new ArrayList<Card>();
       for (CardPile pile : piles.values()) {
         Card card = pile.placeholderCard();
@@ -332,7 +332,6 @@ public class Game {
           gameCards.add(card);
         }
       }
-
       GameStats stats = new GameStats();
       stats.gameType = gameType;
       stats.cards = gameCards.toArray(new Card[0]);
@@ -342,6 +341,7 @@ public class Game {
       gameTypeStats.add(stats);
     }
 
+    // Broadcast Framework Event (???)
     FrameworkEvent frameworkEvent = new FrameworkEvent(FrameworkEvent.Type.GameTypeOver);
     frameworkEvent.setGameType(gameType);
     frameworkEvent.setGameTypeWins(gameTypeSpecificWins);
@@ -517,7 +517,6 @@ public class Game {
     return vps;
 
   }
-
 
   /*
   ** printPlayerTurn - ???
@@ -834,7 +833,6 @@ public class Game {
           }
           GameEvent statusEvent = new GameEvent(GameEvent.EventType.Status, (MoveContext) context);
           broadcastEvent(statusEvent);
-
 
           playBuy(context, buy);
           playerPayOffDebt(player, context);
@@ -1293,10 +1291,6 @@ public class Game {
   */
   private static void printStats(HashMap<String, Double> wins, int gameCount, String gameType) {
 
-    if (!test || gameCount == 1) {
-      return;
-    }
-
     double totalGameCount = 0;
     Iterator<Entry<String, Double>> it = wins.entrySet().iterator();
     while (it.hasNext()) {
@@ -1407,12 +1401,15 @@ public class Game {
     numPlayers = 2;
     numGames   = 3;
 
-    cardsSpecifiedAtLaunch = null;
+    // Reset Containers
     overallWins.clear();
     GAME_TYPE_WINS.clear();
     gameTypeStats.clear();
     playerClassesAndJars.clear();
     playerCache.clear();
+
+    // Set up Game Options
+    cardsSpecifiedAtLaunch = null;
     numRandomEvents = 0;
     randomIncludesEvents = false;
     randomIncludesLandmarks = false;
@@ -1435,7 +1432,7 @@ public class Game {
     errataPossessedTakesTokens = false;
     errataThroneRoomForced = false;
     errataShuffleDeckEmptyOnly = false;
-    startGuildsCoinTokens = false; //only for testing
+
     debug = true; //to print move info
     test = true; //to print stats
 
@@ -2037,10 +2034,6 @@ public class Game {
       // When Baker is included in the game, each Player starts with 1 coin token
       if (bakerInPlay) {
         players[i].gainGuildsCoinTokens(1);
-      }
-      //only for testing
-      if (startGuildsCoinTokens && !players[i].isAi()) {
-        players[i].gainGuildsCoinTokens(99);
       }
 
       /* The journey token is face up at the start of a game.
@@ -2727,15 +2720,16 @@ public class Game {
 
     gameListener = new GameEventListener() {
 
+      // Main gameEvent Function of the Listener Interface
       public void gameEvent(GameEvent event) {
 
-        // Game Start or End, then just return
+        // If Game Start or End, then just return
         if (event.getType() == GameEvent.EventType.GameStarting ||
             event.getType() == GameEvent.EventType.GameOver) {
           return;
         }
 
-        // Otherwise ...
+        // Otherwise, if GameEvent type is 'CardObtained' or 'BuyingCard'...
         if ((event.getType() == GameEvent.EventType.CardObtained ||
              event.getType() == GameEvent.EventType.BuyingCard) &&
             !event.card.is(Type.Event, null)) {
@@ -2743,6 +2737,7 @@ public class Game {
           MoveContext context = event.getContext();
           Player player = context.getPlayer();
 
+          // Handle Possessed Player
           if (player.isPossessed()) {
             possessedBoughtPile.add(event.card);
             MoveContext controlContext = new MoveContext(context.game, context.getPlayer().controlPlayer);
@@ -2750,17 +2745,15 @@ public class Game {
             return;
           }
 
-          //Start inheriting newly gained estate
+          // Start inheriting newly gained estate
           if (event.card.equals(Cards.estate) && event.player.getInheritance() != null) {
             ((CardImpl) event.card).startInheritingCardAbilities(player.getInheritance().getTemplateCard().instantiate());
           }
 
+          // Handle Victory Points gained per this Turn
           if (context != null && event.card.is(Type.Victory)) {
             context.vpsGainedThisTurn += event.card.getVictoryPoints();
           }
-
-          if (Cards.inn.equals(event.responsible))
-          Util.debug((String.format("discard pile: %d", player.discard.size())), true);
 
           // See rules explanation of Tunnel for what commandedDiscard means.
           boolean commandedDiscard = true;
@@ -2773,32 +2766,34 @@ public class Game {
               r = player.getInheritance();
             }
             if (r.equals(Cards.borderVillage) ||
-            r.equals(Cards.feast) ||
-            r.equals(Cards.remodel) ||
-            r.equals(Cards.swindler) ||
-            r.equals(Cards.ironworks) ||
-            r.equals(Cards.saboteur) ||
-            r.equals(Cards.upgrade) ||
-            r.equals(Cards.ambassador) ||
-            r.equals(Cards.smugglers) ||
-            r.equals(Cards.talisman) ||
-            r.equals(Cards.expand) ||
-            r.equals(Cards.forge) ||
-            r.equals(Cards.remake) ||
-            r.equals(Cards.hornOfPlenty) ||
-            r.equals(Cards.jester) ||
-            r.equals(Cards.develop) ||
-            r.equals(Cards.haggler) ||
-            r.equals(Cards.workshop) ||
-            r.equals(Cards.hermit) ||
-            r.equals(Cards.dameNatalie)) {
+                r.equals(Cards.feast) ||
+                r.equals(Cards.remodel) ||
+                r.equals(Cards.swindler) ||
+                r.equals(Cards.ironworks) ||
+                r.equals(Cards.saboteur) ||
+                r.equals(Cards.upgrade) ||
+                r.equals(Cards.ambassador) ||
+                r.equals(Cards.smugglers) ||
+                r.equals(Cards.talisman) ||
+                r.equals(Cards.expand) ||
+                r.equals(Cards.forge) ||
+                r.equals(Cards.remake) ||
+                r.equals(Cards.hornOfPlenty) ||
+                r.equals(Cards.jester) ||
+                r.equals(Cards.develop) ||
+                r.equals(Cards.haggler) ||
+                r.equals(Cards.workshop) ||
+                r.equals(Cards.hermit) ||
+                r.equals(Cards.dameNatalie)) {
               commandedDiscard = false;
             }
           }
           boolean handled = false;
 
-          //Not sure if this is exactly right for the Trader, but it seems to be based on detailed card explanation in the rules
-          //The handling for new cards is done before taking the card from the pile in a different method below.
+          // Not sure if this is exactly right for the Trader, but it seems to be based
+          // on detailed card explanation in the rules.  The handling for new cards is
+          // done before taking the card from the pile in a different method below.
+
           if (!event.newCard) {
             boolean hasInheritedTrader = Cards.trader.equals(context.getPlayer().getInheritance()) && context.getPlayer().hand.contains(Cards.estate);
             boolean hasTrader = context.getPlayer().hand.contains(Cards.trader);
@@ -3230,7 +3225,6 @@ public class Game {
             }
           }
 
-
           // Achievement check...
           if (event.getType() == GameEvent.EventType.BuyingCard && !player.achievementSingleCardFailed) {
             if (Cards.isKingdomCard(event.getCard())) {
@@ -3274,32 +3268,28 @@ public class Game {
     };
   }
 
-  boolean hasMoat(Player player) {
-    for (Card card : player.hand) {
-      if (card.equals(Cards.moat)) {
-        return true;
-      }
-    }
 
-    return false;
-  }
-
+  /*
+  ** hasLighthouse - Return True if player has a Lighthouse, else returns False
+  */
   boolean hasLighthouse(Player player) {
     for (Card card : player.nextTurnCards) {
       if (card.behaveAsCard().equals(Cards.lighthouse) && !((CardImpl) card).trashAfterPlay)
       return true;
     }
-
     return false;
   }
 
+
+  /*
+  ** countChampionsInPlay - Returns the number of Champion cards in play
+  */
   int countChampionsInPlay(Player player) {
     int count = 0;
     for (Card card : player.nextTurnCards) {
       if (card.behaveAsCard().equals(Cards.champion))
       count += ((CardImpl) card).cloneCount;
     }
-
     return count;
   }
 
@@ -3482,8 +3472,7 @@ public class Game {
     if (cardToGain.isPlaceholderCard() || cardToGain.isTemplateCard()) {
       cardToGain = getPile(cardToGain).topCard();
 
-
-      //If the desired card is not on top of the pile, don't take a card
+    //If the desired card is not on top of the pile, don't take a card
     } else if (!isCardOnTop(cardToGain)) {
       return null;
     }
@@ -3501,19 +3490,29 @@ public class Game {
     return takeFromPile(cardToGain, context);
   }
 
+  /*
+  ** pileSize - Returns the size of the <card> pile
+  */
   public int pileSize(Card card) {
     CardPile pile = getPile(card);
     if (pile == null) {
       return -1;
     }
-
     return pile.getCount();
   }
 
+
+  /*
+  ** isPileEmpty - Returns True if the <card> pile is empty
+  */
   public boolean isPileEmpty(Card card) {
     return pileSize(card) <= 0;
   }
 
+
+  /*
+  ** emptyPiles - Returns the number of empty Supply Piles
+  */
   public int emptyPiles() {
     int emptyPiles = 0;
     ArrayList<CardPile> alreadyCounted = new ArrayList<CardPile>();
@@ -3525,6 +3524,7 @@ public class Game {
     }
     return emptyPiles;
   }
+
 
   public Card[] getCardsInGame(GetCardsInGameOptions opt) {
     return getCardsInGame(opt, false);
@@ -3612,7 +3612,6 @@ public class Game {
     if (pile == null || pile.getCount() < 0) {
       return 0;
     }
-
     return pile.getCount();
   }
 
@@ -3648,7 +3647,6 @@ public class Game {
   public CardPile addPile(Card card, int count, boolean isSupply, boolean isBlackMarket) {
     CardPile pile = card.getPileCreator().create(card, count);
 
-
     if (!isSupply) {
       pile.notInSupply();
     }
@@ -3664,6 +3662,7 @@ public class Game {
     //Add the to the list for each templateCard used (this replaces addLinkedPile)
     //Also add the an entry for each templateCardName to the playerSupplyTokens because at some places in the code
     //the token is checked with the actual card and not the placeholder.
+
     for (Card templateCard : pile.getTemplateCards()) {
       if (!piles.containsKey(templateCard.getName())) {
         piles.put(templateCard.getName(), pile);
@@ -3672,7 +3671,6 @@ public class Game {
         playerSupplyTokens.put(templateCard.getName(), tokenMap);
       }
     }
-
 
     return pile;
   }
@@ -3740,17 +3738,14 @@ public class Game {
   ** broadcastEvent - Broadcasts the GameEvent to all Listeners
   */
   public void broadcastEvent(GameEvent event) {
-
     // Notify all GameEventListeners
     for (GameEventListener listener : listeners) {
       listener.gameEvent(event);
     }
-
     // Notify this class' listener last for proper action/logging order
     if (gameListener != null) {
       gameListener.gameEvent(event);
     }
-
   }
 
 
