@@ -3,11 +3,11 @@ package com.vdom.api;
 import java.util.HashMap;
 
 public class FrameworkEvent {
+
     public enum Type {
         GameTypeStarting, // A new GameType is starting
-        GameTypeOver, // GameType completed
-
-        AllDone
+        GameTypeOver,     // GameType completed
+        AllDone           // All GameTypes completed
     }
 
     private Type type;

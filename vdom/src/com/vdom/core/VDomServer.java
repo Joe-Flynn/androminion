@@ -44,7 +44,7 @@ public class VDomServer implements EventHandler {
         public void run() {
             isRunning = true;
             try {
-                Game.go(args, false); // don't call main(), which is only for commandline calling and catches the ExitException which /we want to handle here/.
+                Game.go(args); // don't call main(), which is only for commandline calling and catches the ExitException which /we want to handle here/.
             } catch (ExitException e) {
                 debug("Game exception!");
                 e.printStackTrace();
