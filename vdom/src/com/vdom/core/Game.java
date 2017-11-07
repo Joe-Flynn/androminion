@@ -24,22 +24,25 @@ import com.vdom.api.GameEvent;
 import com.vdom.api.GameEvent.EventType;
 import com.vdom.api.GameEventListener;
 import com.vdom.api.GameType;
+
 import com.vdom.core.MoveContext.TurnPhase;
 import com.vdom.core.Player.ExtraTurnOption;
 import com.vdom.core.Player.HuntingGroundsOption;
 import com.vdom.core.Player.WatchTowerOption;
 import com.vdom.core.Player.FoolsGoldOption;
+
 import com.vdom.players.*;
+
 
 public class Game {
 
   public static boolean junit = false;
   public static boolean debug = false;
   public static Integer cardSequence = 1;
-  public static HashMap<String, Double> GAME_TYPE_WINS = new HashMap<String, Double>();
 
+  public static HashMap<String, Double> GAME_TYPE_WINS = new HashMap<String, Double>();
   public static HashMap<String, Integer> winStats = new HashMap<String, Integer>();
-  public static final String QUICK_PLAY = "(QuickPlay)";
+
   public static final String BANE = "bane+";
   public static final String OBELISK = "obelisk+";
   public static final String BLACKMARKET = "blackMarket+";
@@ -64,7 +67,6 @@ public class Game {
   public static List<Expansion> randomExpansions = null;
   public static List<Expansion> randomExcludedExpansions = null;
 
-  public static boolean showUsage = false;
   public static boolean sheltersNotPassedIn = false;
   public static boolean sheltersPassedIn = false;
   public static boolean platColonyNotPassedIn = false;
@@ -96,10 +98,6 @@ public class Game {
   public static boolean errataThroneRoomForced = false; //Errata introduced Oct 2016 - true enables old behavior
   public static boolean errataShuffleDeckEmptyOnly = false; //Errata introduced Oct 2016 - true enables old behavior
   public static boolean startGuildsCoinTokens = false; //only for testing
-  public static boolean lessProvinces = false; //only for testing
-  public static boolean noCards = false; //only for testing
-  public static boolean disableAi = false; //only for testing
-  public static boolean controlAi = false; //only for testing
   public static boolean maskPlayerNames = false;
 
   public static final HashSet<GameEvent.EventType> showEvents = new HashSet<GameEvent.EventType>();
@@ -113,9 +111,10 @@ public class Game {
 
   static int numGames = -1;
   static int gameCounter = 0;
+
   public ArrayList<GameEventListener> listeners = new ArrayList<GameEventListener>();
   public GameEventListener gameListener;
-  static boolean forceDownload = false;
+
   static HashMap<String, Double> overallWins = new HashMap<String, Double>();
 
   public static Random rand = new Random(System.currentTimeMillis());
@@ -157,9 +156,9 @@ public class Game {
 
   public boolean sheltersInPlay = false;
 
-  public int possessionsToProcess = 0;
+  public int    possessionsToProcess = 0;
   public Player possessingPlayer = null;
-  public int nextPossessionsToProcess = 0;
+  public int    nextPossessionsToProcess = 0;
   public Player nextPossessingPlayer = null;
 
   public static int numPlayers;
@@ -235,17 +234,17 @@ public class Game {
       Util.debug("---------------------", false);
       Util.debug("New Game: " + gameType);
 
-      // Update game status and counter
+      // Update Game Status and Game Counter
       gameOver = false;
       gameCounter++;
 
-      // Initialize the Game Board
+      // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard(gameTypeSpecificWins);
 
       // Set up Player's Turn Information
       playersTurn = 0;
       turnCount = 1;
-      Util.debug("Turn " + turnCount + " ----------");
+      Util.debug("Turn " + turnCount + " --------------------");
       Queue<ExtraTurnInfo> extraTurnsInfo = new LinkedList<ExtraTurnInfo>();
 
       // Play until Game Ends
@@ -360,7 +359,7 @@ public class Game {
       consecutiveTurnCounter = 0;
       if (++playersTurn >= numPlayers) {
         playersTurn = 0;
-        Util.debug("Turn " + (++turnCount) + " ----------", true);
+        Util.debug("Turn " + (++turnCount) + " --------------------", true);
       }
     }
   }
@@ -370,9 +369,8 @@ public class Game {
   ** playTreasures - ???
   */
   public void playTreasures(Player player, MoveContext context, int maxCards, Card responsible) {
-    // storyteller sets maxCards != -1
-    if (disableAi && player.isAi()) return;
 
+    // storyteller sets maxCards != -1
     boolean selectingCoins = playerShouldSelectCoinsToPlay(context, player.getHand());
     if (maxCards != -1) selectingCoins = true;// storyteller
     ArrayList<Card> treasures = null;
@@ -396,7 +394,7 @@ public class Game {
   ** playGuildsTokens - ???
   */
   public void playGuildsTokens(Player player, MoveContext context) {
-    if (disableAi && player.isAi()) return;
+
     int coinTokenTotal = player.getGuildsCoinTokenCount();
 
     if (coinTokenTotal > 0) {
@@ -755,7 +753,6 @@ public class Game {
     do {
       action = null;
       ArrayList<Card> actionCards = null;
-      if (disableAi && player.isAi()) continue;
       if (!actionChains || player.controlPlayer.isAi()) {
         action = player.controlPlayer.doAction(context);
         if (action != null) {
@@ -815,7 +812,6 @@ public class Game {
   public void playerBuy(Player player, MoveContext context) {
     Card buy = null;
     do {
-      if (disableAi && player.isAi()) continue;
       if (context.buys <= 0)
       break; //Player can enter buy phase with 0 or less buys after buying but not playing Villa
       buy = null;
@@ -904,18 +900,12 @@ public class Game {
 
   @SuppressWarnings("unchecked")
   public void playerBeginTurn(Player player, MoveContext context) {
+
     if (context.game.possessionsToProcess > 0) {
       player.controlPlayer = context.game.possessingPlayer;
     } else {
       player.controlPlayer = player;
       consecutiveTurnCounter++;
-    }
-    if (controlAi && player.isAi()) {
-      for (Player curPlayer : players) {
-        if (curPlayer.isAi()) continue;
-        player.startBeingControlled(curPlayer);
-        break;
-      }
     }
 
     cardsObtainedLastTurn[playersTurn].clear();
@@ -1448,10 +1438,6 @@ public class Game {
     errataThroneRoomForced = false;
     errataShuffleDeckEmptyOnly = false;
     startGuildsCoinTokens = false; //only for testing
-    lessProvinces = false; //only for testing
-    noCards = false;
-    controlAi = false; //only for testing
-    disableAi = false;
     debug = true; //to print move info
     test = true; //to print stats
 
@@ -1939,16 +1925,16 @@ public class Game {
     broadcastEvent(event);
   }
 
-  private void handleShowEvent(GameEvent event) {
-    if (showEvents.contains(event.getType())) {
-      Player player = event.getPlayer();
 
-      if (player == null || (player != null && !showPlayers.isEmpty() && !showPlayers.contains(player.getPlayerName()))) {
+  private void handleShowEvent(GameEvent event) {
+
+    if (showEvents.contains(event.getType())) {
+
+      Player player = event.getPlayer();
+      if (player == null || (!showPlayers.isEmpty() && !showPlayers.contains(player.getPlayerName()))) {
         return;
       }
-
       if (event.getType() == GameEvent.EventType.TurnEnd) {
-        Util.debug("");
         return;
       }
 
@@ -1960,8 +1946,9 @@ public class Game {
         if (event.getContext().getBuysLeft() > 0) {
           msg.append(", buys remaining: " + event.getContext().getBuysLeft() + ")");
         }
-      } else if (event.getType() == GameEvent.EventType.PlayingCard || event.getType() == GameEvent.EventType.TurnBegin
-      || event.getType() == GameEvent.EventType.NoBuy) {
+      } else if (event.getType() == GameEvent.EventType.PlayingCard ||
+                 event.getType() == GameEvent.EventType.TurnBegin ||
+                 event.getType() == GameEvent.EventType.NoBuy) {
         msg.append(":" + getHandString(player));
       } else if (event.attackedPlayer != null) {
         msg.append(":" + event.attackedPlayer.getPlayerName() + " with " + event.card.getName());
@@ -1978,6 +1965,7 @@ public class Game {
       Util.debug(msg.toString());
     }
   }
+
 
   int totalCardCount() {
     HashMap<String, Integer> cardCounts = new HashMap<String, Integer>();
@@ -2002,26 +1990,34 @@ public class Game {
     return totalCardCount;
   }
 
-  void initGameBoard(HashMap<String, Double> gameTypeSpecificWins) throws ExitException {
 
+  /*
+  ** initGameBoard - Sets up the game's cards, players, and game listeners
+  */
+  void initGameBoard(HashMap<String, Double> gameTypeSpecificWins) throws ExitException {
     cardSequence = 1;
     baneCard = null;
     firstProvinceWasGained = false;
     doMountainPassAfterThisTurn = false;
-
     initGameListener();
-
     initCards();
     initPlayers(numPlayers, gameTypeSpecificWins);
     initPlayerCards();
-
     gameOver = false;
   }
 
+
+  /*
+  ** initPlayers - Sets up the Game's players
+  */
   public void initPlayers(int numPlayers, HashMap<String, Double> gameTypeSpecificWins) throws ExitException {
     initPlayers(numPlayers, true, gameTypeSpecificWins);
   }
 
+
+  /*
+  ** initPlayers - Sets up the Game's players
+  */
   @SuppressWarnings("unchecked")
   public void initPlayers(int numPlayers, boolean isRandom, HashMap<String, Double> gameTypeSpecificWins) throws ExitException {
     players = new Player[numPlayers];
@@ -2091,8 +2087,7 @@ public class Game {
       }
 
       /* The journey token is face up at the start of a game.
-      * It can be turned over by Ranger, Giant and Pilgrimage.
-      */
+      ** It can be turned over by Ranger, Giant and Pilgrimage. */
       if (journeyTokenInPlay) {
         players[i].flipJourneyToken(null);
       }
@@ -2112,6 +2107,10 @@ public class Game {
     }
   }
 
+
+  /*
+  ** initPlayerCards - Sets up the Players' Starting Decks
+  */
   public void initPlayerCards() {
     Player player;
     for (int i = 0; i < numPlayers; i++) {
@@ -2155,19 +2154,6 @@ public class Game {
       }
     }
 
-    if (noCards) //only for testing
-    {
-      for (int i = 0; i < numPlayers; i++) {
-        player = players[i];
-        if (player.isAi()) {
-          continue;
-        }
-        player.hand.clear();
-        player.deck.clear();
-        player.discard.clear();
-      }
-    }
-
     // Add tradeRoute tokens if tradeRoute in play
     tradeRouteValue = 0;
     if (cardInGame(Cards.tradeRoute)) {
@@ -2180,6 +2166,10 @@ public class Game {
 
   }
 
+
+  /*
+  ** initCards - Sets up the various card piles needed for a Game
+  */
   public void initCards() {
 
     piles.clear();
@@ -2229,10 +2219,6 @@ public class Game {
       treasureMultiplier = 2;
       break;
     }
-    //only for testing
-    if (lessProvinces) {
-      provincePileSize = 1;
-    }
 
     addPile(Cards.gold, 30 * treasureMultiplier);
     addPile(Cards.silver, 40 * treasureMultiplier);
@@ -2247,6 +2233,7 @@ public class Game {
     int added = 0;
 
     if (cardsSpecifiedAtLaunch != null) {
+
       platColonyNotPassedIn = true;
       sheltersNotPassedIn = true;
 
@@ -2780,12 +2767,18 @@ public class Game {
   }
 
 
+  /*
+  ** initGameListener - Defines and instantiates a new GameEventListner,
+  ** which is used for logging GameEvents during a single game.
+  */
   public void initGameListener() {
 
     listeners.clear();
+
     gameListener = new GameEventListener() {
 
       public void gameEvent(GameEvent event) {
+
         handleShowEvent(event);
 
         if (event.getType() == GameEvent.EventType.GameStarting ||
@@ -3456,7 +3449,6 @@ public class Game {
   }
 
   public int getEmbargos(Card card) {
-
     Integer count = embargos.get(getPile(card).placeholderCard().getName());
     return (count == null) ? 0 : count;
   }
@@ -3529,14 +3521,6 @@ public class Game {
     }
   }
 
-  // Only is valid for cards in play...
-  //    protected Card readCard(String name) {
-  //        CardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPileCardPile pile = piles.get(name);
-  //        if (pile == null || pile.getCount() <= 0) {
-  //            return null;
-  //        }
-  //        return pile.card();
-  //    }
 
   public Card takeFromPile(Card card) {
     return takeFromPile(card, null);
@@ -3773,7 +3757,6 @@ public class Game {
     if (next >= numPlayers) {
       next = 0;
     }
-
     return players[next];
   }
 
@@ -3811,15 +3794,26 @@ public class Game {
     return ordered;
   }
 
+
+  /*
+  ** broadcastEvent - Broadcasts the GameEvent to all Listeners
+  */
   public void broadcastEvent(GameEvent event) {
+
+    // Notify all GameEventListeners
     for (GameEventListener listener : listeners) {
       listener.gameEvent(event);
     }
-    // notify this class' listener last for proper action/logging order
-    if (gameListener != null)
-    gameListener.gameEvent(event);
+
+    // Notify this class' listener last for proper action/logging order
+    if (gameListener != null) {
+      gameListener.gameEvent(event);
+    }
+
   }
 
+
+  // getHandString - Returns a string of Card Names in a player's hand
   String getHandString(Player player) {
     String handString = null;
     Card[] hand = player.getHand().toArray();
@@ -3837,6 +3831,7 @@ public class Game {
 
     return handString;
   }
+
 
   public boolean playerShouldSelectCoinsToPlay(MoveContext context, CardList cards) {
     if (!quickPlay) {
@@ -3864,28 +3859,6 @@ public class Game {
       }
     }
 
-    return false;
-  }
-
-  static boolean checkForInteractive() throws ExitException {
-    for (int i = 0; i < numPlayers; i++) {
-      Player player;
-      try {
-        String[] classAndJar = playerClassesAndJars.get(i);
-        if (classAndJar[1] == null) {
-          player = (Player) Class.forName(classAndJar[0]).newInstance();
-        } else {
-          URLClassLoader classLoader = new URLClassLoader(new URL[]{new URL(classAndJar[1])});
-          player = (Player) classLoader.loadClass(classAndJar[0]).newInstance();
-        }
-        if (classAndJar[2] != null) {
-          player.setName(classAndJar[2]);
-        }
-      } catch (Exception e) {
-        Util.log(e);
-        throw new ExitException();
-      }
-    }
     return false;
   }
 
