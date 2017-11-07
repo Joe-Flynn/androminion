@@ -190,7 +190,7 @@ public class Game {
   public static void go(String[] args) throws ExitException {
 
     // Set up game(s)
-    processArgs(args);
+    setGameParameters();
 
     // Set up Win Counters per each playerClass
     for (String[] className : playerClassesAndJars) {
@@ -414,7 +414,9 @@ public class Game {
 
 
   /*
-  ** markWinner - ???
+  * Adds points for winner's total game win tally used to generate stats on the set of games played.
+  * Each winner of a game gets 1 / number of winners (2 for tie, 1 otherwise). In a tie, there are two
+  * winners. 
   */
   private void markWinner(HashMap<String, Double> gameTypeSpecificWins) {
     double highWins = 0;
@@ -1395,11 +1397,11 @@ public class Game {
   }
 
 
-  // processArgs - Sets up game(s) arguments (at start of run)
-  public static void processArgs(String[] args) throws ExitException {
+  // setGameParameters - Sets up parameters for the game(s) (at start of run)
+  public static void setGameParameters() throws ExitException {
 
     numPlayers = 2;
-    numGames   = 3;
+    numGames   = 1;
 
     // Reset Containers
     overallWins.clear();

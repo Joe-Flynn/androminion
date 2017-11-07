@@ -11,56 +11,50 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file leaf-file-name="Game.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="422">
-              <caret line="1505" column="42" lean-forward="false" selection-start-line="1505" selection-start-column="42" selection-end-line="1505" selection-end-column="42" />
+            <state relative-caret-position="-1279">
+              <caret line="418" column="13" lean-forward="false" selection-start-line="418" selection-start-column="13" selection-end-line="418" selection-end-column="13" />
               <folding>
+                <element signature="docComment;field#playerClassesAndJars#0;class#Game#0" expanded="false" />
                 <element signature="docComment;field#gameType#0;class#Game#0" expanded="false" />
                 <element signature="class#BlackMarketSplitPileOptions#0;class#Game#0" expanded="false" />
-                <element signature="method#go#0;class#Game#0" expanded="false" />
                 <element signature="class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
-                <element signature="method#ExtraTurnInfo#0;class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
+                <element signature="method#ExtraTurnInfo#1;class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
+                <element signature="method#main#0;class#Game#0" expanded="false" />
+                <element signature="method#go#0;class#Game#0" expanded="false" />
                 <element signature="method#start#0;class#Game#0" expanded="false" />
-                <element signature="e#10203#10219#0" expanded="true" />
-                <element signature="e#10909#10924#0" expanded="true" />
-                <element signature="e#11925#11961#0" expanded="false" />
-                <element signature="e#12122#12158#0" expanded="false" />
-                <element signature="e#12554#12590#0" expanded="false" />
-                <element signature="e#13179#13215#0" expanded="false" />
                 <element signature="method#setPlayersTurn#0;class#Game#0" expanded="false" />
-                <element signature="method#cardsInLowestPiles#0;class#Game#0" expanded="false" />
                 <element signature="method#playTreasures#0;class#Game#0" expanded="false" />
                 <element signature="method#playGuildsTokens#0;class#Game#0" expanded="false" />
-                <element signature="method#markWinner#0;class#Game#0" expanded="false" />
                 <element signature="method#gameOver#0;class#Game#0" expanded="false" />
                 <element signature="method#printPlayerTurn#0;class#Game#0" expanded="false" />
+                <element signature="class#19120:19413" expanded="false" />
+                <element signature="method#compare#0;class#19120:19413" expanded="false" />
                 <element signature="method#playerEndTurn#0;class#Game#0" expanded="false" />
-                <element signature="e#24726#24746#0" expanded="true" />
-                <element signature="e#25533#25569#0" expanded="false" />
-                <element signature="e#25935#25971#0" expanded="false" />
-                <element signature="e#27342#27446#0" expanded="false" />
+                <element signature="e#20666#20702#0" expanded="false" />
+                <element signature="e#21028#21064#0" expanded="false" />
+                <element signature="e#22259#22363#0" expanded="false" />
                 <element signature="method#playerAfterTurn#0;class#Game#0" expanded="false" />
                 <element signature="method#playerAction#0;class#Game#0" expanded="false" />
-                <element signature="e#31654#31709#0" expanded="false" />
+                <element signature="e#25885#25940#0" expanded="false" />
                 <element signature="method#playerPayOffDebt#0;class#Game#0" expanded="false" />
                 <element signature="method#playerBuy#0;class#Game#0" expanded="false" />
-                <element signature="e#38382#38412#0" expanded="true" />
-                <element signature="e#53899#53981#0" expanded="false" />
+                <element signature="method#playerBeginTurn#0;class#Game#0" expanded="false" />
+                <element signature="e#44318#44400#0" expanded="false" />
                 <element signature="method#playerBeginBuy#0;class#Game#0" expanded="false" />
                 <element signature="method#arena#0;class#Game#0" expanded="false" />
                 <element signature="method#isModifierCard#0;class#Game#0" expanded="false" />
+                <element signature="method#printStats#0;class#Game#0" expanded="false" />
                 <element signature="method#printGameTypeStats#0;class#Game#0" expanded="false" />
-                <element signature="method#calculateLead#0;class#Game#0" expanded="false" />
                 <element signature="method#calculateVps#0;class#Game#0" expanded="false" />
-                <element signature="e#65977#65997#0" expanded="false" />
-                <element signature="method#processUserPrefArgs#0;class#Game#0" expanded="false" />
+                <element signature="method#setGameParameters#0;class#Game#0" expanded="false" />
                 <element signature="method#isValidAction#0;class#Game#0" expanded="false" />
                 <element signature="method#isValidBuy#0;class#Game#0" expanded="false" />
                 <element signature="method#isValidBuy#1;class#Game#0" expanded="false" />
-                <element signature="e#76952#77063#0" expanded="false" />
+                <element signature="e#51823#51934#0" expanded="false" />
                 <element signature="method#playBuy#0;class#Game#0" expanded="false" />
                 <element signature="method#haggler#0;class#Game#0" expanded="false" />
                 <element signature="method#charmWhenBuy#0;class#Game#0" expanded="false" />
@@ -75,21 +69,21 @@
                 <element signature="method#drawToHand#1;class#Game#0" expanded="false" />
                 <element signature="method#draw#0;class#Game#0" expanded="false" />
                 <element signature="method#replenishDeck#0;class#Game#0" expanded="false" />
-                <element signature="method#handleShowEvent#0;class#Game#0" expanded="false" />
                 <element signature="method#totalCardCount#0;class#Game#0" expanded="false" />
                 <element signature="method#initGameBoard#0;class#Game#0" expanded="false" />
-                <element signature="e#97127#97157#0" expanded="true" />
+                <element signature="method#initPlayers#0;class#Game#0" expanded="false" />
+                <element signature="method#initPlayers#1;class#Game#0" expanded="false" />
                 <element signature="method#initPlayerCards#0;class#Game#0" expanded="false" />
-                <element signature="e#101696#101765#0" expanded="false" />
+                <element signature="e#72015#72084#0" expanded="false" />
                 <element signature="method#initCards#0;class#Game#0" expanded="false" />
-                <element signature="e#128134#128175#0" expanded="false" />
                 <element signature="method#initGameListener#0;class#Game#0" expanded="false" />
-                <element signature="e#132139#132257#0" expanded="false" />
-                <element signature="e#137145#137267#0" expanded="false" />
-                <element signature="e#141532#141569#0" expanded="false" />
-                <element signature="e#143573#143650#0" expanded="false" />
-                <element signature="e#159527#159604#0" expanded="false" />
-                <element signature="method#hasMoat#0;class#Game#0" expanded="false" />
+                <element signature="class#93832:121026" expanded="false" />
+                <element signature="method#gameEvent#0;class#93832:121026" expanded="false" />
+                <element signature="e#96894#96971#0" expanded="false" />
+                <element signature="e#101078#101200#0" expanded="false" />
+                <element signature="e#104501#104538#0" expanded="false" />
+                <element signature="e#106190#106267#0" expanded="false" />
+                <element signature="e#118682#118759#0" expanded="false" />
                 <element signature="method#hasLighthouse#0;class#Game#0" expanded="false" />
                 <element signature="method#countChampionsInPlay#0;class#Game#0" expanded="false" />
                 <element signature="method#addEmbargo#0;class#Game#0" expanded="false" />
@@ -105,7 +99,6 @@
                 <element signature="method#isPlayerSupplyTokenOnPile#0;class#Game#0" expanded="false" />
                 <element signature="method#movePlayerSupplyToken#0;class#Game#0" expanded="false" />
                 <element signature="method#removePlayerSupplyToken#0;class#Game#0" expanded="false" />
-                <element signature="e#169825#169862#0" expanded="false" />
                 <element signature="method#takeFromPile#1;class#Game#0" expanded="false" />
                 <element signature="method#takeFromPileCheckTrader#0;class#Game#0" expanded="false" />
                 <element signature="method#pileSize#0;class#Game#0" expanded="false" />
@@ -118,7 +111,7 @@
                 <element signature="method#getCardsLeftInPile#0;class#Game#0" expanded="false" />
                 <element signature="method#addPile#0;class#Game#0" expanded="false" />
                 <element signature="method#addPile#3;class#Game#0" expanded="false" />
-                <element signature="e#177025#177103#0" expanded="false" />
+                <element signature="e#133255#133333#0" expanded="false" />
                 <element signature="method#getCardsObtainedByLastPlayer#0;class#Game#0" expanded="false" />
                 <element signature="method#getNextPlayer#0;class#Game#0" expanded="false" />
                 <element signature="method#getPlayersInTurnOrder#1;class#Game#0" expanded="false" />
@@ -126,7 +119,6 @@
                 <element signature="method#broadcastEvent#0;class#Game#0" expanded="false" />
                 <element signature="method#getHandString#0;class#Game#0" expanded="false" />
                 <element signature="method#playerShouldSelectCoinsToPlay#0;class#Game#0" expanded="false" />
-                <element signature="method#checkForInteractive#0;class#Game#0" expanded="false" />
                 <element signature="method#getPile#0;class#Game#0" expanded="false" />
                 <element signature="method#trashHovelsInHandOption#0;class#Game#0" expanded="false" />
                 <element signature="method#hauntedWoodsAttacks#0;class#Game#0" expanded="false" />
@@ -150,8 +142,8 @@
       <file leaf-file-name="VDomServer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/core/VDomServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="254">
-              <caret line="53" column="30" lean-forward="true" selection-start-line="53" selection-start-column="30" selection-end-line="53" selection-end-column="30" />
+            <state relative-caret-position="840">
+              <caret line="53" column="30" lean-forward="false" selection-start-line="53" selection-start-column="30" selection-end-line="53" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -163,6 +155,8 @@
     <findStrings>
       <find>print</find>
       <find>printstats</find>
+      <find>Earl: Vic</find>
+      <find>isover</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -199,10 +193,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="AndroidView" />
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -239,6 +229,10 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -256,8 +250,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Unnamed">
-    <configuration name="Unnamed" type="Application" factoryName="Application">
+  <component name="RunManager" selected="Application.Run Game">
+    <configuration name="Run Game" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="com.vdom.core.Game" />
       <option name="VM_PARAMETERS" value="" />
@@ -370,107 +364,102 @@
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289183" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3289183" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289183" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22075056" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Code Iris" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Code Iris" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/vdom/core/Game.java</url>
+          <line>1295</line>
+          <properties />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/com/vdom/core/Game.java</url>
+          <line>1293</line>
+          <properties class="com.vdom.core.Game" method="printStats">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="2" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/DumpCardResources.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="9" column="5" lean-forward="false" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/VDomServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="53" column="30" lean-forward="true" selection-start-line="53" selection-start-column="30" selection-end-line="53" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="1505" column="42" lean-forward="false" selection-start-line="1505" selection-start-column="42" selection-end-line="1505" selection-end-column="42" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+            <element signature="docComment;field#playerClassesAndJars#0;class#Game#0" expanded="false" />
             <element signature="docComment;field#gameType#0;class#Game#0" expanded="false" />
             <element signature="class#BlackMarketSplitPileOptions#0;class#Game#0" expanded="false" />
-            <element signature="method#go#0;class#Game#0" expanded="false" />
             <element signature="class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
-            <element signature="method#ExtraTurnInfo#0;class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
+            <element signature="method#ExtraTurnInfo#1;class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
+            <element signature="method#main#0;class#Game#0" expanded="false" />
+            <element signature="method#go#0;class#Game#0" expanded="false" />
             <element signature="method#start#0;class#Game#0" expanded="false" />
-            <element signature="e#10203#10219#0" expanded="true" />
-            <element signature="e#10909#10924#0" expanded="true" />
-            <element signature="e#11925#11961#0" expanded="false" />
-            <element signature="e#12122#12158#0" expanded="false" />
-            <element signature="e#12554#12590#0" expanded="false" />
-            <element signature="e#13179#13215#0" expanded="false" />
             <element signature="method#setPlayersTurn#0;class#Game#0" expanded="false" />
-            <element signature="method#cardsInLowestPiles#0;class#Game#0" expanded="false" />
             <element signature="method#playTreasures#0;class#Game#0" expanded="false" />
             <element signature="method#playGuildsTokens#0;class#Game#0" expanded="false" />
-            <element signature="method#markWinner#0;class#Game#0" expanded="false" />
             <element signature="method#gameOver#0;class#Game#0" expanded="false" />
             <element signature="method#printPlayerTurn#0;class#Game#0" expanded="false" />
+            <element signature="class#19120:19413" expanded="false" />
+            <element signature="method#compare#0;class#19120:19413" expanded="false" />
             <element signature="method#playerEndTurn#0;class#Game#0" expanded="false" />
-            <element signature="e#24726#24746#0" expanded="true" />
-            <element signature="e#25533#25569#0" expanded="false" />
-            <element signature="e#25935#25971#0" expanded="false" />
-            <element signature="e#27342#27446#0" expanded="false" />
+            <element signature="e#20666#20702#0" expanded="false" />
+            <element signature="e#21028#21064#0" expanded="false" />
+            <element signature="e#22259#22363#0" expanded="false" />
             <element signature="method#playerAfterTurn#0;class#Game#0" expanded="false" />
             <element signature="method#playerAction#0;class#Game#0" expanded="false" />
-            <element signature="e#31654#31709#0" expanded="false" />
+            <element signature="e#25885#25940#0" expanded="false" />
             <element signature="method#playerPayOffDebt#0;class#Game#0" expanded="false" />
             <element signature="method#playerBuy#0;class#Game#0" expanded="false" />
-            <element signature="e#38382#38412#0" expanded="true" />
-            <element signature="e#53899#53981#0" expanded="false" />
+            <element signature="method#playerBeginTurn#0;class#Game#0" expanded="false" />
+            <element signature="e#44318#44400#0" expanded="false" />
             <element signature="method#playerBeginBuy#0;class#Game#0" expanded="false" />
             <element signature="method#arena#0;class#Game#0" expanded="false" />
             <element signature="method#isModifierCard#0;class#Game#0" expanded="false" />
+            <element signature="method#printStats#0;class#Game#0" expanded="false" />
             <element signature="method#printGameTypeStats#0;class#Game#0" expanded="false" />
-            <element signature="method#calculateLead#0;class#Game#0" expanded="false" />
             <element signature="method#calculateVps#0;class#Game#0" expanded="false" />
-            <element signature="e#65977#65997#0" expanded="false" />
-            <element signature="method#processUserPrefArgs#0;class#Game#0" expanded="false" />
+            <element signature="method#setGameParameters#0;class#Game#0" expanded="false" />
             <element signature="method#isValidAction#0;class#Game#0" expanded="false" />
             <element signature="method#isValidBuy#0;class#Game#0" expanded="false" />
             <element signature="method#isValidBuy#1;class#Game#0" expanded="false" />
-            <element signature="e#76952#77063#0" expanded="false" />
+            <element signature="e#51823#51934#0" expanded="false" />
             <element signature="method#playBuy#0;class#Game#0" expanded="false" />
             <element signature="method#haggler#0;class#Game#0" expanded="false" />
             <element signature="method#charmWhenBuy#0;class#Game#0" expanded="false" />
@@ -485,21 +474,21 @@
             <element signature="method#drawToHand#1;class#Game#0" expanded="false" />
             <element signature="method#draw#0;class#Game#0" expanded="false" />
             <element signature="method#replenishDeck#0;class#Game#0" expanded="false" />
-            <element signature="method#handleShowEvent#0;class#Game#0" expanded="false" />
             <element signature="method#totalCardCount#0;class#Game#0" expanded="false" />
             <element signature="method#initGameBoard#0;class#Game#0" expanded="false" />
-            <element signature="e#97127#97157#0" expanded="true" />
+            <element signature="method#initPlayers#0;class#Game#0" expanded="false" />
+            <element signature="method#initPlayers#1;class#Game#0" expanded="false" />
             <element signature="method#initPlayerCards#0;class#Game#0" expanded="false" />
-            <element signature="e#101696#101765#0" expanded="false" />
+            <element signature="e#72015#72084#0" expanded="false" />
             <element signature="method#initCards#0;class#Game#0" expanded="false" />
-            <element signature="e#128134#128175#0" expanded="false" />
             <element signature="method#initGameListener#0;class#Game#0" expanded="false" />
-            <element signature="e#132139#132257#0" expanded="false" />
-            <element signature="e#137145#137267#0" expanded="false" />
-            <element signature="e#141532#141569#0" expanded="false" />
-            <element signature="e#143573#143650#0" expanded="false" />
-            <element signature="e#159527#159604#0" expanded="false" />
-            <element signature="method#hasMoat#0;class#Game#0" expanded="false" />
+            <element signature="class#93832:121026" expanded="false" />
+            <element signature="method#gameEvent#0;class#93832:121026" expanded="false" />
+            <element signature="e#96894#96971#0" expanded="false" />
+            <element signature="e#101078#101200#0" expanded="false" />
+            <element signature="e#104501#104538#0" expanded="false" />
+            <element signature="e#106190#106267#0" expanded="false" />
+            <element signature="e#118682#118759#0" expanded="false" />
             <element signature="method#hasLighthouse#0;class#Game#0" expanded="false" />
             <element signature="method#countChampionsInPlay#0;class#Game#0" expanded="false" />
             <element signature="method#addEmbargo#0;class#Game#0" expanded="false" />
@@ -515,7 +504,6 @@
             <element signature="method#isPlayerSupplyTokenOnPile#0;class#Game#0" expanded="false" />
             <element signature="method#movePlayerSupplyToken#0;class#Game#0" expanded="false" />
             <element signature="method#removePlayerSupplyToken#0;class#Game#0" expanded="false" />
-            <element signature="e#169825#169862#0" expanded="false" />
             <element signature="method#takeFromPile#1;class#Game#0" expanded="false" />
             <element signature="method#takeFromPileCheckTrader#0;class#Game#0" expanded="false" />
             <element signature="method#pileSize#0;class#Game#0" expanded="false" />
@@ -528,7 +516,7 @@
             <element signature="method#getCardsLeftInPile#0;class#Game#0" expanded="false" />
             <element signature="method#addPile#0;class#Game#0" expanded="false" />
             <element signature="method#addPile#3;class#Game#0" expanded="false" />
-            <element signature="e#177025#177103#0" expanded="false" />
+            <element signature="e#133255#133333#0" expanded="false" />
             <element signature="method#getCardsObtainedByLastPlayer#0;class#Game#0" expanded="false" />
             <element signature="method#getNextPlayer#0;class#Game#0" expanded="false" />
             <element signature="method#getPlayersInTurnOrder#1;class#Game#0" expanded="false" />
@@ -536,7 +524,153 @@
             <element signature="method#broadcastEvent#0;class#Game#0" expanded="false" />
             <element signature="method#getHandString#0;class#Game#0" expanded="false" />
             <element signature="method#playerShouldSelectCoinsToPlay#0;class#Game#0" expanded="false" />
-            <element signature="method#checkForInteractive#0;class#Game#0" expanded="false" />
+            <element signature="method#getPile#0;class#Game#0" expanded="false" />
+            <element signature="method#trashHovelsInHandOption#0;class#Game#0" expanded="false" />
+            <element signature="method#hauntedWoodsAttacks#0;class#Game#0" expanded="false" />
+            <element signature="method#enchantressAttacks#0;class#Game#0" expanded="false" />
+            <element signature="method#swampHagAttacks#0;class#Game#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/DumpCardResources.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="9" column="5" lean-forward="false" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/VDomServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1113">
+          <caret line="53" column="30" lean-forward="true" selection-start-line="53" selection-start-column="30" selection-end-line="53" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/DumpCardResources.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="9" column="5" lean-forward="false" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/VDomServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="840">
+          <caret line="53" column="30" lean-forward="false" selection-start-line="53" selection-start-column="30" selection-end-line="53" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Game.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1279">
+          <caret line="418" column="13" lean-forward="false" selection-start-line="418" selection-start-column="13" selection-end-line="418" selection-end-column="13" />
+          <folding>
+            <element signature="docComment;field#playerClassesAndJars#0;class#Game#0" expanded="false" />
+            <element signature="docComment;field#gameType#0;class#Game#0" expanded="false" />
+            <element signature="class#BlackMarketSplitPileOptions#0;class#Game#0" expanded="false" />
+            <element signature="class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
+            <element signature="method#ExtraTurnInfo#1;class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
+            <element signature="method#main#0;class#Game#0" expanded="false" />
+            <element signature="method#go#0;class#Game#0" expanded="false" />
+            <element signature="method#start#0;class#Game#0" expanded="false" />
+            <element signature="method#setPlayersTurn#0;class#Game#0" expanded="false" />
+            <element signature="method#playTreasures#0;class#Game#0" expanded="false" />
+            <element signature="method#playGuildsTokens#0;class#Game#0" expanded="false" />
+            <element signature="method#gameOver#0;class#Game#0" expanded="false" />
+            <element signature="method#printPlayerTurn#0;class#Game#0" expanded="false" />
+            <element signature="class#19120:19413" expanded="false" />
+            <element signature="method#compare#0;class#19120:19413" expanded="false" />
+            <element signature="method#playerEndTurn#0;class#Game#0" expanded="false" />
+            <element signature="e#20666#20702#0" expanded="false" />
+            <element signature="e#21028#21064#0" expanded="false" />
+            <element signature="e#22259#22363#0" expanded="false" />
+            <element signature="method#playerAfterTurn#0;class#Game#0" expanded="false" />
+            <element signature="method#playerAction#0;class#Game#0" expanded="false" />
+            <element signature="e#25885#25940#0" expanded="false" />
+            <element signature="method#playerPayOffDebt#0;class#Game#0" expanded="false" />
+            <element signature="method#playerBuy#0;class#Game#0" expanded="false" />
+            <element signature="method#playerBeginTurn#0;class#Game#0" expanded="false" />
+            <element signature="e#44318#44400#0" expanded="false" />
+            <element signature="method#playerBeginBuy#0;class#Game#0" expanded="false" />
+            <element signature="method#arena#0;class#Game#0" expanded="false" />
+            <element signature="method#isModifierCard#0;class#Game#0" expanded="false" />
+            <element signature="method#printStats#0;class#Game#0" expanded="false" />
+            <element signature="method#printGameTypeStats#0;class#Game#0" expanded="false" />
+            <element signature="method#calculateVps#0;class#Game#0" expanded="false" />
+            <element signature="method#setGameParameters#0;class#Game#0" expanded="false" />
+            <element signature="method#isValidAction#0;class#Game#0" expanded="false" />
+            <element signature="method#isValidBuy#0;class#Game#0" expanded="false" />
+            <element signature="method#isValidBuy#1;class#Game#0" expanded="false" />
+            <element signature="e#51823#51934#0" expanded="false" />
+            <element signature="method#playBuy#0;class#Game#0" expanded="false" />
+            <element signature="method#haggler#0;class#Game#0" expanded="false" />
+            <element signature="method#charmWhenBuy#0;class#Game#0" expanded="false" />
+            <element signature="method#validCharmCardLeft#0;class#Game#0" expanded="false" />
+            <element signature="method#isValidCharmCard#0;class#Game#0" expanded="false" />
+            <element signature="method#basilicaWhenBuy#0;class#Game#0" expanded="false" />
+            <element signature="method#colonnadeWhenBuy#0;class#Game#0" expanded="false" />
+            <element signature="method#defiledShrineWhenBuy#0;class#Game#0" expanded="false" />
+            <element signature="method#buyWouldEndGame#0;class#Game#0" expanded="false" />
+            <element signature="method#checkGameOver#0;class#Game#0" expanded="false" />
+            <element signature="method#drawToHand#0;class#Game#0" expanded="false" />
+            <element signature="method#drawToHand#1;class#Game#0" expanded="false" />
+            <element signature="method#draw#0;class#Game#0" expanded="false" />
+            <element signature="method#replenishDeck#0;class#Game#0" expanded="false" />
+            <element signature="method#totalCardCount#0;class#Game#0" expanded="false" />
+            <element signature="method#initGameBoard#0;class#Game#0" expanded="false" />
+            <element signature="method#initPlayers#0;class#Game#0" expanded="false" />
+            <element signature="method#initPlayers#1;class#Game#0" expanded="false" />
+            <element signature="method#initPlayerCards#0;class#Game#0" expanded="false" />
+            <element signature="e#72015#72084#0" expanded="false" />
+            <element signature="method#initCards#0;class#Game#0" expanded="false" />
+            <element signature="method#initGameListener#0;class#Game#0" expanded="false" />
+            <element signature="class#93832:121026" expanded="false" />
+            <element signature="method#gameEvent#0;class#93832:121026" expanded="false" />
+            <element signature="e#96894#96971#0" expanded="false" />
+            <element signature="e#101078#101200#0" expanded="false" />
+            <element signature="e#104501#104538#0" expanded="false" />
+            <element signature="e#106190#106267#0" expanded="false" />
+            <element signature="e#118682#118759#0" expanded="false" />
+            <element signature="method#hasLighthouse#0;class#Game#0" expanded="false" />
+            <element signature="method#countChampionsInPlay#0;class#Game#0" expanded="false" />
+            <element signature="method#addEmbargo#0;class#Game#0" expanded="false" />
+            <element signature="method#addPileVpTokens#0;class#Game#0" expanded="false" />
+            <element signature="method#removePileVpTokens#0;class#Game#0" expanded="false" />
+            <element signature="method#addPileDebtTokens#0;class#Game#0" expanded="false" />
+            <element signature="method#removePileDebtTokens#0;class#Game#0" expanded="false" />
+            <element signature="method#isValidEmbargoPile#0;class#Game#0" expanded="false" />
+            <element signature="method#getEmbargos#0;class#Game#0" expanded="false" />
+            <element signature="method#getPileVpTokens#0;class#Game#0" expanded="false" />
+            <element signature="method#getPileDebtTokens#0;class#Game#0" expanded="false" />
+            <element signature="method#getPlayerSupplyTokens#0;class#Game#0" expanded="false" />
+            <element signature="method#isPlayerSupplyTokenOnPile#0;class#Game#0" expanded="false" />
+            <element signature="method#movePlayerSupplyToken#0;class#Game#0" expanded="false" />
+            <element signature="method#removePlayerSupplyToken#0;class#Game#0" expanded="false" />
+            <element signature="method#takeFromPile#1;class#Game#0" expanded="false" />
+            <element signature="method#takeFromPileCheckTrader#0;class#Game#0" expanded="false" />
+            <element signature="method#pileSize#0;class#Game#0" expanded="false" />
+            <element signature="method#emptyPiles#0;class#Game#0" expanded="false" />
+            <element signature="method#getCardsInGame#1;class#Game#0" expanded="false" />
+            <element signature="method#getCardsInGame#2;class#Game#0" expanded="false" />
+            <element signature="method#cardInGame#0;class#Game#0" expanded="false" />
+            <element signature="method#isCardOnTop#0;class#Game#0" expanded="false" />
+            <element signature="method#pileInGame#0;class#Game#0" expanded="false" />
+            <element signature="method#getCardsLeftInPile#0;class#Game#0" expanded="false" />
+            <element signature="method#addPile#0;class#Game#0" expanded="false" />
+            <element signature="method#addPile#3;class#Game#0" expanded="false" />
+            <element signature="e#133255#133333#0" expanded="false" />
+            <element signature="method#getCardsObtainedByLastPlayer#0;class#Game#0" expanded="false" />
+            <element signature="method#getNextPlayer#0;class#Game#0" expanded="false" />
+            <element signature="method#getPlayersInTurnOrder#1;class#Game#0" expanded="false" />
+            <element signature="method#getPlayersInTurnOrder#2;class#Game#0" expanded="false" />
+            <element signature="method#broadcastEvent#0;class#Game#0" expanded="false" />
+            <element signature="method#getHandString#0;class#Game#0" expanded="false" />
+            <element signature="method#playerShouldSelectCoinsToPlay#0;class#Game#0" expanded="false" />
             <element signature="method#getPile#0;class#Game#0" expanded="false" />
             <element signature="method#trashHovelsInHandOption#0;class#Game#0" expanded="false" />
             <element signature="method#hauntedWoodsAttacks#0;class#Game#0" expanded="false" />
