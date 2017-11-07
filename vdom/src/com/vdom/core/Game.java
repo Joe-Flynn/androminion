@@ -100,8 +100,6 @@ public class Game {
   public static boolean startGuildsCoinTokens = false; //only for testing
   public static boolean maskPlayerNames = false;
 
-  public static final HashSet<GameEvent.EventType> showEvents = new HashSet<GameEvent.EventType>();
-  public static final HashSet<String> showPlayers = new HashSet<String>();
   static boolean test = false;
   static boolean ignoreAllPlayerErrors = false;
   static boolean ignoreSomePlayerErrors = false;
@@ -1926,47 +1924,6 @@ public class Game {
   }
 
 
-  private void handleShowEvent(GameEvent event) {
-
-    if (showEvents.contains(event.getType())) {
-
-      Player player = event.getPlayer();
-      if (player == null || (!showPlayers.isEmpty() && !showPlayers.contains(player.getPlayerName()))) {
-        return;
-      }
-      if (event.getType() == GameEvent.EventType.TurnEnd) {
-        return;
-      }
-
-      StringBuilder msg = new StringBuilder();
-      msg.append(player.getPlayerName() + "::" + turnCount + ":" + event.getType());
-
-      if (event.getType() == GameEvent.EventType.BuyingCard) {
-        msg.append(":" + event.getContext().getCoinAvailableForBuy() + " gold");
-        if (event.getContext().getBuysLeft() > 0) {
-          msg.append(", buys remaining: " + event.getContext().getBuysLeft() + ")");
-        }
-      } else if (event.getType() == GameEvent.EventType.PlayingCard ||
-                 event.getType() == GameEvent.EventType.TurnBegin ||
-                 event.getType() == GameEvent.EventType.NoBuy) {
-        msg.append(":" + getHandString(player));
-      } else if (event.attackedPlayer != null) {
-        msg.append(":" + event.attackedPlayer.getPlayerName() + " with " + event.card.getName());
-      }
-
-      if (event.card != null) {
-        msg.append(" -> " + event.card.getName());
-      }
-
-      if (event.getComment() != null) {
-        msg.append(event.getComment());
-      }
-
-      Util.debug(msg.toString());
-    }
-  }
-
-
   int totalCardCount() {
     HashMap<String, Integer> cardCounts = new HashMap<String, Integer>();
     for (String cardName : piles.keySet()) {
@@ -2696,10 +2653,6 @@ public class Game {
       journeyTokenInPlay = false;
     }
 
-    boolean oldDebug = debug;
-    if (!debug && !showEvents.isEmpty()) {
-      debug = true;
-    }
     Util.debug("");
     Util.debug("Cards in Play", true);
     Util.debug("---------------", true);
@@ -2746,9 +2699,6 @@ public class Game {
       }
     }
 
-    Util.debug("");
-    debug = oldDebug;
-
     if (unfoundCards != null && unfoundCards.size() > 0) {
       unfoundCardText += "\n";
       String cardList = "";
@@ -2779,13 +2729,13 @@ public class Game {
 
       public void gameEvent(GameEvent event) {
 
-        handleShowEvent(event);
-
+        // Game Start or End, then just return
         if (event.getType() == GameEvent.EventType.GameStarting ||
             event.getType() == GameEvent.EventType.GameOver) {
           return;
         }
 
+        // Otherwise ...
         if ((event.getType() == GameEvent.EventType.CardObtained ||
              event.getType() == GameEvent.EventType.BuyingCard) &&
             !event.card.is(Type.Event, null)) {
@@ -3296,38 +3246,29 @@ public class Game {
           }
         }
 
-        boolean shouldShow = (debug || junit);
-        if (!shouldShow) {
-          if (event.getType() != GameEvent.EventType.TurnBegin && event.getType() != GameEvent.EventType.TurnEnd
-          && event.getType() != GameEvent.EventType.DeckReplenished && event.getType() != GameEvent.EventType.GameStarting) {
-            shouldShow = true;
+        StringBuilder msg = new StringBuilder();
+        msg.append(event.getPlayer().getPlayerName() + ": " + event.getType());
+        if (event.card != null) {
+          msg.append(":" + event.card.getName());
+          if (event.card.getControlCard() != event.card) {
+            msg.append(" <" + event.card.getControlCard().getName() + ">");
+          }
+          if (event.card.isImpersonatingAnotherCard()) {
+            msg.append(" (as " + event.card.behaveAsCard().getName() + ")");
           }
         }
-
-        if (!showEvents.contains(event.getType()) && shouldShow) {
-          StringBuilder msg = new StringBuilder();
-          msg.append(event.getPlayer().getPlayerName() + ": " + event.getType());
-          if (event.card != null) {
-            msg.append(":" + event.card.getName());
-            if (event.card.getControlCard() != event.card) {
-              msg.append(" <" + event.card.getControlCard().getName() + ">");
-            }
-            if (event.card.isImpersonatingAnotherCard()) {
-              msg.append(" (as " + event.card.behaveAsCard().getName() + ")");
-            }
-          }
-          if (event.getType() == GameEvent.EventType.TurnBegin && event.getPlayer().isPossessed()) {
-            msg.append(" possessed by " + event.getPlayer().controlPlayer.getPlayerName() + "!");
-          }
-          if (event.attackedPlayer != null) {
-            msg.append(", attacking:" + event.attackedPlayer.getPlayerName());
-          }
-
-          if (event.getType() == GameEvent.EventType.BuyingCard) {
-            msg.append(" (with gold: " + event.getContext().getCoinAvailableForBuy() + ", buys remaining: " + event.getContext().getBuysLeft());
-          }
-          Util.debug(msg.toString(), true);
+        if (event.getType() == GameEvent.EventType.TurnBegin && event.getPlayer().isPossessed()) {
+          msg.append(" possessed by " + event.getPlayer().controlPlayer.getPlayerName() + "!");
         }
+        if (event.attackedPlayer != null) {
+          msg.append(", attacking:" + event.attackedPlayer.getPlayerName());
+        }
+
+        if (event.getType() == GameEvent.EventType.BuyingCard) {
+          msg.append(" (with gold: " + event.getContext().getCoinAvailableForBuy() + ", buys remaining: " + event.getContext().getBuysLeft());
+        }
+        Util.debug(msg.toString(), true);
+
       }
 
     };
