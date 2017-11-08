@@ -205,7 +205,7 @@ public class Game {
     Util.log("");
     Util.log("--------------------------------");
     printStats(overallWins, numGames * GameType.values().length, "Total");
-    printStats(GAME_TYPE_WINS, GameType.values().length, "Types");
+    //printStats(GAME_TYPE_WINS, GameType.values().length, "Types");
     printGameTypeStats();
 
     // Framework Event (???)
@@ -219,7 +219,9 @@ public class Game {
   */
   void start() throws ExitException {
 
-    HashMap<String, Double> gameTypeSpecificWins = new HashMap<String, Double>();
+    HashMap<String, Double> playerToWins = new HashMap<String, Double>();
+    playerToWins.put("com.vdom.players.VDomPlayerEarl", 0.0);
+    playerToWins.put("com.vdom.players.VDomPlayerChuck", 0.0);
 
     // Variables for averaging over all Games
     long turnCountTotal = 0;
@@ -237,7 +239,7 @@ public class Game {
       gameCounter++;
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
-      initGameBoard(gameTypeSpecificWins);
+      initGameBoard();
 
       // Set up Player's Turn Information
       playersTurn = 0;
@@ -306,7 +308,7 @@ public class Game {
 
       // Update Aggregate Game Stats
       turnCountTotal += turnCount;
-      int vps[] = gameOver(gameTypeSpecificWins);
+      int vps[] = gameOver(playerToWins);
       for (int i = 0; i < vps.length; i++) {
         vpTotal += vps[i];
         numCardsTotal += players[i].getAllCards().size();
@@ -317,8 +319,8 @@ public class Game {
     // Mark Game Winner and Print Results
     Util.log("");
     Util.log("RESULTS: -----------------------");
-    markWinner(gameTypeSpecificWins);
-    printStats(gameTypeSpecificWins, numGames, gameType.toString());
+    markWinner(playerToWins);
+    printStats(playerToWins, numGames, gameType.toString());
     Util.log("--------------------------------");
 
     // Update Game Stats (stats)
@@ -344,7 +346,6 @@ public class Game {
     // Broadcast Framework Event (???)
     FrameworkEvent frameworkEvent = new FrameworkEvent(FrameworkEvent.Type.GameTypeOver);
     frameworkEvent.setGameType(gameType);
-    frameworkEvent.setGameTypeWins(gameTypeSpecificWins);
     FrameworkEventHelper.broadcastEvent(frameworkEvent);
   }
 
@@ -1364,7 +1365,6 @@ public class Game {
     Util.log(sb.toString());
   }
 
-
   // printGameTypeStats - Prints the summary stats of each GameType played
   private static void printGameTypeStats() {
     for (int i = 0; i < gameTypeStats.size(); i++) {
@@ -1401,7 +1401,7 @@ public class Game {
   public static void setGameParameters() throws ExitException {
 
     numPlayers = 2;
-    numGames   = 1;
+    numGames   = 20;
 
     // Reset Containers
     overallWins.clear();
@@ -1950,14 +1950,14 @@ public class Game {
   /*
   ** initGameBoard - Sets up the game's cards, players, and game listeners
   */
-  void initGameBoard(HashMap<String, Double> gameTypeSpecificWins) throws ExitException {
+  void initGameBoard() throws ExitException {
     cardSequence = 1;
     baneCard = null;
     firstProvinceWasGained = false;
     doMountainPassAfterThisTurn = false;
     initGameListener();
     initCards();
-    initPlayers(numPlayers, gameTypeSpecificWins);
+    initPlayers(numPlayers);
     initPlayerCards();
     gameOver = false;
   }
@@ -1966,8 +1966,8 @@ public class Game {
   /*
   ** initPlayers - Sets up the Game's players
   */
-  public void initPlayers(int numPlayers, HashMap<String, Double> gameTypeSpecificWins) throws ExitException {
-    initPlayers(numPlayers, true, gameTypeSpecificWins);
+  public void initPlayers(int numPlayers) throws ExitException {
+    initPlayers(numPlayers, true);
   }
 
 
@@ -1975,7 +1975,7 @@ public class Game {
   ** initPlayers - Sets up the Game's players
   */
   @SuppressWarnings("unchecked")
-  public void initPlayers(int numPlayers, boolean isRandom, HashMap<String, Double> gameTypeSpecificWins) throws ExitException {
+  public void initPlayers(int numPlayers, boolean isRandom) throws ExitException {
     players = new Player[numPlayers];
     cardsObtainedLastTurn = new ArrayList[numPlayers];
     for (int i = 0; i < numPlayers; i++) {
@@ -1999,13 +1999,9 @@ public class Game {
 
       if (i == 0) {
         players[i] = new VDomPlayerEarl();
-        GAME_TYPE_WINS.put("com.vdom.players.VDomPlayerEarl", 0.0);
-        gameTypeSpecificWins.put("com.vdom.players.VDomPlayerEarl", 0.0);
       }
       else {
         players[i] = new VDomPlayerChuck();
-        GAME_TYPE_WINS.put("com.vdom.players.VDomPlayerChuck", 0.0);
-        gameTypeSpecificWins.put("com.vdom.players.VDomPlayerChuck", 0.0);
       }
 
       players[i].game = this;
