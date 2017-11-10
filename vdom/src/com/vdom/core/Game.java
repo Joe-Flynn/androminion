@@ -416,7 +416,7 @@ public class Game {
   /*
   * Adds points for winner's total game win tally used to generate stats on the set of games played.
   * Each winner of a game gets 1 / number of winners (2 for tie, 1 otherwise). In a tie, there are two
-  * winners. 
+  * winners.
   */
   private void markWinner(HashMap<String, Double> gameTypeSpecificWins) {
     double highWins = 0;
@@ -1401,7 +1401,7 @@ public class Game {
   public static void setGameParameters() throws ExitException {
 
     numPlayers = 2;
-    numGames   = 1;
+    numGames   = 3;
 
     // Reset Containers
     overallWins.clear();
@@ -3227,19 +3227,6 @@ public class Game {
             }
           }
 
-          // Achievement check...
-          if (event.getType() == GameEvent.EventType.BuyingCard && !player.achievementSingleCardFailed) {
-            if (Cards.isKingdomCard(event.getCard())) {
-              if (player.achievementSingleCardFirstKingdomCardBought == null) {
-                player.achievementSingleCardFirstKingdomCardBought = event.getCard();
-              } else {
-                if (!player.achievementSingleCardFirstKingdomCardBought.equals(event.getCard())) {
-                  player.achievementSingleCardFailed = true;
-                  player.achievementSingleCardFirstKingdomCardBought = null;
-                }
-              }
-            }
-          }
         }
 
         StringBuilder msg = new StringBuilder();

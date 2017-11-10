@@ -19,22 +19,23 @@ public abstract class Player {
 
   Random rand = new Random(System.currentTimeMillis());
 
-  public static final String RANDOM_AI = "Random AI";
   public static final String DISTINCT_CARDS = "Distinct Cards";
   public static final String ONE_COPY_CARDS = "One Copy Cards";
   public static final String THREE_PLUS_COPY_ACTION_CARDS = "Three Plus Copy Action Cards";
   public static final String NON_VICTORY_EMPTY_SUPPLY_PILE_CARDS = "Non Victory Empty Supply Pile Cards";
   public static final String SECOND_MOST_COMMON_ACTION_CARDS = "Second Most Common Action Cards";
-  public static final String VICTORY_TOKENS = "Victory Tokens";
 
-  // Only used by InteractivePlayer currently
+  // Player Name and Number
   private String name;
   public int playerNumber;
+
+  // Player's Counters and Win Status
   public int shuffleCount = 0;
   protected int turnCount = 0;
-  public int vps;
+  public int vps = 0;
   public boolean win = false;
 
+  // Player's Hand and Other Piles
   protected CardList hand;
   protected CardList deck;
   protected CardList discard;
@@ -53,26 +54,34 @@ public abstract class Player {
   protected Card inheritance;
   protected Card save;
   protected CardList encampment;
-  protected Map<Player, Map<Cards.Kind, Integer>> attackDurationEffectsOnOthers;
+
+  // Player's Game and Game Features
+
   public Game game;
+
   public Player controlPlayer = this;
   public boolean controlled = false;
+  public int pirateShipTreasure = 0;
 
-  public boolean achievementSingleCardFailed;
-  public Card achievementSingleCardFirstKingdomCardBought;
+  protected Map<Player, Map<Cards.Kind, Integer>> attackDurationEffectsOnOthers;
 
-  public int pirateShipTreasure;
-
-  // The number of coin tokens held by the player
-  private int guildsCoinTokenCount;
-  private int debtTokenCount;
-
+  private int guildsCoinTokenCount = 0; // The number of coin tokens held by the player
+  private int debtTokenCount = 0;
   private Card checkLeadCard;
   private int victoryTokens;
   private Map<Card, Integer> victoryTokensSource = new TreeMap<Card, Integer>();
   private boolean journeyTokenFaceUp;
   private boolean minusOneCoinTokenOn;
   private boolean minusOneCardTokenOn;
+
+
+  // ////////////////////////////////////////////
+  // Player Functions
+  // ////////////////////////////////////////////
+
+
+
+
 
 
   public boolean isPossessed() {
@@ -93,13 +102,20 @@ public abstract class Player {
     controlled = true;
   }
 
+  /*
+  ** addVictoryTokens - Adds Victory Tokens to the PLayer
+  */
   public void addVictoryTokens(MoveContext context, int vt, Card responsible) {
 
-    if (vt == 0) { return; }
+    if (vt == 0) {
+      return; // No Victory Tokens to add
+    }
 
+    // Add Victory Tokens
     Player p = (!Game.errataPossessedTakesTokens && isPossessed()) ? controlPlayer : this;
     p.victoryTokens += vt;
 
+    // Update Victory Tokens Source's Counter (i.e. the Card that provided Victory Tokens to Player)
     responsible = responsible.getTemplateCard();
     if (p.victoryTokensSource.containsKey(responsible)) {
       p.victoryTokensSource.put(responsible, p.victoryTokensSource.get(responsible) + vt);
@@ -107,13 +123,25 @@ public abstract class Player {
       p.victoryTokensSource.put(responsible, vt);
     }
 
+    // Broadcast Victory Tokens Obtained
     GameEvent event = new GameEvent(GameEvent.EventType.VPTokensObtained, isPossessed() ? new MoveContext(context.game, p) : context);
     event.setAmount(vt);
     context.game.broadcastEvent(event);
 
     if (!isPossessed()) {
-      context.vpsGainedThisTurn += vt; // How to track vp gained in a turn by possessing player?
+      context.vpsGainedThisTurn += vt; // TODO: How do we track vp gained in a turn by possessing player?
     }
+  }
+
+
+
+
+  public boolean isAi() {
+    return true;
+  }
+
+  public void setName(String name) {
+    this.name = name.replace("_", " ");
   }
 
   public int getTotalCardsBoughtThisTurn(MoveContext context) {
@@ -122,14 +150,6 @@ public abstract class Player {
 
   public int getTotalEventsBoughtThisTurn(MoveContext context) {
     return context.getTotalEventsBoughtThisTurn();
-  }
-
-  public boolean isAi() {
-    return true;
-  }
-
-  public void setName(String name) {
-    this.name = name.replace("_", " ");
   }
 
   public int getCurrencyTotal(MoveContext context) {
@@ -155,6 +175,7 @@ public abstract class Player {
     }
     return Util.getCardCount(getAllCards(), card);
   }
+
   public int getTurnCount() {
     return turnCount;
   }
@@ -163,6 +184,10 @@ public abstract class Player {
     turnCount++;
   }
 
+
+
+
+
   public ArrayList<Card> getActionCards(Card[] cards, Player player) {
     ArrayList<Card> actionCards = new ArrayList<Card>();
     for (Card card : cards) {
@@ -170,39 +195,12 @@ public abstract class Player {
         actionCards.add(card);
       }
     }
-
     return actionCards;
   }
 
-  public int getActionCardCount(Card[] cards, Player player) {
-    return getActionCards(cards, player).size();
-  }
 
-  public int getMyAddActionCardCount() {
-    int addActionsCards = 0;
-    for (Card card : getAllCards()) {
-      if (card.is(Type.Action, this)) {
-        if (card.getAddActions() > 0) {
-          addActionsCards++;
-        }
-      }
-    }
 
-    return addActionsCards;
-  }
 
-  public int getMyAddCardCardCount() {
-    int addCards = 0;
-    for (Card card : getAllCards()) {
-      if (card.is(Type.Action, this)) {
-        if (card.getAddCards() > 0) {
-          addCards++;
-        }
-      }
-    }
-
-    return addCards;
-  }
 
   public int getMyAddActions() {
     int addActions = 0;
@@ -211,31 +209,11 @@ public abstract class Player {
         addActions += card.getAddActions();
       }
     }
-
     return addActions;
   }
 
-  public int getMyAddCards() {
-    int addCards = 0;
-    for (Card card : getAllCards()) {
-      if (card.is(Type.Action, this)) {
-        addCards += card.getAddCards();
-      }
-    }
 
-    return addCards;
-  }
 
-  public int getMyAddBuys() {
-    int addBuys = 0;
-    for (Card card : getAllCards()) {
-      if (card.is(Type.Action, this)) {
-        addBuys += card.getAddBuys();
-      }
-    }
-
-    return addBuys;
-  }
 
   public boolean inHand(Card card) {
     for (Card thisCard : hand) {
@@ -243,33 +221,7 @@ public abstract class Player {
         return true;
       }
     }
-
     return false;
-  }
-
-  public boolean inPlay(Card card) {
-    return playedCards.contains(card) || nextTurnCards.contains(card);
-  }
-
-  public boolean isInCardArray(Card card, Card[] list) {
-    for (Card thisCard : list) {
-      if (thisCard.equals(card)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  public int mineableCards(Card[] hand) {
-    int mineableCards = 0;
-    for (Card card : hand) {
-      if (card.equals(Cards.potion) || card.equals(Cards.loan) || card.equals(Cards.masterpiece) || card.equals(Cards.illGottenGains) || card.equals(Cards.copper) || card.equals(Cards.silver) || card.equals(Cards.gold)) {
-        mineableCards++;
-      }
-    }
-
-    return mineableCards;
   }
 
   public int inHandCount(Card card) {
@@ -282,8 +234,30 @@ public abstract class Player {
         return thisCard;
       }
     }
-
     return null;
+  }
+
+  public boolean inPlay(Card card) {
+    return playedCards.contains(card) || nextTurnCards.contains(card);
+  }
+
+  public boolean isInCardArray(Card card, Card[] list) {
+    for (Card thisCard : list) {
+      if (thisCard.equals(card)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public int mineableCards(Card[] hand) {
+    int mineableCards = 0;
+    for (Card card : hand) {
+      if (card.equals(Cards.potion) || card.equals(Cards.loan) || card.equals(Cards.masterpiece) || card.equals(Cards.illGottenGains) || card.equals(Cards.copper) || card.equals(Cards.silver) || card.equals(Cards.gold)) {
+        mineableCards++;
+      }
+    }
+    return mineableCards;
   }
 
   public boolean getWin() {
@@ -310,6 +284,9 @@ public abstract class Player {
     encampment = new CardList(this, "Encampment");
     attackDurationEffectsOnOthers = new HashMap<Player,Map<Cards.Kind,Integer>>();
   }
+
+
+
 
   private List<PutBackOption> getPutBackOptions(MoveContext context, int actionsPlayed) {
 
