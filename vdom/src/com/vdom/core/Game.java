@@ -529,8 +529,8 @@ public class Game {
   public void initPlayerCards() {
     Player player;
     for (int i = 0; i < numPlayers; i++) {
-      player = players[i];
 
+      player = players[i];
       player.discard(takeFromPile(Cards.copper), null, null);
       player.discard(takeFromPile(Cards.copper), null, null);
       player.discard(takeFromPile(Cards.copper), null, null);
@@ -543,7 +543,6 @@ public class Game {
         player.discard(takeFromPile(Cards.necropolis), null, null);
         player.discard(takeFromPile(Cards.overgrownEstate), null, null);
         player.discard(takeFromPile(Cards.hovel), null, null);
-
         // Also need to remove the Estates that were put in the pile prior to
         // determining if Shelters would be used
         takeFromPile(Cards.estate);
@@ -1984,8 +1983,9 @@ public class Game {
     }
 
     cardsObtainedLastTurn[playersTurn].clear();
-    if (consecutiveTurnCounter == 1)
-    player.newTurn();
+    if (consecutiveTurnCounter == 1) {
+      player.newTurn();
+    }
 
     player.clearDurationEffectsOnOtherPlayers();
 
@@ -3309,6 +3309,9 @@ public class Game {
   }
 
 
+  /*
+  ** playerShouldSelectCoinsToPlay - Returns True if player should select Treasures to play
+  */
   public boolean playerShouldSelectCoinsToPlay(MoveContext context, CardList cards) {
     if (!quickPlay) {
       return true;
