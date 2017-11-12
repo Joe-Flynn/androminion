@@ -37,12 +37,12 @@ public class MoveContext {
     public int totalExpeditionBoughtThisTurn = 0;
     public boolean canBuyCards = true;
     public boolean startOfTurn = false;
-    
+
     public enum TurnPhase {
     	Action, Buy, CleanUp
     }
-    
-    public TurnPhase phase = TurnPhase.Action;  
+
+    public TurnPhase phase = TurnPhase.Action;
     public boolean blackMarketBuyPhase = false;  // this is not a really buyPhase (peddler costs 8, you can't spend Guilds coin tokens)
     public boolean returnToActionPhase = false;
     public ArrayList<Card> cantBuy = new ArrayList<Card>();
@@ -73,7 +73,7 @@ public class MoveContext {
     public MoveContext(Game game, Player player) {
     	this(game, player, true);
     }
-    
+
     public MoveContext(Game game, Player player, boolean canBuyCards) {
         this.game = game;
         this.player = player;
@@ -97,10 +97,6 @@ public class MoveContext {
         return player;
     }
 
-    public boolean isQuickPlay() {
-        return Game.quickPlay;
-    }
-
     public int getPotions() {
         return potions;
     }
@@ -122,7 +118,7 @@ public class MoveContext {
         }
         return cardsInPlay + countCardsInNextTurn(card);
     }
-    
+
     public int countCardsInPlayByName(Card card) {
         int cardsInPlay = 0;
         for(Card c : getPlayedCards()) {
@@ -146,7 +142,7 @@ public class MoveContext {
         }
         return cardsInNextTurn;
     }
-    
+
     private int countCardsInNextTurnByName(Card card) {
         int cardsInNextTurn = 0;
         for(Card c : getCardsInNextTurn()) {
@@ -166,27 +162,27 @@ public class MoveContext {
     }
 
     public enum CardsInPlay {ACTION,ATTACK,TRAVELLER,VICTORY,TREASURE};
-    
+
     public int countActionCardsInPlay() {
     	return countTypedCardsInPlay(Type.Action);
     }
-    
+
     public int countAttackCardsInPlay() {
     	return countTypedCardsInPlay(Type.Attack);
     }
-    
+
     public int countTreasureCardsInPlay() {
     	return countTypedCardsInPlay(Type.Treasure);
     }
-    
+
     public int countTravellerCardsInPlay() {
     	return countTypedCardsInPlay(Type.Traveller);
     }
-    
+
     public int countVictoryCardsInPlay() {
     	return countTypedCardsInPlay(Type.Victory);
     }
-    
+
     public int countTypedCardsInPlay(Type type) {
         int numInPlay = 0;
         for (Card c : getPlayedCards()) {
@@ -256,15 +252,15 @@ public class MoveContext {
     public int getEmbargos(Card card) {
         return game.getEmbargos(card);
     }
-    
+
     public int getPileVpTokens(Card card) {
     	return game.getPileVpTokens(card);
     }
-    
+
     public int getPileDebtTokens(Card card) {
     	return game.getPileDebtTokens(card);
     }
-    
+
     public int getPileTradeRouteTokens(Card card) {
     	return game.getPileTradeRouteTokens(card);
     }
@@ -279,11 +275,11 @@ public class MoveContext {
     public ArrayList<Card> getCardsObtainedByLastPlayer() {
         return game.getCardsObtainedByLastPlayer();
     }
-    
+
     public int getNumCardsGainedThisTurn() {
     	return game.getCardsObtainedByPlayer().size();
     }
-    
+
     public int getNumCardsGainedThisTurn(Kind kind) {
     	int result = 0;
         for (Card c : game.getCardsObtainedByPlayer()) {
@@ -329,10 +325,6 @@ public class MoveContext {
         }
     }
 
-    public boolean cardsSpecifiedOnStartup() {
-        return Game.cardsSpecifiedAtLaunch != null && Game.cardsSpecifiedAtLaunch.length > 0;
-    }
-
     public GameType getGameType() {
         return Game.gameType;
     }
@@ -360,7 +352,7 @@ public class MoveContext {
     public int getBuysLeft() {
         return buys;
     }
-    
+
     public int getCoins() {
     	return coins;
     }
@@ -368,11 +360,11 @@ public class MoveContext {
     public int getCoinAvailableForBuy() {
         return getCoins();
     }
-    
+
     public void addCoins(int coinsToAdd) {
     	addCoins(coinsToAdd, null);
     }
-    
+
     public void addCoins(int coinsToAdd, Card responsible) {
     	if (coinsToAdd == 0)
     		return;
@@ -382,12 +374,12 @@ public class MoveContext {
     			getPlayer().setMinusOneCoinToken(false, this);
     		}
     	}
-    	
+
     	coins += coinsToAdd;
     	if (coins < 0)
     		coins = 0;
     }
-    
+
     public void spendCoins(int coinsToSpend) {
     	coins -= coinsToSpend;
     }

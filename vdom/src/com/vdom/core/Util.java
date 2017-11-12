@@ -131,7 +131,7 @@ public class Util {
      * is not always a "debug" message, but it still seems to make sense to use the term.
      */
     public static void debug(String msg, boolean interactiveAsWell) {
-        if (Game.debug || Game.junit) {
+        if (Game.debug) {
             log(msg);
         }
     }
