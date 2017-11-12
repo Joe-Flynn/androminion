@@ -30,7 +30,6 @@ public abstract class Player {
   public int playerNumber;
 
   // Player's Counters and Win Status
-  public int shuffleCount = 0;
   protected int turnCount = 0;
   public int vps = 0;
   public boolean win = false;
@@ -48,12 +47,12 @@ public abstract class Player {
   protected CardList summon;
   protected CardList island;
   protected CardList haven;
+  protected CardList encampment;
+  protected CardList horseTraders;
   protected ArrayList<ArrayList<Card>> gear;
   protected ArrayList<ArrayList<Card>> archive;
-  protected CardList horseTraders;
   protected Card inheritance;
   protected Card save;
-  protected CardList encampment;
 
   // Player's Game and Game Features
 
@@ -1101,7 +1100,6 @@ public abstract class Player {
   }
 
   public void replenishDeck(MoveContext context, Card responsible, int cardsLeftToDraw) {
-    shuffleCount++;
     shuffleIntoDeck(context, responsible, discard, cardsLeftToDraw);
   }
 
