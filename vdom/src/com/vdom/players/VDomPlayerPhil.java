@@ -53,6 +53,9 @@ public class VDomPlayerPhil extends BasePlayer  {
     @Override
     public Card doBuy(MoveContext context) {}
 
+    // ---> May also want to add treasureCardsToPlayInOrder(MoveContext context, int maxCards, Card responsible)
+    // ---> May also want to add numGuildsCoinTokensToSpend(MoveContext context, int coinTokenTotal, boolean butcher)
+
     @Override
     public Card[] getTrashCards() {}
 
