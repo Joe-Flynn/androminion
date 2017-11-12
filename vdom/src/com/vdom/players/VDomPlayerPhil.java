@@ -24,19 +24,31 @@ import com.vdom.core.Util;
 public class VDomPlayerPhil extends BasePlayer  {
 
     @Override
+    public String getPlayerName() {
+      return getPlayerName(Game.maskPlayerNames);
+    }
+
+    @Override
+    public String getPlayerName(boolean maskName) {
+      return maskName ? "Player " + (playerNumber + 1) : "Phil";
+    }
+
+    @Override
+    public boolean isAi() {
+      return true;
+    }
+
+
+
+
+
+    @Override
     public void newGame(MoveContext context) {}
 
     @Override
-    public String getPlayerName() {}
-
-    @Override
-    public String getPlayerName(boolean maskName) {}
-
-    @Override
-    public boolean isAi() { return true; }
-
-    @Override
     public Card doAction(MoveContext context) {}
+
+    // ---> May also want to add actionCardsToPlayInOrder(MoveContext context)
 
     @Override
     public Card doBuy(MoveContext context) {}
