@@ -1093,7 +1093,7 @@ public class Cards {
     for (Card card : eventsCards)       { cardNameToCard.put(card.getName(), card); }
     for (Card card : landmarkCards)     { cardNameToCard.put(card.getName(), card); }
 
-    // Cards in Black Market deck are not in supply
+    // Cards in Black Market Deck are not in supply
     blackMarketCards.clear();
   }
 

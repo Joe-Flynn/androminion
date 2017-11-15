@@ -78,69 +78,44 @@ public abstract class Player {
   // Player Functions
   // ////////////////////////////////////////////
 
-
-
-
-
-
-  public boolean isPossessed() {
-    return !controlled && !this.equals(controlPlayer);
-  }
-
-  public boolean isControlled() {
-    return controlled;
-  }
-
-  public void stopBeingControlled() {
-    controlPlayer = this;
-    controlled = false;
-  }
-
-  public void startBeingControlled(Player player) {
-    controlPlayer = player;
-    controlled = true;
-  }
-
-  /*
-  ** addVictoryTokens - Adds Victory Tokens to the PLayer
-  */
-  public void addVictoryTokens(MoveContext context, int vt, Card responsible) {
-
-    if (vt == 0) {
-      return; // No Victory Tokens to add
-    }
-
-    // Add Victory Tokens
-    Player p = (!Game.errataPossessedTakesTokens && isPossessed()) ? controlPlayer : this;
-    p.victoryTokens += vt;
-
-    // Update Victory Tokens Source's Counter (i.e. the Card that provided Victory Tokens to Player)
-    responsible = responsible.getTemplateCard();
-    if (p.victoryTokensSource.containsKey(responsible)) {
-      p.victoryTokensSource.put(responsible, p.victoryTokensSource.get(responsible) + vt);
-    } else {
-      p.victoryTokensSource.put(responsible, vt);
-    }
-
-    // Broadcast Victory Tokens Obtained
-    GameEvent event = new GameEvent(GameEvent.EventType.VPTokensObtained, isPossessed() ? new MoveContext(context.game, p) : context);
-    event.setAmount(vt);
-    context.game.broadcastEvent(event);
-
-    if (!isPossessed()) {
-      context.vpsGainedThisTurn += vt; // TODO: How do we track vp gained in a turn by possessing player?
-    }
-  }
-
-
-
-
   public boolean isAi() {
     return true;
   }
 
   public void setName(String name) {
     this.name = name.replace("_", " ");
+  }
+
+  /*
+  ** initCards - Initialize all of the player's piles (i.e. CardLists)
+  */
+  public void initCards() {
+    hand           = new CardList(this, "Hand");
+    deck           = new CardList(this, "Deck");
+    discard        = new CardList(this, "Discard");
+    playedCards    = new CardList(this, "InPlay");
+    nextTurnCards  = new CardList(this, "Duration");
+    nativeVillage  = new CardList(this, "Native Village");
+    tavern         = new CardList(this, "Tavern");
+    prince         = new CardList(this, "Prince");
+    summon         = new CardList(this, "Summon");
+    playedByPrince = new CardList(this, "PlayedByPrince");
+    island         = new CardList(this, "Island");
+    haven          = new CardList(this, "Haven");
+    gear           = new ArrayList<ArrayList<Card>>();
+    archive        = new ArrayList<ArrayList<Card>>();
+    horseTraders   = new CardList(this, "Horse Traders");
+    inheritance    = null;
+    encampment     = new CardList(this, "Encampment");
+    attackDurationEffectsOnOthers = new HashMap<Player,Map<Cards.Kind,Integer>>();
+  }
+
+  public void newTurn() {
+    turnCount++;
+  }
+
+  public int getTurnCount() {
+    return turnCount;
   }
 
   public int getTotalCardsBoughtThisTurn(MoveContext context) {
@@ -151,381 +126,13 @@ public abstract class Player {
     return context.getTotalEventsBoughtThisTurn();
   }
 
-  public int getCurrencyTotal(MoveContext context) {
-    int coin = 0;
-    for (Card card : getAllCards()) {
-      if (card.is(Type.Treasure, context.getPlayer())) {
-        coin += card.getAddGold();
-        if (card.getKind() == Cards.Kind.Bank) {
-          coin += 1;
-        }
-      }
-    }
-    return coin;
-  }
-
-  public int getMyCardCount(Card card) {
-    if (card.isPlaceholderCard()) {
-      int count = 0;
-      for (Card template : game.getPile(card).getTemplateCards()) {
-        count += Util.getCardCount(getAllCards(), template);
-      }
-      return count;
-    }
-    return Util.getCardCount(getAllCards(), card);
-  }
-
-  public int getTurnCount() {
-    return turnCount;
-  }
-
-  public void newTurn() {
-    turnCount++;
-  }
-
-
-
-
-
-  public ArrayList<Card> getActionCards(Card[] cards, Player player) {
-    ArrayList<Card> actionCards = new ArrayList<Card>();
-    for (Card card : cards) {
-      if (card.is(Type.Action, player)) {
-        actionCards.add(card);
-      }
-    }
-    return actionCards;
-  }
-
-
-
-
-
-  public int getMyAddActions() {
-    int addActions = 0;
-    for (Card card : getAllCards()) {
-      if (card.is(Type.Action, this)) {
-        addActions += card.getAddActions();
-      }
-    }
-    return addActions;
-  }
-
-
-
-
-  public boolean inHand(Card card) {
-    for (Card thisCard : hand) {
-      if (thisCard.equals(card)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public int inHandCount(Card card) {
-    return Util.getCardCount(getHand(), card);
-  }
-
-  public Card fromHand(Card card) {
-    for (Card thisCard : getHand()) {
-      if (thisCard.equals(card)) {
-        return thisCard;
-      }
-    }
-    return null;
-  }
-
-  public boolean inPlay(Card card) {
-    return playedCards.contains(card) || nextTurnCards.contains(card);
-  }
-
-  public boolean isInCardArray(Card card, Card[] list) {
-    for (Card thisCard : list) {
-      if (thisCard.equals(card)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public int mineableCards(Card[] hand) {
-    int mineableCards = 0;
-    for (Card card : hand) {
-      if (card.equals(Cards.potion) || card.equals(Cards.loan) || card.equals(Cards.masterpiece) || card.equals(Cards.illGottenGains) || card.equals(Cards.copper) || card.equals(Cards.silver) || card.equals(Cards.gold)) {
-        mineableCards++;
-      }
-    }
-    return mineableCards;
-  }
-
-  public boolean getWin() {
-    return win;
-  }
-
-  public void initCards() {
-    hand = new CardList(this, "Hand");
-    deck = new CardList(this, "Deck");
-    discard = new CardList(this, "Discard");
-    playedCards = new CardList(this, "InPlay");
-    nextTurnCards = new CardList(this, "Duration");
-    nativeVillage = new CardList(this, "Native Village");
-    tavern = new CardList(this, "Tavern");
-    prince = new CardList(this, "Prince");
-    summon = new CardList(this, "Summon");
-    playedByPrince = new CardList(this, "PlayedByPrince");
-    island = new CardList(this, "Island");
-    haven = new CardList(this, "Haven");
-    gear = new ArrayList<ArrayList<Card>>();
-    archive = new ArrayList<ArrayList<Card>>();
-    horseTraders = new CardList(this, "Horse Traders");
-    inheritance = null;
-    encampment = new CardList(this, "Encampment");
-    attackDurationEffectsOnOthers = new HashMap<Player,Map<Cards.Kind,Integer>>();
-  }
-
-
-
-
-  private List<PutBackOption> getPutBackOptions(MoveContext context, int actionsPlayed) {
-
-    // Determine if criteria were met for certain action cards
-    boolean victoryBought = context.getVictoryCardsBoughtThisTurn() > 0;
-    boolean potionPlayed   = context.countCardsInPlay(Cards.potion) > 0;
-    boolean treasurePlayed = context.countTreasureCardsInPlay() > 0;
-    int actionsInPlay = context.countActionCardsInPlay();
-
-    List<PutBackOption> options = new ArrayList<PutBackOption>();
-
-    for (Card c: playedCards) {
-      if (c.behaveAsCard().equals(Cards.treasury) && !victoryBought) {
-        options.add(PutBackOption.Treasury);
-      } else if (c.behaveAsCard().equals(Cards.alchemist) && potionPlayed) {
-        options.add(PutBackOption.Alchemist);
-      } else if (c.behaveAsCard().equals(Cards.walledVillage) && actionsPlayed <= 2) {
-        options.add(PutBackOption.WalledVillage);
-      } else if (c.behaveAsCard().equals(Cards.herbalist) && treasurePlayed) {
-        options.add(PutBackOption.Coin);
-      }
-    }
-    if (actionsInPlay > 0) {
-      for (int i = 0; i < context.schemesPlayed; i++) {
-        options.add(PutBackOption.Action);
-      }
-    }
-    /* check if all options are simple
-    * (Alchemist, Treasury or WalledVillage) */
-    boolean allSimple = true;
-    for (PutBackOption o: options) {
-      if (   o.equals(PutBackOption.Alchemist)
-      || o.equals(PutBackOption.Treasury)
-      || o.equals(PutBackOption.WalledVillage))
-      {
-        continue;
-      }
-      allSimple = false;
-      break;
-    }
-    if (allSimple && options.size() > 1)
-    {
-      options.add(PutBackOption.All);
-    }
-    return options;
-  }
-
-  private Card findCard(MoveContext context, Card template) {
-    for (Card c: playedCards) {
-      if (c.behaveAsCard().equals(template)) {
-        return c;
-      }
-    }
-    return null;
-  }
-
-  protected void cleanupOutOfTurn(MoveContext context) {
-    //So far now, only cards that can happen here are Duplicate
-    // and Coin of the Realm (when called after playing a Caravan Guard as part of a Reaction)
-    for (Card card : playedCards) {
-      CardImpl actualCard = (CardImpl) card;
-      actualCard.cloneCount = 1;
-    }
-    while (!playedCards.isEmpty()) {
-      discard(playedCards.remove(0), null, context, false, true);
-    }
-  }
-
-  protected void cleanup(MoveContext context) {
-    // /////////////////////////////////
-    // Discard played cards
-    // /////////////////////////////////
-
-    // reset any lingering CloneCounts
-    for (Card card : playedCards) {
-      CardImpl actualCard = (CardImpl) card;
-      actualCard.cloneCount = 1;
-    }
-
-    // Check for return-to-deck options
-    List<PutBackOption> putBackOptions;
-    ArrayList<Card> putBackCards = new ArrayList<Card>();
-    int actionsPlayed = context.countActionCardsInPlay();
-
-    //return Encampments
-    while (!encampment.isEmpty()) {
-      Card toReturn = encampment.removeLastCard();
-      game.getGamePile(toReturn).addCard(toReturn);
-    }
-
-    while (!(putBackOptions = controlPlayer.getPutBackOptions(context, actionsPlayed)).isEmpty()) {
-      PutBackOption putBackOption = controlPlayer.selectPutBackOption(context, putBackOptions);
-      if (putBackOption == PutBackOption.None || (isPossessed() && controlPlayer.isAi())) {
-        break;
-      } else {
-        if (putBackOption == PutBackOption.All) {
-          for (PutBackOption p : putBackOptions) {
-            if (p == PutBackOption.Treasury)
-            {
-              Card treasury = findCard(context, Cards.treasury);
-              playedCards.remove(treasury);
-              putBackCards.add(treasury);
-            }
-            if (p == PutBackOption.Alchemist)
-            {
-              Card alchemist = findCard(context, Cards.alchemist);
-              playedCards.remove(alchemist);
-              putBackCards.add(alchemist);
-            }
-            if (p == PutBackOption.WalledVillage) {
-              Card walledVillage = findCard(context, Cards.walledVillage);
-              playedCards.remove(walledVillage);
-              putBackCards.add(walledVillage);
-            }
-          }
-        } else if (putBackOption == PutBackOption.Treasury) {
-          Card treasury = findCard(context, Cards.treasury);
-          playedCards.remove(treasury);
-          putBackCards.add(treasury);
-        } else if (putBackOption == PutBackOption.Alchemist) {
-          Card alchemist = findCard(context, Cards.alchemist);
-          playedCards.remove(alchemist);
-          putBackCards.add(alchemist);
-        } else if (putBackOption == PutBackOption.WalledVillage) {
-          Card walledVillage = findCard(context, Cards.walledVillage);
-          playedCards.remove(walledVillage);
-          putBackCards.add(walledVillage);
-        } else if (putBackOption == PutBackOption.Coin) {
-          Card herbalist = findCard(context, Cards.herbalist);
-          playedCards.remove(herbalist);
-          discard(herbalist, null, null, false, true);
-          ArrayList<Card> treasureCards = new ArrayList<Card>();
-          //TODO: selecting card from right place - now there's a difference between treasures in play
-          //      vs treasures that are in nextTurnCards (and a difference from next turn and permanent ones)
-          for(Card card : playedCards) {
-            if(card.is(Type.Treasure, this)) {
-              treasureCards.add(card);
-            }
-          }
-          //TODO: make sure this works right with fake cards here and all
-          for(Card card : nextTurnCards) {
-            if(card.is(Type.Treasure, this)) {
-              treasureCards.add(card);
-            }
-          }
-
-          if(treasureCards.size() > 0) {
-            Card treasureCard = controlPlayer.herbalist_backOnDeck(context, treasureCards.toArray(new Card[0]));
-            if(treasureCard != null && treasureCard.is(Type.Treasure, this)) {
-              if (nextTurnCards.contains(treasureCard)) {
-                nextTurnCards.remove(treasureCard);
-                putBackCards.add(treasureCard);
-              } else if (playedCards.contains(treasureCard)) {
-                playedCards.remove(treasureCard);
-                putBackCards.add(treasureCard);
-              }
-            }
-          }
-        } else if (putBackOption == PutBackOption.Action) {
-          context.schemesPlayed --;
-          ArrayList<Card> actions = new ArrayList<Card>();
-          for(Card c : playedCards) {
-            if(c.is(Type.Action, context.player)) {
-              actions.add(c);
-            }
-          }
-          if(actions.size() == 0) {
-            break;
-          }
-
-          Card actionToPutBack = controlPlayer.scheme_actionToPutOnTopOfDeck(((MoveContext) context), actions.toArray(new Card[0]));
-          if(actionToPutBack == null) {
-            break;
-          }
-          int index = playedCards.indexOf((Card) actionToPutBack);
-          if(index == -1) {
-            Util.playerError(this, "Scheme returned invalid card to put back on top of deck, ignoring");
-            break;
-          }
-
-          Card card = playedCards.remove(index);
-          if (card.behaveAsCard().equals(Cards.hermit) &&
-          (context != null) &&
-          (context.totalCardsBoughtThisTurn == 0)) {
-            controlPlayer.gainNewCard(Cards.madman, card, context);
-          }
-          putBackCards.add(card);
-        }
-      }
-    }
-
-    if (!putBackCards.isEmpty()) {
-      // reset any lingering Impersonations
-      for (Card card : putBackCards) {
-        ((CardImpl) card).stopImpersonatingCard();
-      }
-
-      if (putBackCards.size() == 1) {
-        putOnTopOfDeck(putBackCards.get(0), context, true);
-      } else {
-        Card[] orderedCards = controlPlayer.topOfDeck_orderCards(context, putBackCards.toArray(new Card[0]));
-
-        for (int i = orderedCards.length - 1; i >= 0; i--) {
-          Card card = orderedCards[i];
-          putOnTopOfDeck(card, context, true);
-        }
-      }
-    }
-
-    Collections.sort(playedCards.toArrayList(), new Util.CardTravellerComparator());
-    while (!playedCards.isEmpty()) {
-      discard(playedCards.remove(0), null, context, false, true);
-      princeCardLeftThePlay(this); // princed travellers may be exchanged
-    }
-
-    playedByPrince.clear();
-
-    // /////////////////////////////////
-    // Discard hand
-    // /////////////////////////////////
-
-    while (getHand().size() > 0) {
-      discard(hand.remove(0, false), null, null, false, false);
-    }
-
-    // /////////////////////////////////
-    // Double check that deck/discard/hand all have valid cards.
-    // /////////////////////////////////
-    checkCardsValid();
-
-  }
-
-  public void debug(String msg) {
-    Util.debug(this, msg, false);
-  }
-
   public CardList getHand() {
     return hand;
   }
 
+  /*
+  ** getStashesInHand - Returns the number of Stashes in the Player's Hand
+  */
   public int getStashesInHand() {
     if (hand.size() == 0)
     return 0;
@@ -538,8 +145,40 @@ public abstract class Player {
     return result;
   }
 
-  public CardList getDiscard() {
-    return discard;
+  /*
+  ** getTreasuresInHand - Returns an ArrayList of Treasure Cards in Player's Hand
+  */
+  public ArrayList<Card> getTreasuresInHand() {
+    ArrayList<Card> treasures = new ArrayList<Card>();
+    for (Card c : getHand())
+    if (c.is(Type.Treasure, this)) {
+      treasures.add(c);
+    }
+    return treasures;
+  }
+
+  /*
+  ** getVictoryInHand - Returns an ArrayList of Victory Cards in Player's Hand
+  */
+  public ArrayList<Card> getVictoryInHand() {
+    ArrayList<Card> victory = new ArrayList<Card>();
+    for (Card c : getHand())
+    if (c.is(Type.Victory, this)) {
+      victory.add(c);
+    }
+    return victory;
+  }
+
+  /*
+  ** getActionsInHand - Returns an ArrayList of Action Cards in Player's Hand
+  */
+  public ArrayList<Card> getActionsInHand(Player player) {
+    ArrayList<Card> actions = new ArrayList<Card>();
+    for (Card c : getHand())
+    if (c.is(Type.Action, player)) {
+      actions.add(c);
+    }
+    return actions;
   }
 
   public int getDeckSize() {
@@ -550,6 +189,10 @@ public abstract class Player {
     if (deck.size() == 0)
     return false;
     return deck.get(0).equals(Cards.stash);
+  }
+
+  public CardList getDiscard() {
+    return discard;
   }
 
   public int getDiscardSize() {
@@ -588,27 +231,116 @@ public abstract class Player {
     return pirateShipTreasure;
   }
 
-  public int getGuildsCoinTokenCount()
-  {
-    return guildsCoinTokenCount;
-  }
-
-  public int getDebtTokenCount()
-  {
-    return debtTokenCount;
-  }
-
   public int getMiserTreasure() {
     return  Util.getCardCount(this.tavern, Cards.copper);
   }
 
-  public boolean getMinusOneCoinToken()
-  {
+  /*
+  ** inHand - Returns True if <card> is in Player's Hand
+  */
+  public boolean inHand(Card card) {
+    for (Card thisCard : hand) {
+      if (thisCard.equals(card)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public int inHandCount(Card card) {
+    return Util.getCardCount(getHand(), card);
+  }
+
+  public Card fromHand(Card card) {
+    for (Card thisCard : getHand()) {
+      if (thisCard.equals(card)) {
+        return thisCard;
+      }
+    }
+    return null;
+  }
+
+  public boolean inPlay(Card card) {
+    return playedCards.contains(card) || nextTurnCards.contains(card);
+  }
+
+  public boolean isInCardArray(Card card, Card[] list) {
+    for (Card thisCard : list) {
+      if (thisCard.equals(card)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public int mineableCards(Card[] hand) {
+    int mineableCards = 0;
+    for (Card card : hand) {
+      if (card.equals(Cards.potion) ||
+          card.equals(Cards.loan) ||
+          card.equals(Cards.masterpiece) ||
+          card.equals(Cards.illGottenGains) ||
+          card.equals(Cards.copper) ||
+          card.equals(Cards.silver) ||
+          card.equals(Cards.gold)) {
+        mineableCards++;
+      }
+    }
+    return mineableCards;
+  }
+
+  public int getCurrencyTotal(MoveContext context) {
+    int coin = 0;
+    for (Card card : getAllCards()) {
+      if (card.is(Type.Treasure, context.getPlayer())) {
+        coin += card.getAddGold();
+        if (card.getKind() == Cards.Kind.Bank) {
+          coin += 1;
+        }
+      }
+    }
+    return coin;
+  }
+
+  public int getMyCardCount(Card card) {
+    if (card.isPlaceholderCard()) {
+      int count = 0;
+      for (Card template : game.getPile(card).getTemplateCards()) {
+        count += Util.getCardCount(getAllCards(), template);
+      }
+      return count;
+    }
+    return Util.getCardCount(getAllCards(), card);
+  }
+
+  public int getMyAddActions() {
+    int addActions = 0;
+    for (Card card : getAllCards()) {
+      if (card.is(Type.Action, this)) {
+        addActions += card.getAddActions();
+      }
+    }
+    return addActions;
+  }
+
+
+  // ////////////////////////////////////
+  // Player Tokens & Coins Accessor Functions
+  // ////////////////////////////////////
+
+  public int getGuildsCoinTokenCount() {
+    return guildsCoinTokenCount;
+  }
+
+  public int getDebtTokenCount() {
+    return debtTokenCount;
+  }
+
+  public boolean getMinusOneCoinToken() {
     return minusOneCoinTokenOn;
   }
 
-  public void setMinusOneCoinToken(boolean state, MoveContext context)
-  {
+  public void setMinusOneCoinToken(boolean state, MoveContext context) {
     if(minusOneCoinTokenOn != state) {
       minusOneCoinTokenOn = state;
       if (context != null) {
@@ -618,13 +350,11 @@ public abstract class Player {
     }
   }
 
-  public boolean getMinusOneCardToken()
-  {
+  public boolean getMinusOneCardToken() {
     return minusOneCardTokenOn;
   }
 
-  public void setMinusOneCardToken(boolean state, MoveContext context)
-  {
+  public void setMinusOneCardToken(boolean state, MoveContext context) {
     if(minusOneCardTokenOn != state) {
       minusOneCardTokenOn = state;
       if (context != null) {
@@ -634,13 +364,11 @@ public abstract class Player {
     }
   }
 
-  public boolean getJourneyToken()
-  {
+  public boolean getJourneyToken() {
     return journeyTokenFaceUp;
   }
 
-  public boolean flipJourneyToken(MoveContext context)
-  {
+  public boolean flipJourneyToken(MoveContext context) {
     journeyTokenFaceUp = !journeyTokenFaceUp;
     if (context != null) {
       GameEvent event = new GameEvent(journeyTokenFaceUp ? GameEvent.EventType.TurnJourneyTokenFaceUp : GameEvent.EventType.TurnJourneyTokenFaceDown , context);
@@ -649,8 +377,7 @@ public abstract class Player {
     return journeyTokenFaceUp;
   }
 
-  public void gainGuildsCoinTokens(int tokenCount)
-  {
+  public void gainGuildsCoinTokens(int tokenCount) {
     if (tokenCount == 0) return;
     if (Game.errataPossessedTakesTokens) {
       guildsCoinTokenCount += tokenCount;
@@ -659,20 +386,15 @@ public abstract class Player {
     }
   }
 
-  public void spendGuildsCoinTokens(int tokenCount)
-  {
-    if (tokenCount <= guildsCoinTokenCount)
-    {
+  public void spendGuildsCoinTokens(int tokenCount) {
+    if (tokenCount <= guildsCoinTokenCount) {
       guildsCoinTokenCount -= tokenCount;
-    }
-    else
-    {
+    } else {
       Util.playerError(this, "spendGuildsCoinTokens() - Can't spend " + tokenCount + " coin tokens, only have " + guildsCoinTokenCount);
     }
   }
 
-  public void gainDebtTokens(int tokenCount)
-  {
+  public void gainDebtTokens(int tokenCount) {
     controlPlayer.debtTokenCount += tokenCount;
   }
 
@@ -684,13 +406,45 @@ public abstract class Player {
     }
   }
 
+  /*
+  ** addVictoryTokens - Adds Victory Tokens to the PLayer
+  */
+  public void addVictoryTokens(MoveContext context, int vt, Card responsible) {
+
+    if (vt == 0) {
+      return; // No Victory Tokens to add
+    }
+
+    // Add Victory Tokens
+    Player p = (!Game.errataPossessedTakesTokens && isPossessed()) ? controlPlayer : this;
+    p.victoryTokens += vt;
+
+    // Update Victory Tokens Source's Counter (i.e. the Card that provided Victory Tokens to Player)
+    responsible = responsible.getTemplateCard();
+    if (p.victoryTokensSource.containsKey(responsible)) {
+      p.victoryTokensSource.put(responsible, p.victoryTokensSource.get(responsible) + vt);
+    } else {
+      p.victoryTokensSource.put(responsible, vt);
+    }
+
+    // Broadcast Victory Tokens Obtained
+    GameEvent event = new GameEvent(GameEvent.EventType.VPTokensObtained, isPossessed() ? new MoveContext(context.game, p) : context);
+    event.setAmount(vt);
+    context.game.broadcastEvent(event);
+
+    if (!isPossessed()) {
+      context.vpsGainedThisTurn += vt; // TODO: How do we track vp gained in a turn by possessing player?
+    }
+  }
+
   public int getVictoryTokens() {
     return victoryTokens;
   }
 
-  public int getAllCardCount() {
-    return this.getAllCards().size();
-  }
+
+  // ////////////////////////////////////
+  // Player Card Accessor Functions
+  // ////////////////////////////////////
 
   public ArrayList<Card> getAllCards() {
     ArrayList<Card> allCards = new ArrayList<Card>();
@@ -752,6 +506,7 @@ public abstract class Player {
   }
 
   public Map<Object, Integer> getVictoryCardCounts() {
+
     final HashSet<String> distinctCards = new HashSet<String>();
     final Map<Object, Integer> allCardCounts = new HashMap<Object, Integer>();
     final Map<Object, Integer> cardCounts = new HashMap<Object, Integer>();
@@ -820,23 +575,6 @@ public abstract class Player {
     return cardCounts;
   }
 
-  public Map<Object, Integer> getAllCardCounts() {
-    final HashSet<String> distinctCards = new HashSet<String>();
-    final Map<Object, Integer> cardCounts = new HashMap<Object, Integer>();
-
-    for(Card card : this.getAllCards()) {
-      distinctCards.add(card.getName());
-      if(cardCounts.containsKey(card)) {
-        cardCounts.put(card, cardCounts.get(card) + 1);
-      } else {
-        cardCounts.put(card, 1);
-      }
-    }
-
-    cardCounts.put(DISTINCT_CARDS, distinctCards.size());
-    return cardCounts;
-  }
-
   public Map<Card, Integer> getTreasureCardCounts() {
     final Map<Card, Integer> cardCounts = new HashMap<Card, Integer>();
     for (CardPile pile : this.game.placeholderPiles.values()) {
@@ -846,7 +584,6 @@ public abstract class Player {
         }
       }
     }
-
     for(Card card : this.getAllCards()) {
       if (card.is(Type.Treasure, this)) {
         if(cardCounts.containsKey(card)) {
@@ -893,22 +630,6 @@ public abstract class Player {
     return this.getCardCount(Type.Victory);
   }
 
-  public int getDistinctCardCount() {
-    return getDistinctCardCount(null);
-  }
-
-  public int getDistinctCardCount(ArrayList<Card> cards) {
-    if (cards==null) cards = this.getAllCards();
-    //        int cardCount = 0;
-
-    final HashSet<String> distinctCards = new HashSet<String>();
-    for(Card card : cards) {
-      distinctCards.add(card.getName());
-    }
-
-    return distinctCards.size();
-  }
-
   public int getCastleCardCount(Player player) {
     return getCastleCardCount(getAllCards(), player);
   }
@@ -922,6 +643,708 @@ public abstract class Player {
     }
     return cardCount;
   }
+
+
+  // ////////////////////////////////////
+  // Player Action Functions
+  // ////////////////////////////////////
+
+  public Card peekAtDeckBottom() {
+    return deck.get(deck.size() - 1);
+  }
+
+  public void removeFromDeckBottom() {
+    deck.remove(deck.size() - 1);
+  }
+
+  public void putOnTopOfDeck(Card card, MoveContext context, boolean UI) {
+    putOnTopOfDeck(card);
+    if (UI) {
+      GameEvent event = new GameEvent(GameEvent.EventType.CardOnTopOfDeck, context);
+      event.card = card;
+      event.setPlayer(this);
+      context.game.broadcastEvent(event);
+    }
+  }
+
+  public void putOnTopOfDeck(Card card) {
+    deck.add(0, card);
+  }
+
+  public void replenishDeck(MoveContext context, Card responsible, int cardsLeftToDraw) {
+    shuffleIntoDeck(context, responsible, discard, cardsLeftToDraw);
+  }
+
+  private void shuffleIntoDeck(MoveContext context, Card responsible, CardList source, int cardsLeftToDraw) {
+    ArrayList<Card> stashes = new ArrayList<Card>();
+    int positionAll = -1;
+    if (context != null) {
+      int numStashes = 0;
+      for (Card c : source) {
+        if (c.equals(Cards.stash)) {
+          numStashes++;
+        }
+      }
+      boolean shuffleNormally = false;
+      if (source.size() == numStashes) {
+        shuffleNormally = true;
+      } else if (numStashes > 1) {
+        int afterCardsToDraw = cardsLeftToDraw;
+        if (afterCardsToDraw < 1)
+        afterCardsToDraw = source.size() - numStashes;
+        positionAll = this.controlPlayer.stash_chooseDeckPosition(context, responsible, source.size() - numStashes, numStashes, afterCardsToDraw);
+        // -1 -> Pass (shuffle normally)
+        // -2 or below -> (choose individually)
+        if (positionAll > source.size() - numStashes)
+        positionAll = source.size() - numStashes;
+        if (positionAll == -1) {
+          shuffleNormally = true;
+        }
+      }
+      if (!shuffleNormally) {
+        //pull out the Stash cards
+        for (int i = 0; i < source.size(); ++i) {
+          if (source.get(i).equals(Cards.stash)) {
+            stashes.add(source.remove(i--));
+          }
+        }
+      }
+    }
+
+    // shuffle
+    while (source.size() > 0) {
+      deck.add(source.remove(Game.rand.nextInt(source.size())));
+    }
+
+    while (stashes.size() > 0) {
+      source.add(stashes.remove(0));
+    }
+
+    // add pulled Stash cards back into deck
+    if (source.size() > 0) {
+      int numStashes = source.size();
+      for (int i = 0; i < numStashes; ++i) {
+        int position;
+        if (positionAll >= 0) {
+          position = positionAll;
+          position = Math.min(position, deck.size());
+        } else {
+          int afterCurrentCards = cardsLeftToDraw;
+          if (cardsLeftToDraw < 1) {
+            afterCurrentCards = deck.size();
+          }
+          position = controlPlayer.stash_chooseDeckPosition(context, responsible, deck.size(), 1, afterCurrentCards);
+          if (position < 0)
+          position = Game.rand.nextInt(deck.size() + 1);
+          position = Math.min(position, deck.size());
+        }
+        deck.add(position, source.remove(0));
+      }
+    }
+  }
+
+  public void shuffleDeck(MoveContext context, Card responsible) {
+    CardList tempDeck = new CardList(this, name);
+    while (deck.size() > 0) {
+      tempDeck.add(deck.remove(0));
+    }
+    shuffleIntoDeck(context, responsible, tempDeck, 0);
+  }
+
+  public void checkCardsValid() {
+    hand.checkValid();
+    discard.checkValid();
+    deck.checkValid();
+  }
+
+  public void namedCard(Card card, Card responsible, MoveContext context) {
+    GameEvent event = new GameEvent(GameEvent.EventType.CardNamed, context);
+    event.card = card;
+    event.responsible = responsible;
+    context.game.broadcastEvent(event);
+  }
+
+  public void revealFromHand(Card card, Card responsible, MoveContext context) {
+    GameEvent event = new GameEvent(GameEvent.EventType.CardRevealedFromHand, context);
+    event.card = card;
+    event.responsible = responsible;
+    context.game.broadcastEvent(event);
+  }
+
+  public void reveal(Card card, Card responsible, MoveContext context) {
+    GameEvent event = new GameEvent(GameEvent.EventType.CardRevealed, context);
+    event.card = card;
+    event.responsible = responsible;
+    context.game.broadcastEvent(event);
+  }
+
+  public void attacked(Card card, MoveContext context) {
+    context.attackedPlayer = this;
+    GameEvent event = new GameEvent(GameEvent.EventType.PlayerAttacking, context);
+    event.attackedPlayer = this;
+    event.card = card.behaveAsCard();
+    context.game.broadcastEvent(event);
+  }
+
+  public Card gainNewCard(Card cardToGain, Card responsible, MoveContext context) {
+    Card card = game.takeFromPileCheckTrader(cardToGain, context);
+    if (card != null) {
+      GameEvent gainEvent = new GameEvent(GameEvent.EventType.CardObtained, (MoveContext) context);
+      gainEvent.card = card;
+      gainEvent.responsible = responsible;
+      gainEvent.newCard = true;
+
+      // Check if Trader swapped the card, so it can be made responsible, putting the card in the discard
+      // pile rather than were it would go otherwise (according to faq)
+      if(!cardToGain.equals(card) && card.equals(Cards.silver)) {
+        gainEvent.responsible = Cards.trader;
+      }
+
+      context.game.broadcastEvent(gainEvent);
+
+    }
+    return card;
+  }
+
+  public void gainCardAlreadyInPlay(Card card, Card responsible, MoveContext context) {
+    if (context != null) {
+      GameEvent event = new GameEvent(GameEvent.EventType.CardObtained, context);
+      event.card = card;
+      event.responsible = responsible;
+      event.newCard = false;
+      context.game.broadcastEvent(event);
+    }
+  }
+
+  protected void discardRemainingCardsFromHand(MoveContext context, Card[] cardsToKeep, Card responsibleCard, int keepCardCount) {
+    ArrayList<Card> keepCards = new ArrayList<Card>(Arrays.asList(cardsToKeep));
+
+    if (keepCardCount > 0) {
+      boolean bad = false;
+      if (cardsToKeep == null || cardsToKeep.length != keepCardCount) {
+        bad = true;
+      } else {
+        ArrayList<Card> handCopy = Util.copy(hand);
+        for (Card cardToKeep : cardsToKeep) {
+          if (!handCopy.remove(cardToKeep)) {
+            bad = true;
+            break;
+          }
+        }
+      }
+
+      if (bad) {
+        Util.playerError(this, responsibleCard.getName() + " discard error, just keeping first " + keepCardCount);
+        cardsToKeep = new Card[keepCardCount];
+        for (int i = 0; i < keepCardCount; i++) {
+          cardsToKeep[i] = hand.get(i);
+        }
+      }
+    }
+
+    // Discard remaining cards
+    for (int i = hand.size(); i > 0; ) {
+      Card card = hand.get(--i);
+      if (keepCards.contains(card)) {
+        keepCards.remove(card);
+      } else {
+        hand.remove(i, false);
+        discard(card, responsibleCard, context);
+      }
+    }
+  }
+
+  public void discard(Card card, Card responsible, MoveContext context) {
+    discard(card, responsible, context, true, false);
+  }
+
+  // TODO make similar way to put cards back on the deck (remove as well?)
+  public void discard(Card card, Card responsible, MoveContext context, boolean commandedDiscard, boolean cleanup) { // See rules explanation of Tunnel for what commandedDiscard means.
+    boolean willDiscard = false;
+    Card exchange = null;
+
+    if (card.behaveAsCard().equals(Cards.hermit)) {
+      if (!commandedDiscard &&
+      (context != null) &&
+      (context.totalCardsBoughtThisTurn == 0))
+      {
+        /* A Hermit that is set aside again by Prince on a turn
+        * where no cards were bought will fail to trash itself,
+        * but you will still gain a Madman
+        */
+        if (cleanup && playedByPrince.contains(card)) {
+          willDiscard = true;
+        }
+        else {
+          trash(card, card, context);
+        }
+        controlPlayer.gainNewCard(Cards.madman, card, context);
+      }
+      else
+      {
+        willDiscard = true;
+      }
+    }
+    else
+    {
+      willDiscard = true;
+    }
+
+    if (willDiscard) {
+      if (!commandedDiscard && cleanup && card.equals(Cards.capital)) {
+        context.getPlayer().controlPlayer.gainDebtTokens(6);
+        GameEvent event = new GameEvent(GameEvent.EventType.DebtTokensObtained, context);
+        event.setAmount(6);
+        context.game.broadcastEvent(event);
+        context.game.playerPayOffDebt(this, context);
+      }
+
+      //if discarding during cleanup put the card back on prince
+      if (!commandedDiscard && cleanup && playedByPrince.contains(card)) {
+        prince.add(card);
+        playedByPrince.remove(card);
+        if(context != null) {
+          GameEvent event = new GameEvent(GameEvent.EventType.CardSetAside, context);
+          event.card = card;
+          context.game.broadcastEvent(event);
+        }
+      }
+      else if(!commandedDiscard && cleanup && card.is(Type.Traveller, this)) {
+        exchange = traveller_exchange(context, card);
+        if (exchange != null) {
+          // Return to the pile
+          game.getPile(card).addCard(card);
+          discard.add(takeFromPile(exchange));
+        }
+        else {
+          discard.add(card);
+        }
+      }
+      else {
+        discard.add(card);
+      }
+    }
+    if (willDiscard) {
+      if(commandedDiscard && card.equals(Cards.tunnel)) {
+
+        MoveContext tunnelContext = new MoveContext(game, this);
+
+        if(game.pileSize(Cards.gold) > 0 && controlPlayer.tunnel_shouldReveal(tunnelContext)) {
+          reveal(card, card, tunnelContext);
+          gainNewCard(Cards.gold, card, tunnelContext);
+        }
+      }
+    }
+
+    // card left play - stop impersonations
+    ((CardImpl) card).stopImpersonatingCard();
+
+    // XXX making game slow; is this necessary?  For that matter, are discarded cards public?
+    if(context != null && (commandedDiscard || exchange != null)) {
+      GameEvent event;
+      if(exchange != null) {
+        event = new GameEvent(GameEvent.EventType.TravellerExchanged, context);
+        event.card = exchange;
+        event.responsible = card;
+      } else {
+        event = new GameEvent(GameEvent.EventType.CardDiscarded, context);
+        event.card = (card);
+        event.responsible = responsible;
+      }
+
+      event.setPlayer(this);
+      context.game.broadcastEvent(event);
+    }
+  }
+
+  private Card traveller_exchange(MoveContext context, Card card) {
+    Card exchange = null;
+    if (card.behaveAsCard().equals(Cards.peasant)) exchange = Cards.soldier;
+    if (card.equals(Cards.soldier)) exchange = Cards.fugitive;
+    if (card.equals(Cards.fugitive)) exchange = Cards.disciple;
+    if (card.equals(Cards.disciple)) exchange = Cards.teacher;
+    if (card.behaveAsCard().equals(Cards.page)) exchange = Cards.treasureHunter;
+    if (card.equals(Cards.treasureHunter)) exchange = Cards.warrior;
+    if (card.equals(Cards.warrior)) exchange = Cards.hero;
+    if (card.equals(Cards.hero)) exchange = Cards.champion;
+    if (!context.isCardOnTop(exchange))
+    exchange = null;
+    if (exchange != null) {
+      if(!controlPlayer.traveller_shouldExchange(context, card.behaveAsCard(), exchange))
+      exchange = null;
+    }
+    return exchange;
+  }
+
+
+  public Card takeFromPile(Card card) {
+    return game.takeFromPile(card);
+  }
+
+
+  /*
+  ** trash - Trashes a Card
+  */
+  public void trash(Card card, Card responsible, MoveContext context) {
+
+    if(context != null) {
+      // TODO: Track in main game event listener instead
+      context.cardsTrashedThisTurn++;
+    }
+
+    // Broadcast Trash Event
+    GameEvent event = new GameEvent(GameEvent.EventType.CardTrashed, context);
+    event.card = card;
+    event.responsible = responsible;
+    context.game.broadcastEvent(event);
+
+    // Add to Trash Pile
+    if (isPossessed()) {
+      context.game.possessedTrashPile.add(card);
+    } else {
+      context.game.trashPile.add(card);
+    }
+
+    // Add VP token if Tomb is in play
+    if (context.game.cardInGame(Cards.tomb)) {
+      addVictoryTokens(context, 1, Cards.tomb);
+    }
+
+    // Execute special card logic when the trashing occurs
+    if (card.equals(Cards.estate) && getInheritance() != null) {
+      getInheritance().behaveAsCard().isTrashed(context);
+    } else {
+      card.behaveAsCard().isTrashed(context);
+    }
+
+    // Market Square trashing reaction
+    boolean hasInheritedMarketSquare = Cards.marketSquare.equals(context.getPlayer().getInheritance()) && context.getPlayer().hand.contains(Cards.estate);
+    boolean hasMarketSquare = context.getPlayer().hand.contains(Cards.marketSquare);
+
+    if (hasMarketSquare || hasInheritedMarketSquare) {
+
+      ArrayList<Card> marketSquaresInHand = new ArrayList<Card>();
+
+      for (Card c : hand) {
+        if (c.getKind() == Cards.Kind.MarketSquare || (hasInheritedMarketSquare && c.equals(Cards.estate))) {
+          marketSquaresInHand.add(c);
+        }
+      }
+
+      for (Card c : marketSquaresInHand) {
+        if (controlPlayer.marketSquare_shouldDiscard(context, c)) {
+          hand.remove(c);
+          discard(c, card, context);
+          gainNewCard(Cards.gold, Cards.marketSquare, context);
+        }
+      }
+    }
+  }
+
+
+  private List<PutBackOption> getPutBackOptions(MoveContext context, int actionsPlayed) {
+
+    // Determine if criteria were met for certain action cards
+    boolean victoryBought  = context.getVictoryCardsBoughtThisTurn() > 0;
+    boolean potionPlayed   = context.countCardsInPlay(Cards.potion) > 0;
+    boolean treasurePlayed = context.countTreasureCardsInPlay() > 0;
+    int actionsInPlay      = context.countActionCardsInPlay();
+
+    List<PutBackOption> options = new ArrayList<PutBackOption>();
+
+    for (Card c: playedCards) {
+      if (c.behaveAsCard().equals(Cards.treasury) && !victoryBought) {
+        options.add(PutBackOption.Treasury);
+      } else if (c.behaveAsCard().equals(Cards.alchemist) && potionPlayed) {
+        options.add(PutBackOption.Alchemist);
+      } else if (c.behaveAsCard().equals(Cards.walledVillage) && actionsPlayed <= 2) {
+        options.add(PutBackOption.WalledVillage);
+      } else if (c.behaveAsCard().equals(Cards.herbalist) && treasurePlayed) {
+        options.add(PutBackOption.Coin);
+      }
+    }
+    if (actionsInPlay > 0) {
+      for (int i = 0; i < context.schemesPlayed; i++) {
+        options.add(PutBackOption.Action);
+      }
+    }
+    /* check if all options are simple
+    * (Alchemist, Treasury or WalledVillage) */
+    boolean allSimple = true;
+    for (PutBackOption o: options) {
+      if (o.equals(PutBackOption.Alchemist) ||
+      o.equals(PutBackOption.Treasury) ||
+      o.equals(PutBackOption.WalledVillage)) {
+        continue;
+      }
+      allSimple = false;
+      break;
+    }
+    if (allSimple && options.size() > 1) {
+      options.add(PutBackOption.All);
+    }
+    return options;
+  }
+
+  protected void cleanupOutOfTurn(MoveContext context) {
+    //So far now, only cards that can happen here are Duplicate
+    // and Coin of the Realm (when called after playing a Caravan Guard as part of a Reaction)
+    for (Card card : playedCards) {
+      CardImpl actualCard = (CardImpl) card;
+      actualCard.cloneCount = 1;
+    }
+    while (!playedCards.isEmpty()) {
+      discard(playedCards.remove(0), null, context, false, true);
+    }
+  }
+
+  protected void cleanup(MoveContext context) {
+
+    // Reset any lingering CloneCounts
+    for (Card card : playedCards) {
+      CardImpl actualCard = (CardImpl) card;
+      actualCard.cloneCount = 1;
+    }
+
+    // Check for return-to-deck options
+    List<PutBackOption> putBackOptions;
+    ArrayList<Card> putBackCards = new ArrayList<Card>();
+    int actionsPlayed = context.countActionCardsInPlay();
+
+    // Return Encampments
+    while (!encampment.isEmpty()) {
+      Card toReturn = encampment.removeLastCard();
+      game.getGamePile(toReturn).addCard(toReturn);
+    }
+
+    while (!(putBackOptions = controlPlayer.getPutBackOptions(context, actionsPlayed)).isEmpty()) {
+
+      PutBackOption putBackOption = controlPlayer.selectPutBackOption(context, putBackOptions);
+
+      if (putBackOption == PutBackOption.None || (isPossessed() && controlPlayer.isAi())) {
+        break;
+      } else {
+        if (putBackOption == PutBackOption.All) {
+          for (PutBackOption p : putBackOptions) {
+            if (p == PutBackOption.Treasury)
+            {
+              Card treasury = findCard(context, Cards.treasury);
+              playedCards.remove(treasury);
+              putBackCards.add(treasury);
+            }
+            if (p == PutBackOption.Alchemist)
+            {
+              Card alchemist = findCard(context, Cards.alchemist);
+              playedCards.remove(alchemist);
+              putBackCards.add(alchemist);
+            }
+            if (p == PutBackOption.WalledVillage) {
+              Card walledVillage = findCard(context, Cards.walledVillage);
+              playedCards.remove(walledVillage);
+              putBackCards.add(walledVillage);
+            }
+          }
+        } else if (putBackOption == PutBackOption.Treasury) {
+          Card treasury = findCard(context, Cards.treasury);
+          playedCards.remove(treasury);
+          putBackCards.add(treasury);
+        } else if (putBackOption == PutBackOption.Alchemist) {
+          Card alchemist = findCard(context, Cards.alchemist);
+          playedCards.remove(alchemist);
+          putBackCards.add(alchemist);
+        } else if (putBackOption == PutBackOption.WalledVillage) {
+          Card walledVillage = findCard(context, Cards.walledVillage);
+          playedCards.remove(walledVillage);
+          putBackCards.add(walledVillage);
+        } else if (putBackOption == PutBackOption.Coin) {
+          Card herbalist = findCard(context, Cards.herbalist);
+          playedCards.remove(herbalist);
+          discard(herbalist, null, null, false, true);
+          ArrayList<Card> treasureCards = new ArrayList<Card>();
+          //TODO: selecting card from right place - now there's a difference between treasures in play
+          //      vs treasures that are in nextTurnCards (and a difference from next turn and permanent ones)
+          for(Card card : playedCards) {
+            if(card.is(Type.Treasure, this)) {
+              treasureCards.add(card);
+            }
+          }
+
+          //TODO: make sure this works right with fake cards here and all
+          for(Card card : nextTurnCards) {
+            if(card.is(Type.Treasure, this)) {
+              treasureCards.add(card);
+            }
+          }
+
+          if(treasureCards.size() > 0) {
+            Card treasureCard = controlPlayer.herbalist_backOnDeck(context, treasureCards.toArray(new Card[0]));
+            if(treasureCard != null && treasureCard.is(Type.Treasure, this)) {
+              if (nextTurnCards.contains(treasureCard)) {
+                nextTurnCards.remove(treasureCard);
+                putBackCards.add(treasureCard);
+              } else if (playedCards.contains(treasureCard)) {
+                playedCards.remove(treasureCard);
+                putBackCards.add(treasureCard);
+              }
+            }
+          }
+
+        } else if (putBackOption == PutBackOption.Action) {
+          context.schemesPlayed --;
+          ArrayList<Card> actions = new ArrayList<Card>();
+          for(Card c : playedCards) {
+            if(c.is(Type.Action, context.player)) {
+              actions.add(c);
+            }
+          }
+          if(actions.size() == 0) {
+            break;
+          }
+
+          Card actionToPutBack = controlPlayer.scheme_actionToPutOnTopOfDeck(((MoveContext) context), actions.toArray(new Card[0]));
+          if(actionToPutBack == null) {
+            break;
+          }
+          int index = playedCards.indexOf((Card) actionToPutBack);
+          if(index == -1) {
+            Util.playerError(this, "Scheme returned invalid card to put back on top of deck, ignoring");
+            break;
+          }
+
+          Card card = playedCards.remove(index);
+          if (card.behaveAsCard().equals(Cards.hermit) &&
+          (context != null) &&
+          (context.totalCardsBoughtThisTurn == 0)) {
+            controlPlayer.gainNewCard(Cards.madman, card, context);
+          }
+          putBackCards.add(card);
+        }
+      }
+    }
+
+    if (!putBackCards.isEmpty()) {
+      // reset any lingering Impersonations
+      for (Card card : putBackCards) {
+        ((CardImpl) card).stopImpersonatingCard();
+      }
+
+      if (putBackCards.size() == 1) {
+        putOnTopOfDeck(putBackCards.get(0), context, true);
+      } else {
+        Card[] orderedCards = controlPlayer.topOfDeck_orderCards(context, putBackCards.toArray(new Card[0]));
+
+        for (int i = orderedCards.length - 1; i >= 0; i--) {
+          Card card = orderedCards[i];
+          putOnTopOfDeck(card, context, true);
+        }
+      }
+    }
+
+    Collections.sort(playedCards.toArrayList(), new Util.CardTravellerComparator());
+    while (!playedCards.isEmpty()) {
+      discard(playedCards.remove(0), null, context, false, true);
+      princeCardLeftThePlay(this); // princed travellers may be exchanged
+    }
+
+    playedByPrince.clear();
+
+    // Discard hand
+    while (getHand().size() > 0) {
+      discard(hand.remove(0, false), null, null, false, false);
+    }
+
+    // Double check that deck/discard/hand all have valid cards.
+    checkCardsValid();
+
+  }
+
+  /*
+  ** findCard - Return Card from list of Played Cards
+  */
+  private Card findCard(MoveContext context, Card template) {
+    for (Card c: playedCards) {
+      if (c.behaveAsCard().equals(template)) {
+        return c;
+      }
+    }
+    return null;
+  }
+
+  /*
+  ** princeCardLeftThePlay - Tests if any prince card left the play
+  */
+  public void princeCardLeftThePlay(Player currentPlayer) {
+    if (currentPlayer.playedByPrince.size() > 0) {
+      ArrayList<Card> playedByPrince = new ArrayList<Card>();
+      for (int i = 0; i < currentPlayer.playedByPrince.size(); i++) {
+        playedByPrince.add(currentPlayer.playedByPrince.remove(i));
+      }
+      ArrayList<Card> playedCards = new ArrayList<Card>();
+      for (int i = 0; i < currentPlayer.playedCards.size(); i++) {
+        playedCards.add(currentPlayer.playedCards.get(i));
+      }
+      for (Card card : playedByPrince) {
+        if (playedCards.contains(card)) {
+          playedCards.remove(card);
+          currentPlayer.playedByPrince.add(card);
+        }
+        else {
+          Util.log("Prince card has left the play:" + card.getName());
+        }
+      }
+    }
+  }
+
+
+  // ////////////////////////////////////
+  // Player Interaction Functions
+  // ////////////////////////////////////
+
+  public boolean isPossessed() {
+    return !controlled && !this.equals(controlPlayer);
+  }
+
+  public boolean isControlled() {
+    return controlled;
+  }
+
+  public void stopBeingControlled() {
+    controlPlayer = this;
+    controlled = false;
+  }
+
+  public void startBeingControlled(Player player) {
+    controlPlayer = player;
+    controlled = true;
+  }
+
+  public void clearDurationEffectsOnOtherPlayers() {
+    attackDurationEffectsOnOthers.clear();
+  }
+
+  public void addDurationEffectOnOtherPlayer(Player player, Cards.Kind effectType) {
+    if (!attackDurationEffectsOnOthers.containsKey(player)) {
+      attackDurationEffectsOnOthers.put(player, new HashMap<Cards.Kind, Integer>());
+    }
+    Map<Cards.Kind, Integer> otherPlayerEffects = attackDurationEffectsOnOthers.get(player);
+    if (!otherPlayerEffects.containsKey(effectType)) {
+      otherPlayerEffects.put(effectType, 0);
+    }
+    otherPlayerEffects.put(effectType, otherPlayerEffects.get(effectType) + 1);
+  }
+
+  public int getDurationEffectsOnOtherPlayer(Player player, Cards.Kind effectType) {
+    if (attackDurationEffectsOnOthers.containsKey(player)
+    && attackDurationEffectsOnOthers.get(player).containsKey(effectType)) {
+      return attackDurationEffectsOnOthers.get(player).get(effectType);
+    }
+    return 0;
+  }
+
+
+  // ////////////////////////////////////
+  // Player Game Scoring Functions
+  // ////////////////////////////////////
 
   public int calculateLead(Card card) {
     checkLeadCard = card;
@@ -1050,494 +1473,30 @@ public abstract class Player {
     return totals;
   }
 
-  public Map<Card, Integer> getVictoryTokensTotals() {
-    return victoryTokensSource;
+  /*
+  ** getWin - Returns True if Player wins
+  */
+  public boolean getWin() {
+    return win;
   }
 
-  public void clearDurationEffectsOnOtherPlayers() {
-    attackDurationEffectsOnOthers.clear();
-  }
-
-  public void addDurationEffectOnOtherPlayer(Player player, Cards.Kind effectType) {
-    if (!attackDurationEffectsOnOthers.containsKey(player)) {
-      attackDurationEffectsOnOthers.put(player, new HashMap<Cards.Kind, Integer>());
-    }
-    Map<Cards.Kind, Integer> otherPlayerEffects = attackDurationEffectsOnOthers.get(player);
-    if (!otherPlayerEffects.containsKey(effectType)) {
-      otherPlayerEffects.put(effectType, 0);
-    }
-    otherPlayerEffects.put(effectType, otherPlayerEffects.get(effectType) + 1);
-  }
-
-  public int getDurationEffectsOnOtherPlayer(Player player, Cards.Kind effectType) {
-    if (attackDurationEffectsOnOthers.containsKey(player)
-    && attackDurationEffectsOnOthers.get(player).containsKey(effectType)) {
-      return attackDurationEffectsOnOthers.get(player).get(effectType);
-    }
-    return 0;
-  }
-
-  public Card peekAtDeckBottom() {
-    return deck.get(deck.size() - 1);
-  }
-
-  public void removeFromDeckBottom() {
-    deck.remove(deck.size() - 1);
-  }
-
-  public void putOnTopOfDeck(Card card, MoveContext context, boolean UI) {
-    putOnTopOfDeck(card);
-    if (UI) {
-      GameEvent event = new GameEvent(GameEvent.EventType.CardOnTopOfDeck, context);
-      event.card = card;
-      event.setPlayer(this);
-      context.game.broadcastEvent(event);
-    }
-  }
-
-  public void putOnTopOfDeck(Card card) {
-    deck.add(0, card);
-  }
-
-  public void replenishDeck(MoveContext context, Card responsible, int cardsLeftToDraw) {
-    shuffleIntoDeck(context, responsible, discard, cardsLeftToDraw);
-  }
-
-  private void shuffleIntoDeck(MoveContext context, Card responsible, CardList source, int cardsLeftToDraw) {
-    ArrayList<Card> stashes = new ArrayList<Card>();
-    int positionAll = -1;
-    if (context != null) {
-      int numStashes = 0;
-      for (Card c : source) {
-        if (c.equals(Cards.stash)) {
-          numStashes++;
-        }
-      }
-      boolean shuffleNormally = false;
-      if (source.size() == numStashes) {
-        shuffleNormally = true;
-      } else if (numStashes > 1) {
-        int afterCardsToDraw = cardsLeftToDraw;
-        if (afterCardsToDraw < 1)
-        afterCardsToDraw = source.size() - numStashes;
-        positionAll = this.controlPlayer.stash_chooseDeckPosition(context, responsible, source.size() - numStashes, numStashes, afterCardsToDraw);
-        // -1 -> Pass (shuffle normally)
-        // -2 or below -> (choose individually)
-        if (positionAll > source.size() - numStashes)
-        positionAll = source.size() - numStashes;
-        if (positionAll == -1) {
-          shuffleNormally = true;
-        }
-      }
-      if (!shuffleNormally) {
-        //pull out the Stash cards
-        for (int i = 0; i < source.size(); ++i) {
-          if (source.get(i).equals(Cards.stash)) {
-            stashes.add(source.remove(i--));
-          }
-        }
-      }
-    }
-
-    // shuffle
-    while (source.size() > 0) {
-      deck.add(source.remove(Game.rand.nextInt(source.size())));
-    }
-
-    while (stashes.size() > 0) {
-      source.add(stashes.remove(0));
-    }
-
-    // add pulled Stash cards back into deck
-    if (source.size() > 0) {
-      int numStashes = source.size();
-      for (int i = 0; i < numStashes; ++i) {
-        int position;
-        if (positionAll >= 0) {
-          position = positionAll;
-          position = Math.min(position, deck.size());
-        } else {
-          int afterCurrentCards = cardsLeftToDraw;
-          if (cardsLeftToDraw < 1) {
-            afterCurrentCards = deck.size();
-          }
-          position = controlPlayer.stash_chooseDeckPosition(context, responsible, deck.size(), 1, afterCurrentCards);
-          if (position < 0)
-          position = Game.rand.nextInt(deck.size() + 1);
-          position = Math.min(position, deck.size());
-        }
-        deck.add(position, source.remove(0));
-      }
-    }
-  }
-
-  public void shuffleDeck(MoveContext context, Card responsible) {
-    CardList tempDeck = new CardList(this, name);
-    while (deck.size() > 0) {
-      tempDeck.add(deck.remove(0));
-    }
-    shuffleIntoDeck(context, responsible, tempDeck, 0);
-  }
-
-  public void checkCardsValid() {
-    hand.checkValid();
-    discard.checkValid();
-    deck.checkValid();
-  }
-
-  protected void discardRemainingCardsFromHand(MoveContext context, Card[] cardsToKeep, Card responsibleCard, int keepCardCount) {
-    ArrayList<Card> keepCards = new ArrayList<Card>(Arrays.asList(cardsToKeep));
-
-    if (keepCardCount > 0) {
-      boolean bad = false;
-      if (cardsToKeep == null || cardsToKeep.length != keepCardCount) {
-        bad = true;
-      } else {
-        ArrayList<Card> handCopy = Util.copy(hand);
-        for (Card cardToKeep : cardsToKeep) {
-          if (!handCopy.remove(cardToKeep)) {
-            bad = true;
-            break;
-          }
-        }
-      }
-
-      if (bad) {
-        Util.playerError(this, responsibleCard.getName() + " discard error, just keeping first " + keepCardCount);
-        cardsToKeep = new Card[keepCardCount];
-        for (int i = 0; i < keepCardCount; i++) {
-          cardsToKeep[i] = hand.get(i);
-        }
-      }
-
-
-    }
-
-    // Discard remaining cards
-    for (int i = hand.size(); i > 0; ) {
-      Card card = hand.get(--i);
-      if (keepCards.contains(card)) {
-        keepCards.remove(card);
-      } else {
-        hand.remove(i, false);
-        discard(card, responsibleCard, context);
-      }
-    }
-  }
-
-  public void discard(Card card, Card responsible, MoveContext context) {
-    discard(card, responsible, context, true, false);
-  }
-
-  private Card traveller_exchange(MoveContext context, Card card) {
-    Card exchange = null;
-    if (card.behaveAsCard().equals(Cards.peasant)) exchange = Cards.soldier;
-    if (card.equals(Cards.soldier)) exchange = Cards.fugitive;
-    if (card.equals(Cards.fugitive)) exchange = Cards.disciple;
-    if (card.equals(Cards.disciple)) exchange = Cards.teacher;
-    if (card.behaveAsCard().equals(Cards.page)) exchange = Cards.treasureHunter;
-    if (card.equals(Cards.treasureHunter)) exchange = Cards.warrior;
-    if (card.equals(Cards.warrior)) exchange = Cards.hero;
-    if (card.equals(Cards.hero)) exchange = Cards.champion;
-    if (!context.isCardOnTop(exchange))
-    exchange = null;
-    if (exchange != null) {
-      if(!controlPlayer.traveller_shouldExchange(context, card.behaveAsCard(), exchange))
-      exchange = null;
-    }
-    return exchange;
-  }
-
-  // TODO make similar way to put cards back on the deck (remove as well?)
-  public void discard(Card card, Card responsible, MoveContext context, boolean commandedDiscard, boolean cleanup) { // See rules explanation of Tunnel for what commandedDiscard means.
-    boolean willDiscard = false;
-    Card exchange = null;
-
-    if (card.behaveAsCard().equals(Cards.hermit)) {
-      if (!commandedDiscard &&
-      (context != null) &&
-      (context.totalCardsBoughtThisTurn == 0))
-      {
-        /* A Hermit that is set aside again by Prince on a turn
-        * where no cards were bought will fail to trash itself,
-        * but you will still gain a Madman
-        */
-        if (cleanup && playedByPrince.contains(card)) {
-          willDiscard = true;
-        }
-        else {
-          trash(card, card, context);
-        }
-        controlPlayer.gainNewCard(Cards.madman, card, context);
-      }
-      else
-      {
-        willDiscard = true;
-      }
-    }
-    else
-    {
-      willDiscard = true;
-    }
-
-    if (willDiscard) {
-      if (!commandedDiscard && cleanup && card.equals(Cards.capital)) {
-        context.getPlayer().controlPlayer.gainDebtTokens(6);
-        GameEvent event = new GameEvent(GameEvent.EventType.DebtTokensObtained, context);
-        event.setAmount(6);
-        context.game.broadcastEvent(event);
-        context.game.playerPayOffDebt(this, context);
-      }
-
-      //if discarding during cleanup put the card back on prince
-      if (!commandedDiscard && cleanup && playedByPrince.contains(card)) {
-        prince.add(card);
-        playedByPrince.remove(card);
-        if(context != null) {
-          GameEvent event = new GameEvent(GameEvent.EventType.CardSetAside, context);
-          event.card = card;
-          context.game.broadcastEvent(event);
-        }
-      }
-      else if(!commandedDiscard && cleanup && card.is(Type.Traveller, this)) {
-        exchange = traveller_exchange(context, card);
-        if (exchange != null) {
-          // Return to the pile
-          game.getPile(card).addCard(card);
-          discard.add(takeFromPile(exchange));
-        }
-        else {
-          discard.add(card);
-        }
-      }
-      else {
-        discard.add(card);
-      }
-    }
-    if (willDiscard) {
-      if(commandedDiscard && card.equals(Cards.tunnel)) {
-
-        MoveContext tunnelContext = new MoveContext(game, this);
-
-        if(game.pileSize(Cards.gold) > 0 && controlPlayer.tunnel_shouldReveal(tunnelContext)) {
-          reveal(card, card, tunnelContext);
-          gainNewCard(Cards.gold, card, tunnelContext);
-        }
-      }
-    }
-
-    // card left play - stop impersonations
-    ((CardImpl) card).stopImpersonatingCard();
-
-    // XXX making game slow; is this necessary?  For that matter, are discarded cards public?
-    if(context != null && (commandedDiscard || exchange != null)) {
-      GameEvent event;
-      if(exchange != null) {
-        event = new GameEvent(GameEvent.EventType.TravellerExchanged, context);
-        event.card = exchange;
-        event.responsible = card;
-      } else {
-        event = new GameEvent(GameEvent.EventType.CardDiscarded, context);
-        event.card = (card);
-        event.responsible = responsible;
-      }
-
-      event.setPlayer(this);
-      context.game.broadcastEvent(event);
-    }
-  }
-
-  public Card gainNewCard(Card cardToGain, Card responsible, MoveContext context) {
-    Card card = game.takeFromPileCheckTrader(cardToGain, context);
-    if (card != null) {
-      GameEvent gainEvent = new GameEvent(GameEvent.EventType.CardObtained, (MoveContext) context);
-      gainEvent.card = card;
-      gainEvent.responsible = responsible;
-      gainEvent.newCard = true;
-
-      // Check if Trader swapped the card, so it can be made responsible, putting the card in the discard
-      // pile rather than were it would go otherwise (according to faq)
-      if(!cardToGain.equals(card) && card.equals(Cards.silver)) {
-        gainEvent.responsible = Cards.trader;
-      }
-
-      context.game.broadcastEvent(gainEvent);
-
-    }
-    return card;
-  }
-
-
-  public void gainCardAlreadyInPlay(Card card, Card responsible, MoveContext context) {
-    if (context != null) {
-      GameEvent event = new GameEvent(GameEvent.EventType.CardObtained, context);
-      event.card = card;
-      event.responsible = responsible;
-      event.newCard = false;
-      context.game.broadcastEvent(event);
-    }
-  }
-
-  // test if any prince card left the play
-  public void princeCardLeftThePlay(Player currentPlayer) {
-    if (currentPlayer.playedByPrince.size() > 0) {
-      ArrayList<Card> playedByPrince = new ArrayList<Card>();
-      for (int i = 0; i < currentPlayer.playedByPrince.size(); i++) {
-        playedByPrince.add(currentPlayer.playedByPrince.remove(i));
-      }
-      ArrayList<Card> playedCards = new ArrayList<Card>();
-      for (int i = 0; i < currentPlayer.playedCards.size(); i++) {
-        playedCards.add(currentPlayer.playedCards.get(i));
-      }
-      for (Card card : playedByPrince) {
-        if (playedCards.contains(card)) {
-          playedCards.remove(card);
-          currentPlayer.playedByPrince.add(card);
-        }
-        else {
-          Util.log("Prince card has left the play:" + card.getName());
-        }
-      }
-    }
-  }
-
+  /*
+  ** broadcastEvent - Broadcasts a GameEvent for the Player
+  */
   public void broadcastEvent(GameEvent event) {
     game.broadcastEvent(event);
   }
 
-  public Card takeFromPile(Card card) {
-    return game.takeFromPile(card);
-  }
-
-
   /*
-  ** trash - Trashes a Card
+  ** debug - Prints a Debug Message for the Player
   */
-  public void trash(Card card, Card responsible, MoveContext context) {
-
-    if(context != null) {
-      // TODO: Track in main game event listener instead
-      context.cardsTrashedThisTurn++;
-    }
-
-    // Broadcast Trash Event
-    GameEvent event = new GameEvent(GameEvent.EventType.CardTrashed, context);
-    event.card = card;
-    event.responsible = responsible;
-    context.game.broadcastEvent(event);
-
-    // Add to Trash Pile
-    if (isPossessed()) {
-      context.game.possessedTrashPile.add(card);
-    } else {
-      context.game.trashPile.add(card);
-    }
-
-    // Add VP token if Tomb is in play
-    if (context.game.cardInGame(Cards.tomb)) {
-      addVictoryTokens(context, 1, Cards.tomb);
-    }
-
-    // Execute special card logic when the trashing occurs
-    if (card.equals(Cards.estate) && getInheritance() != null) {
-      getInheritance().behaveAsCard().isTrashed(context);
-    } else {
-      card.behaveAsCard().isTrashed(context);
-    }
-
-    // Market Square trashing reaction
-    boolean hasInheritedMarketSquare = Cards.marketSquare.equals(context.getPlayer().getInheritance()) && context.getPlayer().hand.contains(Cards.estate);
-    boolean hasMarketSquare = context.getPlayer().hand.contains(Cards.marketSquare);
-
-    if (hasMarketSquare || hasInheritedMarketSquare) {
-
-      ArrayList<Card> marketSquaresInHand = new ArrayList<Card>();
-
-      for (Card c : hand) {
-        if (c.getKind() == Cards.Kind.MarketSquare || (hasInheritedMarketSquare && c.equals(Cards.estate))) {
-          marketSquaresInHand.add(c);
-        }
-      }
-
-      for (Card c : marketSquaresInHand) {
-        if (controlPlayer.marketSquare_shouldDiscard(context, c)) {
-          hand.remove(c);
-          discard(c, card, context);
-          gainNewCard(Cards.gold, Cards.marketSquare, context);
-        }
-      }
-    }
+  public void debug(String msg) {
+    Util.debug(this, msg, false);
   }
 
-
-  public void namedCard(Card card, Card responsible, MoveContext context) {
-    GameEvent event = new GameEvent(GameEvent.EventType.CardNamed, context);
-    event.card = card;
-    event.responsible = responsible;
-    context.game.broadcastEvent(event);
-  }
-
-  public void revealFromHand(Card card, Card responsible, MoveContext context) {
-    GameEvent event = new GameEvent(GameEvent.EventType.CardRevealedFromHand, context);
-    event.card = card;
-    event.responsible = responsible;
-    context.game.broadcastEvent(event);
-  }
-
-  public void reveal(Card card, Card responsible, MoveContext context) {
-    GameEvent event = new GameEvent(GameEvent.EventType.CardRevealed, context);
-    event.card = card;
-    event.responsible = responsible;
-    context.game.broadcastEvent(event);
-  }
-
-  public void attacked(Card card, MoveContext context) {
-    context.attackedPlayer = this;
-    GameEvent event = new GameEvent(GameEvent.EventType.PlayerAttacking, context);
-    event.attackedPlayer = this;
-    event.card = card.behaveAsCard();
-    context.game.broadcastEvent(event);
-  }
-
-  /*
-  ** getTreasuresInHand - Returns an ArrayList of Treasure Cards in Player's Hand
-  */
-  public ArrayList<Card> getTreasuresInHand() {
-    ArrayList<Card> treasures = new ArrayList<Card>();
-    for (Card c : getHand())
-    if (c.is(Type.Treasure, this)) {
-      treasures.add(c);
-    }
-    return treasures;
-  }
-
-  /*
-  ** getVictoryInHand - Returns an ArrayList of Victory Cards in Player's Hand
-  */
-  public ArrayList<Card> getVictoryInHand() {
-    ArrayList<Card> victory = new ArrayList<Card>();
-    for (Card c : getHand())
-    if (c.is(Type.Victory, this)) {
-      victory.add(c);
-    }
-    return victory;
-  }
-
-  /*
-  ** getActionsInHand - Returns an ArrayList of Action Cards in Player's Hand
-  */
-  public ArrayList<Card> getActionsInHand(Player player) {
-    ArrayList<Card> actions = new ArrayList<Card>();
-    for (Card c : getHand())
-    if (c.is(Type.Action, player)) {
-      actions.add(c);
-    }
-    return actions;
-  }
 
   // ////////////////////////////////////////////
-  // 'OPTION' ENUMERATIONS TO BE USED BY ALL PLAYERS
-  // (BUT, I'M NOT SURE WHY THIS IS IN THE PLAYER CLASS INSTEAD OF CARD CLASS) - ???
+  // 'OPTION' ENUMERATIONS TO BE SELECTED BY THE PLAYER
   // ////////////////////////////////////////////
 
   public static enum SentryOption {

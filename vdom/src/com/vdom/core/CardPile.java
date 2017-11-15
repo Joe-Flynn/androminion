@@ -9,6 +9,7 @@ import java.util.Map;
 import com.vdom.api.Card;
 
 public class CardPile  {
+
 	protected Card placeholderCard = null;
 	protected ArrayList<Card> cards;
 	protected ArrayList<Card> templateCards;
@@ -26,6 +27,7 @@ public class CardPile  {
 	}
 
 	public CardPile(Card placeholder, List<CardMultiplicity> cardList, boolean ordered, boolean allCardsVisible) {
+
 		this.cards = new ArrayList<Card>();
 		this.templateCards = new ArrayList<Card>();
 
@@ -83,11 +85,14 @@ public class CardPile  {
 		return cards.remove(0);
 	}
 
-	public boolean areAllCardsVisible() { return this.allCardsVisible; }
+	public boolean areAllCardsVisible() {
+		return this.allCardsVisible;
+	}
 
 	public boolean cardAllowedOnPile(Card card) {
-		if (card.isTemplateCard()) return false; //No template card allowed on the pile
-
+		if (card.isTemplateCard()) {
+			return false; //No template card allowed on the pile
+		}
 		for (Card template : this.templateCards) {
 			if (template.equals(card)) {
 				return true;

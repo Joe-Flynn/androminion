@@ -8,14 +8,14 @@ public class GameEvent {
   public enum EventType {
 
     GameStarting, // A new game is starting, called at the start of each game when multiple are played
-    GameOver,     // Game completed
-    Embargo,      // Embargo added to card
+    GameOver,     // A game has completed
+    Embargo,      // Embargo was added to card
 
     Status,       // Sent before playing an action or buying a card for UI to show action/buy/coin status
 
     CantBuy,       // Card that can't be bought (ie. named in playing Contraband)
     VictoryPoints, // VictoryPoints at the end of the game
-    NewHand,       // Player gets a NewHand
+    NewHand,       // Player gets a new hand
     TurnBegin,     // Player begins a turn
     TurnEnd,       // Player's turn ends
 
@@ -52,9 +52,9 @@ public class GameEvent {
     CardSetAsideOnIslandMat,  // A card was set aside on island mat
     CardSetAsideInheritance,  // A card was set aside with Inheritance
     DeckPutIntoDiscardPile,   // Deck put into discard pile
-    TravellerExchanged,       // traveller exchanged
-    TurnJourneyTokenFaceUp,   // journey token turned face up
-    TurnJourneyTokenFaceDown, // journey token turned face down
+    TravellerExchanged,       // Traveller exchanged
+    TurnJourneyTokenFaceUp,   // Journey token turned face up
+    TurnJourneyTokenFaceDown, // Journey token turned face down
     MinusOneCoinTokenOn,      // -1 Coin token placed
     MinusOneCoinTokenOff,     // -1 Coin token removed
     MinusOneCardTokenOn,      // -1 Card token put onto deck
@@ -76,28 +76,23 @@ public class GameEvent {
     MountainPassWinner,       // Mountain Pass bidding finished (winning bid/player) - 0 amount means no bids were placed
   }
 
-  public EventType type;
+  // Main GameEvent Fields:
+  public EventType   type;
   public MoveContext context;
-  public Player player;
+  public Player      player;
 
-  // //////////////////////////////////////////////
-  // Optional fields that may be field depending
-  // on the type of event
-  // //////////////////////////////////////////////
-
-  public  Card card;
+  // Optional fields that may be used (depending on EventType):
+  public  Card    card;
   private boolean cardPrivate;
-  public  Card responsible;
-  public  Player attackedPlayer;
+  public  Card    responsible;
+  public  Player  attackedPlayer;
   public  boolean newCard;
-  private String comment;
-  private int amount;
+  private String  comment;
+  private int     amount;
 
-
-  // //////////////////////////////////////////////
-  //
-  // //////////////////////////////////////////////
-
+  /*
+  ** GameEvent Constructor
+  */
   public GameEvent(EventType type, MoveContext context) {
     this.type = type;
     this.context = context;
@@ -116,9 +111,6 @@ public class GameEvent {
     return player;
   }
 
-  /**
-  * @param player the player to set
-  */
   public void setPlayer(Player player) {
     this.player = player;
   }
@@ -131,16 +123,10 @@ public class GameEvent {
     return card;
   }
 
-  /**
-  * @return the comment
-  */
   public String getComment() {
     return comment;
   }
 
-  /**
-  * @param comment the comment to set
-  */
   public void setComment(String comment) {
     this.comment = comment;
   }
