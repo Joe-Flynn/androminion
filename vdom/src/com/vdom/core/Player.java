@@ -437,8 +437,18 @@ public abstract class Player {
     }
   }
 
+  /*
+  ** getVictoryTokens - Returns the total Number of Victory Tokens
+  */
   public int getVictoryTokens() {
     return victoryTokens;
+  }
+
+  /*
+  ** getVictoryTokensTotals - Returns a Map of Number of Victory Tokens by Source
+  */
+  public Map<Card, Integer> getVictoryTokensTotals() {
+    return victoryTokensSource;
   }
 
 
