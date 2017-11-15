@@ -53,21 +53,27 @@ public class VDomPlayerPhil extends BasePlayer  {
     public Card doBuy(MoveContext context) {
         int coins = context.getCoinAvailableForBuy();
 
-        if (coins == 0) {
-            return null;
+        if (coins == 0) return null;
+
+        if (context.canBuy(Cards.province)) return Cards.province;
+
+        if (context.canBuy(Cards.gold)) return Cards.gold;
+
+        if (context.canBuy(Cards.duchy)) {
+            int provincesLeft = 0;
+            for (Card card : context.getBuyableCards()) {
+                if (card.equals(Cards.province))
+                    provincesLeft++;
+            }
+
+            if (provincesLeft <= 5) {
+                return Cards.duchy;
+            }
         }
-        else if (context.canBuy(Cards.province)) {
-            return Cards.province;
-        }
-        else if (context.canBuy(Cards.gold)) {
-            return Cards.gold;
-        }
-        else if (context.canBuy(Cards.silver)) {
-            return Cards.silver;
-        }
-        else {
-            return null;
-        }
+
+        if (context.canBuy(Cards.silver)) return Cards.silver;
+
+        return null;
     }
 
     // ---> May also want to add treasureCardsToPlayInOrder(MoveContext context, int maxCards, Card responsible)

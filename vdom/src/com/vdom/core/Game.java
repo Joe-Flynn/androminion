@@ -381,7 +381,7 @@ public class Game {
   public static void setGameParameters() throws ExitException {
 
     numPlayers = 2;
-    numGames   = 20;
+    numGames   = 200;
 
     // Reset Containers
     overallWins.clear();
