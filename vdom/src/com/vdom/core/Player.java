@@ -133,8 +133,6 @@ public abstract class Player {
   }
 
 
-
-
   public boolean isAi() {
     return true;
   }

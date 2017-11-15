@@ -38,10 +38,6 @@ public class VDomPlayerPhil extends BasePlayer  {
       return true;
     }
 
-
-
-
-
     @Override
     public void newGame(MoveContext context) {}
 
@@ -51,7 +47,28 @@ public class VDomPlayerPhil extends BasePlayer  {
     // ---> May also want to add actionCardsToPlayInOrder(MoveContext context)
 
     @Override
-    public Card doBuy(MoveContext context) {return null;}
+    /**
+     * Simple Big Money Strategy
+     */
+    public Card doBuy(MoveContext context) {
+        int coins = context.getCoinAvailableForBuy();
+
+        if (coins == 0) {
+            return null;
+        }
+        else if (context.canBuy(Cards.province)) {
+            return Cards.province;
+        }
+        else if (context.canBuy(Cards.gold)) {
+            return Cards.gold;
+        }
+        else if (context.canBuy(Cards.silver)) {
+            return Cards.silver;
+        }
+        else {
+            return null;
+        }
+    }
 
     // ---> May also want to add treasureCardsToPlayInOrder(MoveContext context, int maxCards, Card responsible)
     // ---> May also want to add numGuildsCoinTokensToSpend(MoveContext context, int coinTokenTotal, boolean butcher)
