@@ -38,20 +38,101 @@ public class VDomPlayerPhil extends BasePlayer  {
       return true;
     }
 
-
+    @Override
+    public void newGame(MoveContext context) {
+      super.newGame(context);
+    }
 
 
 
     @Override
-    public void newGame(MoveContext context) {}
+    public Card doAction(MoveContext context) {
 
+      System.out.println("<PHIL> HAND: " + hand);
+
+      // Get +Action Cards First
+      for (int i = 0; i < hand.size(); i++) {
+        Card cardInHand = hand.get(i);
+        if (cardInHand.is(Type.Action) && cardInHand.getAddActions() > 0) {
+          return cardInHand;
+        }
+      }
+
+      // Get +Draw Cards Next
+      if (context.actions > 1) {
+        for (int i = 0; i < hand.size(); i++) {
+          Card cardInHand = hand.get(i);
+          if (cardInHand.is(Type.Action) && cardInHand.getAddCards() > 0) {
+            return cardInHand;
+          }
+        }
+      }
+
+      // Get +Gold Cards Next
+      if (context.actions > 1) {
+        for (int i = 0; i < hand.size(); i++) {
+          Card cardInHand = hand.get(i);
+          if (cardInHand.is(Type.Action) && cardInHand.getAddGold() > 0) {
+            return cardInHand;
+          }
+        }
+      }
+
+      // Pick a Terminal Card (optimally with the highest value)
+      int  highestValue = 0;
+      Card highestValueCard = null;
+      for (int i = 0; i < hand.size(); i++) {
+        Card cardInHand = hand.get(i);
+        if (cardInHand.is(Type.Action)) {
+          if (cardInHand.getCost(context) > highestValue) {
+            highestValue = cardInHand.getCost(context);
+            highestValueCard = cardInHand;
+          }
+        }
+      }
+      return highestValueCard;
+    }
+
+    /*
+    ** doBuy - Simple Big Money Strategy
+    */
     @Override
-    public Card doAction(MoveContext context) {return null;}
+    public Card doBuy(MoveContext context) {
 
-    // ---> May also want to add actionCardsToPlayInOrder(MoveContext context)
+      int coins = context.getCoinAvailableForBuy();
+      if (coins == 0) {
+        return null;
+      }
 
-    @Override
-    public Card doBuy(MoveContext context) {return null;}
+      // Buy Province or Gold
+      if (context.canBuy(Cards.province)) {
+        return Cards.province;
+      }
+      if (context.canBuy(Cards.gold)) {
+        return Cards.gold;
+      }
+
+      // Get Highest Value Card Player can Buy
+      int  highestValue = 0;
+      Card highestValueCard = null;
+      for (String p : context.game.placeholderPiles.keySet()) {
+        CardPile pile = context.game.placeholderPiles.get(p);
+        Card supplyCard = pile.placeholderCard();
+        if (context.canBuy(supplyCard) && supplyCard.getCost(context) > highestValue) {
+          highestValue = supplyCard.getCost(context);
+          highestValueCard = supplyCard;
+        }
+      }
+      if (highestValueCard != null) {
+        return highestValueCard;
+      }
+
+      // Buy Silver
+      if (context.canBuy(Cards.silver)) {
+        return Cards.silver;
+      }
+      return null;
+    }
 
     // ---> May also want to add treasureCardsToPlayInOrder(MoveContext context, int maxCards, Card responsible)
     // ---> May also want to add numGuildsCoinTokensToSpend(MoveContext context, int coinTokenTotal, boolean butcher)

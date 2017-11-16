@@ -39,13 +39,6 @@ public class Game {
   static int     gameCounter = 0;  // Game Counter
   static boolean gameOver = false; // Is Current Game Over?
 
-  /**
-  * PLAYER classes and optionally the url to the jar on the web that the class is located in. Player class
-  * is in index [0] of the array and the jar is in index [1]. Index [1] is null (but still there) if the
-  * default class loader should be used.
-  */
-  static ArrayList<String[]> playerClassesAndJars = new ArrayList<String[]>();
-
   public static int numPlayers;   // Number of Players / Game
   public static Player[] players; // Array of Players in the Game
 
@@ -215,11 +208,6 @@ public class Game {
     // Set up game(s)
     setGameParameters();
 
-    // Set up Win Counters per each playerClass
-    for (String[] className : playerClassesAndJars) {
-      overallWins.put(className[0], 0.0);
-    }
-
     // Select Game Type and Start
     gameType = GameType.RandomBaseGame;
     new Game().start();
@@ -228,7 +216,7 @@ public class Game {
     Util.log("");
     Util.log("--------------------------------");
     printStats(overallWins, numGames * GameType.values().length, "Total");
-  //  printStats(GAME_TYPE_WINS, GameType.values().length, "Types");
+    // printStats(GAME_TYPE_WINS, GameType.values().length, "Types");
     printGameTypeStats();
 
     // Framework Event (???)
@@ -242,7 +230,7 @@ public class Game {
   void start() throws ExitException {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
-    playerToWins.put("com.vdom.players.VDomPlayerEarl", 0.0);
+    playerToWins.put("com.vdom.players.VDomPlayerPhil", 0.0);
     playerToWins.put("com.vdom.players.VDomPlayerChuck", 0.0);
 
     // Variables for averaging over all Games
@@ -275,6 +263,8 @@ public class Game {
         Player player = players[playersTurn];
         boolean canBuyCards = extraTurnsInfo.isEmpty() ? true : extraTurnsInfo.remove().canBuyCards;
         MoveContext context = new MoveContext(this, player, canBuyCards);
+
+        // Begin Phase of Turn
         context.phase = TurnPhase.Action;
         context.startOfTurn = true;
         playerBeginTurn(player, context);
@@ -381,13 +371,12 @@ public class Game {
   public static void setGameParameters() throws ExitException {
 
     numPlayers = 2;
-    numGames   = 20;
+    numGames   = 100;
 
     // Reset Containers
     overallWins.clear();
     GAME_TYPE_WINS.clear();
     gameTypeStats.clear();
-    playerClassesAndJars.clear();
 
     // Set up Game Options
     cardsSpecifiedAtLaunch = null;
@@ -443,28 +432,19 @@ public class Game {
   */
   @SuppressWarnings("unchecked")
   public void initPlayers(int numPlayers, boolean isRandom) throws ExitException {
+
     players = new Player[numPlayers];
+    playersTurn = 0;
+
     cardsObtainedLastTurn = new ArrayList[numPlayers];
     for (int i = 0; i < numPlayers; i++) {
       cardsObtainedLastTurn[i] = new ArrayList<Card>();
     }
 
-    ArrayList<String[]> randomize = new ArrayList<String[]>();
-    while (!playerClassesAndJars.isEmpty()) {
-      if (isRandom) {
-        randomize.add(playerClassesAndJars.remove(rand.nextInt(playerClassesAndJars.size())));
-      } else {
-        randomize.add(playerClassesAndJars.remove(0));
-      }
-    }
-
-    playerClassesAndJars = randomize;
-    playersTurn = 0;
-
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerEarl();
+        players[i] = new VDomPlayerPhil();
       }
       else {
         players[i] = new VDomPlayerChuck();
@@ -1990,69 +1970,60 @@ public class Game {
     GameEvent gevent = new GameEvent(GameEvent.EventType.TurnBegin, context);
     broadcastEvent(gevent);
 
-    /* Duration cards, horse traders, cards on prince*/
-
-    /* selectOption() must know if horse traders are set aside by reaction or by haven/gear or by prince.
-    * We put 2 cards in list durationEffects to differentiate:
-    * Examples (Curse is here a dummy card):
-    * HorseTrader - (Curse)
-    * Haven - Card set aside by haven
-    * Gear - List of Cards set aside by gear
-    * Archive - List of Cards set aside by archive
-    * Prince - Card set aside by prince
-    * other Durations like Wharf - (Curse)
-    */
+    /* Duration cards (i.e. horse traders, haven, gear, archive, wharf, cards on prince, etc. */
     boolean allDurationAreSimple = true;
     ArrayList<Object> durationEffects = new ArrayList<Object>();
     ArrayList<Boolean> durationEffectsAreCards = new ArrayList<Boolean>();
     int archiveNum = 0;
+
     for (Card card : player.nextTurnCards) {
+
       Card thisCard = card.behaveAsCard();
       if (thisCard.is(Type.Duration, player)) {
-        /* Wiki:
-        * Effects that resolve at the start of your turn can be resolved in any order;
-        * this includes multiple plays of the same Duration card by a Throne Room variant.
-        * For example, if you played a Wharf and then a Throne Room on an Amulet last turn,
-        * on this turn you could choose to first gain a Silver from the first Amulet play,
-        * then draw 2 cards from Wharf (perhaps triggering a reshuffle and maybe drawing
-        * that Silver), and then choose to trash a card from the second Amulet play,
-        * now that you have more cards to choose from.
+
+        /* NOTE: Effects that resolve at the start of your turn can be resolved in any order;
+        ** this includes multiple plays of the same Duration card by a Throne Room variant.
+        ** For example, if you played a Wharf and then a Throne Room on an Amulet last turn,
+        ** on this turn you could choose to first gain a Silver from the first Amulet play,
+        ** then draw 2 cards from Wharf (perhaps triggering a reshuffle and maybe drawing
+        ** that Silver), and then choose to trash a card from the second Amulet play,
+        ** now that you have more cards to choose from.
         */
+
         int cloneCount = ((CardImpl) card).getControlCard().cloneCount;
+
         for (int clone = cloneCount; clone > 0; clone--) {
-          if (thisCard.equals(Cards.amulet)
-          || thisCard.equals(Cards.dungeon)) {
+
+          if (thisCard.equals(Cards.amulet) ||
+              thisCard.equals(Cards.dungeon)) {
             allDurationAreSimple = false;
           }
+
           if (thisCard.equals(Cards.haven)) {
             if (player.haven != null && player.haven.size() > 0) {
               durationEffects.add(thisCard);
               durationEffects.add(player.haven.remove(0));
-              durationEffectsAreCards.add(clone == cloneCount
-              && !((CardImpl) card.behaveAsCard()).trashAfterPlay);
+              durationEffectsAreCards.add(clone == cloneCount && !((CardImpl) card.behaveAsCard()).trashAfterPlay);
               durationEffectsAreCards.add(false);
             }
           } else if (thisCard.equals(Cards.gear)) {
             if (player.gear.size() > 0) {
               durationEffects.add(thisCard);
               durationEffects.add(player.gear.remove(0));
-              durationEffectsAreCards.add(clone == cloneCount
-              && !((CardImpl) card.behaveAsCard()).trashAfterPlay);
+              durationEffectsAreCards.add(clone == cloneCount && !((CardImpl) card.behaveAsCard()).trashAfterPlay);
               durationEffectsAreCards.add(false);
             }
           } else if (thisCard.equals(Cards.archive)) {
             if (player.archive.size() > 0) {
               durationEffects.add(thisCard);
               durationEffects.add(player.archive.get(archiveNum++));
-              durationEffectsAreCards.add(clone == cloneCount
-              && !((CardImpl) card.behaveAsCard()).trashAfterPlay);
+              durationEffectsAreCards.add(clone == cloneCount && !((CardImpl) card.behaveAsCard()).trashAfterPlay);
               durationEffectsAreCards.add(false);
             }
           } else {
             durationEffects.add(thisCard);
             durationEffects.add(Cards.curse); /*dummy*/
-            durationEffectsAreCards.add(clone == cloneCount
-            && !((CardImpl) card.behaveAsCard()).trashAfterPlay);
+            durationEffectsAreCards.add(clone == cloneCount && !((CardImpl) card.behaveAsCard()).trashAfterPlay);
             durationEffectsAreCards.add(false);
           }
         }
@@ -2063,6 +2034,7 @@ public class Game {
         broadcastEvent(event);
       }
     }
+
     for (Card card : player.horseTraders) {
       durationEffects.add(card);
       durationEffects.add(Cards.curse); /*dummy*/
@@ -2126,7 +2098,6 @@ public class Game {
         numOptionalItems += 2;
       }
     }
-
     while (durationEffects.size() > numOptionalItems) {
       int selection = 0;
       if (allDurationAreSimple) {
@@ -2160,11 +2131,11 @@ public class Game {
       durationEffectsAreCards.remove(selection);
 
       if (card.equals(Cards.prince)) {
+
         if (!(card2.is(Type.Duration, player))) {
           player.playedByPrince.add(card2);
         }
         player.prince.remove(card2);
-
         context.freeActionInEffect++;
         try {
           card2.play(this, context, false);
@@ -2172,9 +2143,10 @@ public class Game {
           e.printStackTrace();
         }
         context.freeActionInEffect--;
+
       } else if (card.equals(Cards.summon)) {
-        player.summon.remove(card2);
 
+        player.summon.remove(card2);
         context.freeActionInEffect++;
         try {
           card2.play(this, context, false);
@@ -2182,12 +2154,16 @@ public class Game {
           e.printStackTrace();
         }
         context.freeActionInEffect--;
+
       } else if (card.behaveAsCard().equals(Cards.horseTraders)) {
+
         //BUG: this doesn't let you call estates inheriting horse trader differently
         Card horseTrader = player.horseTraders.remove(0);
         player.hand.add(horseTrader);
         drawToHand(context, horseTrader, 1);
+
       } else if (card.behaveAsCard().is(Type.Duration, player)) {
+
         if (card.behaveAsCard().equals(Cards.haven)) {
           player.hand.add(card2);
         }
@@ -2431,12 +2407,14 @@ public class Game {
 
 
   public void playerAction(Player player, MoveContext context) {
-    // TODO move this check to action and buy (and others?)
-    // if(player.hand.size() > 0)
+
     Card action = null;
+
     do {
+
       action = null;
       ArrayList<Card> actionCards = null;
+
       if (!actionChains || player.controlPlayer.isAi()) {
         action = player.controlPlayer.doAction(context);
         if (action != null) {
@@ -2454,12 +2432,12 @@ public class Game {
       }
 
       while (context.actions > 0 && actionCards != null && !actionCards.isEmpty()) {
+
         action = actionCards.remove(0);
         if (action != null) {
           if (isValidAction(context, action)) {
             GameEvent event = new GameEvent(GameEvent.EventType.Status, (MoveContext) context);
             broadcastEvent(event);
-
             try {
               action.play(this, (MoveContext) context, true);
             } catch (RuntimeException e) {
@@ -2467,7 +2445,6 @@ public class Game {
             }
           } else {
             Util.debug("Error:Invalid action selected");
-            // action = null;
           }
         }
       }

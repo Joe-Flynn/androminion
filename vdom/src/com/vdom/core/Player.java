@@ -58,16 +58,16 @@ public abstract class Player {
 
   public Game game;
 
-  public Player controlPlayer = this;
+  public Player  controlPlayer = this;
   public boolean controlled = false;
-  public int pirateShipTreasure = 0;
+  public int     pirateShipTreasure = 0;
 
   protected Map<Player, Map<Cards.Kind, Integer>> attackDurationEffectsOnOthers;
 
-  private int guildsCoinTokenCount = 0; // The number of coin tokens held by the player
-  private int debtTokenCount = 0;
+  private int  guildsCoinTokenCount = 0; // The number of coin tokens held by the player
+  private int  debtTokenCount = 0;
   private Card checkLeadCard;
-  private int victoryTokens;
+  private int  victoryTokens;
   private Map<Card, Integer> victoryTokensSource = new TreeMap<Card, Integer>();
   private boolean journeyTokenFaceUp;
   private boolean minusOneCoinTokenOn;

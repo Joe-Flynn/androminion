@@ -17,7 +17,7 @@ import com.vdom.api.GameEventListener;
 
 public abstract class BasePlayer extends Player implements GameEventListener {
 
-    //trash in this order!
+    // Trash in this order!
     protected static final Card[] EARLY_TRASH_CARDS = new Card[] { Cards.curse, Cards.rats, Cards.overgrownEstate, Cards.ruinedVillage, Cards.ruinedMarket, Cards.hovel, Cards.survivors, Cards.ruinedLibrary, Cards.abandonedMine, Cards.virtualRuins, Cards.estate };
     protected static final Card[] LATE_TRASH_CARDS = new Card[] { Cards.curse, Cards.rats, Cards.overgrownEstate, Cards.ruinedVillage, Cards.ruinedMarket, Cards.survivors, Cards.ruinedLibrary, Cards.abandonedMine, Cards.virtualRuins, Cards.estate, Cards.copper, Cards.masterpiece };
     protected static final Card[] EASY_WHEN_TRASH_CARDS = new Card[] { Cards.cultist, Cards.rats, Cards.catacombs, Cards.fortress, Cards.huntingGrounds, Cards.sirVander, Cards.overgrownEstate};
@@ -43,7 +43,6 @@ public abstract class BasePlayer extends Player implements GameEventListener {
         // All GameListeners are removed after every game, so we have to add ourselves back. Not very
         // Java-like, but does prevent a player from keeping around listeners that should be gone.
         context.addGameListener(this);
-
         midGame = 12;
     }
 
@@ -81,19 +80,19 @@ public abstract class BasePlayer extends Player implements GameEventListener {
     @Override
     public abstract Card doBuy(MoveContext context);
 
-	@Override
-	public Card getAttackReaction(MoveContext context, Card responsible, boolean defended, Card lastCard) {
-		Card[] reactionCards = getAttackReactionCards(defended);
-		for (Card c : reactionCards)
-		{
-			if (!reactedSet.contains(c))
-			{
-				reactedSet.add(c);
-				return c;
-			}
-		}
-		return null;
-	}
+    @Override
+    public Card getAttackReaction(MoveContext context, Card responsible, boolean defended, Card lastCard) {
+      Card[] reactionCards = getAttackReactionCards(defended);
+      for (Card c : reactionCards)
+      {
+        if (!reactedSet.contains(c))
+        {
+          reactedSet.add(c);
+          return c;
+        }
+      }
+      return null;
+    }
 
     // ////////////////////////
     // Helper Methods

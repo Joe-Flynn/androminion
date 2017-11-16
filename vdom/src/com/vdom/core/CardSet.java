@@ -156,6 +156,7 @@ public class CardSet {
 	 * @return A random CardSet selected from the list of entered cards
 	 */
 	public static CardSet getRandomCardSet(List<Card> possibleCards, int count, int eventCount, int landmarkCount, boolean linkMaxEventsAndLandmarks, boolean adjustForAlchemy) {
+
 		final List<Card> cardSetList = new ArrayList<Card>();
 		final List<Card> eventList = new ArrayList<Card>();
 		final List<Card> landmarkList = new ArrayList<Card>();
