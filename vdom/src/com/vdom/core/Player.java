@@ -55,7 +55,7 @@ public abstract class Player {
   protected Card save;
 
   // Player's Game and Game Features
-
+  
   public Game game;
 
   public Player  controlPlayer = this;
