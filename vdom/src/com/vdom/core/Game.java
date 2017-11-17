@@ -2476,11 +2476,15 @@ public class Game {
     }
   }
 
+  /*
+  ** playerBuy - Implements main BUY phase for the Player
+  */
   public void playerBuy(Player player, MoveContext context) {
-    Card buy = null;
+
+    Card buy = null; // Card to Buy
+
     do {
-      if (context.buys <= 0)
-      break; //Player can enter buy phase with 0 or less buys after buying but not playing Villa
+      if (context.buys <= 0) { break; }
       buy = null;
       try {
         playerPayOffDebt(player, context);
@@ -2503,13 +2507,11 @@ public class Game {
           }
           GameEvent statusEvent = new GameEvent(GameEvent.EventType.Status, (MoveContext) context);
           broadcastEvent(statusEvent);
-
           playBuy(context, buy);
           playerPayOffDebt(player, context);
           if (context.returnToActionPhase)
           return;
         } else {
-          // TODO report?
           buy = null;
         }
       }
@@ -2656,14 +2658,19 @@ public class Game {
     return false;
   }
 
+  /*
+  ** playBuy - ???
+  */
   Card playBuy(MoveContext context, Card buy) {
+
+    // Use up one Buy
     Player player = context.getPlayer();
     if (!context.blackMarketBuyPhase) {
       context.buys--;
     }
 
+    // Spend Coins, or Potion, or Gain Debt
     context.spendCoins(buy.getCost(context));
-
     if (buy.costPotion()) {
       context.potions--;
     } else if (buy.getDebtCost(context) > 0) {
@@ -2674,12 +2681,13 @@ public class Game {
       context.game.broadcastEvent(event);
     }
 
+    // Check for Embargos on the Supply Pile (and Gain Curses if there are)
     int embargos = getEmbargos(buy);
     for (int i = 0; i < embargos; i++) {
       player.gainNewCard(Cards.curse, Cards.embargo, context);
     }
 
-    // Tax Debt tokens
+    // Check for "Tax" Debt Tokens on the Supply Pile (and Gain Debt if there are)
     int numDebtTokensOnPile = getPileDebtTokens(buy);
     if (numDebtTokensOnPile > 0) {
       removePileDebtTokens(buy, numDebtTokensOnPile, context);
@@ -2689,9 +2697,7 @@ public class Game {
       context.game.broadcastEvent(event);
     }
 
-    /* GameEvent.Type.BuyingCard must be after overpaying! */
-
-    // cost adjusted based on any cards played or card being bought
+    // Calculate Cost adjusted based on other Cards in play or Card being bought
     int cost = buy.getCost(context);
 
     Card card = buy;
@@ -2762,6 +2768,9 @@ public class Game {
         }
       }
     }
+
+
+    /* GameEvent.Type.BuyingCard must be after overpaying! */
 
     if (card != null) {
       GameEvent event = new GameEvent(GameEvent.EventType.BuyingCard, (MoveContext) context);
@@ -3026,11 +3035,11 @@ public class Game {
 
   public Card takeFromPileCheckTrader(Card cardToGain, MoveContext context) {
 
-    //If the pile was specified instead of a card, take the top card from that pile.
+    // If the pile was specified instead of a card, take the top card from that pile.
     if (cardToGain.isPlaceholderCard() || cardToGain.isTemplateCard()) {
       cardToGain = getPile(cardToGain).topCard();
 
-    //If the desired card is not on top of the pile, don't take a card
+    // If the desired card is not on top of the pile, don't take a card
     } else if (!isCardOnTop(cardToGain)) {
       return null;
     }

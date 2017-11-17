@@ -485,16 +485,26 @@ public class CardImpl implements Card, Comparable<Card>{
 		return typeSet.size();
 	}
 
+	/*
+	** getCost - Get Cost of a Buying a Card (which might be adjusted by
+	** several factors in the game expansions, which are included here)
+	*/
 	public int getCost(MoveContext context) {
-		if (context == null)
-		return cost;
+		if (context == null) { return cost; }
 		return getCost(context, context.phase == TurnPhase.Buy);
 	}
 
+  /*
+	** getCost - Get Cost of a Buying a Card (which might be adjusted by
+	** several factors in the game expansions, which are included here)
+	*/
 	public int getCost(MoveContext context, boolean buyPhase) {
-		if (this.is(Type.Event, null)) return cost; //Costs of Events are not affected by cards like Bridge Troll.
 
-		//If it's a variable card pile, and it's not empty, return the cost of the top card
+    // Costs of Events are unaffected by cards (i.e. Bridge Troll)
+		if (this.is(Type.Event, null)) { return cost; }
+
+		// If the card is from a variable card pile and the pile not empty,
+		// then return the cost of the top card
 		if (this.isPlaceholderCard()) {
 			CardPile pile = context.game.getPile(this);
 			if (!pile.isEmpty()) {
@@ -502,16 +512,20 @@ public class CardImpl implements Card, Comparable<Card>{
 			}
 		}
 
+    // Return cost of Control Card if this card is isControlled
+		// (i.e. by cards like "Inheritance" or "Band of Misfits")
 		CardImpl controlCard = getControlCard();
 		if (controlCard != null && controlCard != this && controlCard.inheritingAbilitiesCard != null) {
 			return controlCard.getCost(context, buyPhase);
 		}
 
+		// Get Current Player (for Cost Modifiers Below)
 		MoveContext currentPlayerContext = context;
 		if (context.game.getCurrentPlayer() != context.getPlayer()) {
 			currentPlayerContext = new MoveContext(context.game, context.game.getCurrentPlayer());
 		}
 
+		// Modify Card Cost (depending on the following cards in play)
 		int costModifier = 0;
 		//TODO: BUG this isAction call for Quarry should be player-specific sometimes
 		costModifier -= this.is(Type.Action, null) ? (2 * context.countCardsInPlay(Cards.quarry)) : 0;
@@ -523,13 +537,19 @@ public class CardImpl implements Card, Comparable<Card>{
 		costModifier -= (context.game.isPlayerSupplyTokenOnPile(this.getControlCard().equals(Cards.estate) ? this.getControlCard() : this,
 		context.game.getCurrentPlayer(), PlayerSupplyToken.MinusTwoCost)) ? 2 : 0;
 
-		return Math.max(0, cost + costModifier + context.cardCostModifier/*bridge*/);
+		return Math.max(0, cost + costModifier + context.cardCostModifier); // Bridge
 	}
 
+  /*
+	** getDebtCost - Get Debt Cost of a Card
+	*/
 	public int getDebtCost(MoveContext context) {
 		return debtCost;
 	}
 
+	/*
+	** getVictoryPoints - Get Victory Points of a Card
+	*/
 	@Override
 	public int getVictoryPoints() {
 		return vp;
@@ -989,10 +1009,6 @@ public class CardImpl implements Card, Comparable<Card>{
 		return inheritingAbilitiesCard.behaveAsCard();
 		return this;
 	}
-
-	//    CardImpl getImpersonatingCard() {
-	//        return impersonatingCard;
-	//    }
 
 	void startInheritingCardAbilities(CardImpl inheritingCard) {
 		inheritingCard.setControlCard(this);

@@ -500,8 +500,9 @@ public abstract class Player {
     for (Card card : horseTraders) {
       allCards.add(card);
     }
-    if (inheritance != null)
-    allCards.add(inheritance);
+    if (inheritance != null) {
+      allCards.add(inheritance);
+    }
     for (Card card : encampment) {
       allCards.add(card);
     }

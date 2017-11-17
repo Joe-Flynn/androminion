@@ -118,9 +118,13 @@ public class VDomPlayerPhil extends BasePlayer  {
       for (String p : context.game.placeholderPiles.keySet()) {
         CardPile pile = context.game.placeholderPiles.get(p);
         Card supplyCard = pile.placeholderCard();
-        if (context.canBuy(supplyCard) && supplyCard.getCost(context) > highestValue) {
-          highestValue = supplyCard.getCost(context);
-          highestValueCard = supplyCard;
+        // This extra check may be unnecessary
+        if (Cards.isSupplyCard(supplyCard) && pile.topCard() != null) {
+          Card selectCard = pile.topCard();
+          if (context.canBuy(selectCard) && selectCard.getCost(context) > highestValue) {
+            highestValue = selectCard.getCost(context);
+            highestValueCard = selectCard;
+          }
         }
       }
       if (highestValueCard != null) {
