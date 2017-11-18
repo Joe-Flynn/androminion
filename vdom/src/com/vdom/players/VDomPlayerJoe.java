@@ -88,10 +88,4 @@ public class VDomPlayerJoe extends BasePlayer  {
       return null;
     }
 
-    // ---> May also want to add treasureCardsToPlayInOrder(MoveContext context, int maxCards, Card responsible)
-    // ---> May also want to add numGuildsCoinTokensToSpend(MoveContext context, int coinTokenTotal, boolean butcher)
-
-    @Override
-    public Card[] getTrashCards() {return null;}
-
 }

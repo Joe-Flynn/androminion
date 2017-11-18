@@ -230,8 +230,8 @@ public class Game {
   void start() throws ExitException {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
-    playerToWins.put("com.vdom.players.VDomPlayerPhil", 0.0);
     playerToWins.put("com.vdom.players.VDomPlayerJoe", 0.0);
+    playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
 
     // Variables for averaging over all Games
     long turnCountTotal = 0;
@@ -444,10 +444,10 @@ public class Game {
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerPhil();
+        players[i] = new VDomPlayerJoe();
       }
       else {
-        players[i] = new VDomPlayerJoe();
+        players[i] = new VDomPlayerAndrew();
       }
 
       players[i].game = this;
