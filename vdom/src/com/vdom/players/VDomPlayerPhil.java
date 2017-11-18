@@ -118,12 +118,10 @@ public class VDomPlayerPhil extends BasePlayer  {
       for (String p : context.game.placeholderPiles.keySet()) {
         CardPile pile = context.game.placeholderPiles.get(p);
         Card supplyCard = pile.placeholderCard();
-        // This extra check may be unnecessary
-        if (Cards.isSupplyCard(supplyCard) && pile.topCard() != null) {
-          Card selectCard = pile.topCard();
-          if (context.canBuy(selectCard) && selectCard.getCost(context) > highestValue) {
-            highestValue = selectCard.getCost(context);
-            highestValueCard = selectCard;
+        if (pile.topCard() != null) {
+          if (context.canBuy(supplyCard) && supplyCard.getCost(context) > highestValue) {
+            highestValue = supplyCard.getCost(context);
+            highestValueCard = supplyCard;
           }
         }
       }
@@ -141,7 +139,7 @@ public class VDomPlayerPhil extends BasePlayer  {
     // ---> May also want to add treasureCardsToPlayInOrder(MoveContext context, int maxCards, Card responsible)
     // ---> May also want to add numGuildsCoinTokensToSpend(MoveContext context, int coinTokenTotal, boolean butcher)
 
-    @Override
-    public Card[] getTrashCards() {return null;}
+    // We man want to modify which cards get considered to be "garbage", differently from the Base Player
+    // public Card[] getTrashCards() { return null; }
 
 }

@@ -3033,17 +3033,22 @@ public class Game {
     return pile.removeCard();
   }
 
+  /*
+  ** takeFromPileCheckTrader - Takes <cardToGain> from Supply Pile, as long as the
+  ** player doens't have a Trader (card) in hand to counter-act a bad <cardToGain>
+  */
   public Card takeFromPileCheckTrader(Card cardToGain, MoveContext context) {
 
     // If the pile was specified instead of a card, take the top card from that pile.
     if (cardToGain.isPlaceholderCard() || cardToGain.isTemplateCard()) {
       cardToGain = getPile(cardToGain).topCard();
 
-    // If the desired card is not on top of the pile, don't take a card
+    // If the desired card is not on top of the pile, don't take the card
     } else if (!isCardOnTop(cardToGain)) {
       return null;
     }
 
+    // Check if Trader (card) should be used to pick up a Silver instead
     boolean hasInheritedTrader = Cards.trader.equals(context.getPlayer().getInheritance()) && context.getPlayer().hand.contains(Cards.estate);
     boolean hasTrader = context.getPlayer().hand.contains(Cards.trader);
     Card traderCard = hasTrader ? Cards.trader : Cards.estate;
@@ -3054,8 +3059,10 @@ public class Game {
       }
     }
 
+    // Picks up the Card
     return takeFromPile(cardToGain, context);
   }
+
 
   /*
   ** pileSize - Returns the size of the <card> pile
