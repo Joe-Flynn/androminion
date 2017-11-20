@@ -35,8 +35,7 @@ import com.vdom.players.*;
 
 public class Game {
 
-  static int     numGames = -1;    // Number of Games to Play
-  static int     gameCounter = 0;  // Game Counter
+  static int numGames = -1;    // Number of Games to Play
   static boolean gameOver = false; // Is Current Game Over?
 
   public static int numPlayers;   // Number of Players / Game
@@ -87,7 +86,7 @@ public class Game {
 
   // Game Configurations for Black Market (from "Promo" Expansion)
   public static enum BlackMarketSplitPileOptions { NONE, ONE, ANY, ALL }
-  public static int     blackMarketCount = 25;
+  public static int blackMarketCount = 25;
   public static BlackMarketSplitPileOptions blackMarketSplitPileOptions = BlackMarketSplitPileOptions.NONE;
   public static boolean blackMarketOnlyCardsFromUsedExpansions = false;
 
@@ -132,10 +131,10 @@ public class Game {
   private HashMap<String, HashMap<Player, List<PlayerSupplyToken>>> playerSupplyTokens = new HashMap<String, HashMap<Player, List<PlayerSupplyToken>>>();
 
   // Special Card-Specific Game Values
-  public int     possessionsToProcess = 0;            // Needed for Possession (from "Alchemy" Expansion)
-  public Player  possessingPlayer = null;             // Needed for Possession (from "Alchemy" Expansion)
-  public int     nextPossessionsToProcess = 0;        // Needed for Possession (from "Alchemy" Expansion)
-  public Player  nextPossessingPlayer = null;         // Needed for Possession (from "Alchemy" Expansion)
+  public int    possessionsToProcess = 0;             // Needed for Possession (from "Alchemy" Expansion)
+  public Player possessingPlayer = null;              // Needed for Possession (from "Alchemy" Expansion)
+  public int    nextPossessionsToProcess = 0;         // Needed for Possession (from "Alchemy" Expansion)
+  public Player nextPossessingPlayer = null;          // Needed for Possession (from "Alchemy" Expansion)
 
   public int  tradeRouteValue = 0;                    // Trade Route's Value (from "Prosperity" Expansion)
   public Card baneCard = null;                        // Young Witch's Bane (from "Cornucopia" Expansion)
@@ -244,9 +243,8 @@ public class Game {
       Util.debug("---------------------", false);
       Util.debug("New Game: " + gameType);
 
-      // Update Game Status and Game Counter
+      // Update Game Status
       gameOver = false;
-      gameCounter++;
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
@@ -260,6 +258,7 @@ public class Game {
       // Play Turns until Game Ends
       while (!gameOver) {
 
+        // Create MoveContext for New Turn
         Player player = players[playersTurn];
         boolean canBuyCards = extraTurnsInfo.isEmpty() ? true : extraTurnsInfo.remove().canBuyCards;
         MoveContext context = new MoveContext(this, player, canBuyCards);
@@ -572,63 +571,67 @@ public class Game {
     blackMarketPileShuffled.clear();
 
     platColonyNotPassedIn = false;
-    platColonyPassedIn = false;
-    sheltersNotPassedIn = false;
-    sheltersPassedIn = false;
+    platColonyPassedIn    = false;
+    sheltersNotPassedIn   = false;
+    sheltersPassedIn      = false;
 
-    int provincePileSize = -1;
-    int curseCount = -1;
+    int provincePileSize  = -1;
+    int curseCount        = -1;
     int treasureMultiplier = 1;
 
     switch (numPlayers) {
       case 1:
       case 2:
-      curseCount = 10;
-      provincePileSize = 8;
-      victoryCardPileSize = 8;
+        curseCount = 10;
+        provincePileSize = 8;
+        victoryCardPileSize = 8;
       break;
       case 3:
-      curseCount = 20;
-      provincePileSize = 12;
-      victoryCardPileSize = 12;
+        curseCount = 20;
+        provincePileSize = 12;
+        victoryCardPileSize = 12;
       break;
       case 4:
-      curseCount = 30;
-      provincePileSize = 12;
-      victoryCardPileSize = 12;
+        curseCount = 30;
+        provincePileSize = 12;
+        victoryCardPileSize = 12;
       break;
       case 5:
-      curseCount = 40;
-      provincePileSize = 15;
-      victoryCardPileSize = 12;
-      treasureMultiplier = 2;
+        curseCount = 40;
+        provincePileSize = 15;
+        victoryCardPileSize = 12;
+        treasureMultiplier = 2;
       break;
       case 6:
-      curseCount = 50;
-      provincePileSize = 18;
-      victoryCardPileSize = 12;
-      treasureMultiplier = 2;
+        curseCount = 50;
+        provincePileSize = 18;
+        victoryCardPileSize = 12;
+        treasureMultiplier = 2;
       break;
     }
 
-    addPile(Cards.gold, 30 * treasureMultiplier);
+    // Create Treasure Piles
+    addPile(Cards.gold,   30 * treasureMultiplier);
     addPile(Cards.silver, 40 * treasureMultiplier);
     addPile(Cards.copper, 60 * treasureMultiplier);
 
-    addPile(Cards.curse, curseCount);
+    // Create Victory Card Piles
+    addPile(Cards.curse,    curseCount);
     addPile(Cards.province, provincePileSize);
-    addPile(Cards.duchy, victoryCardPileSize);
-    addPile(Cards.estate, victoryCardPileSize + (3 * numPlayers));
+    addPile(Cards.duchy,    victoryCardPileSize);
+    addPile(Cards.estate,   victoryCardPileSize + (3 * numPlayers));
 
     unfoundCards.clear();
     int added = 0;
 
+    // Handles Special Cards Specified at Launch
     if (cardsSpecifiedAtLaunch != null) {
 
       platColonyNotPassedIn = true;
       sheltersNotPassedIn = true;
 
       for (String cardName : cardsSpecifiedAtLaunch) {
+
         Card card = null;
         boolean bane = false;
         boolean obelisk = false;
@@ -1198,8 +1201,8 @@ public class Game {
 
           // See rules explanation of Tunnel for what commandedDiscard means.
           boolean commandedDiscard = true;
-          if (event.getType() == GameEvent.EventType.BuyingCard
-              || event.getType() == GameEvent.EventType.CardObtained) {
+          if (event.getType() == GameEvent.EventType.BuyingCard ||
+              event.getType() == GameEvent.EventType.CardObtained) {
             commandedDiscard = false;
           } else if (event.responsible != null) {
             Card r = event.responsible;

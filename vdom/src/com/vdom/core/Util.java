@@ -313,6 +313,9 @@ public class Util {
     return false;
   }
 
+  /*
+  ** doBeggar - Implements Beggar Functions
+  */
   private static boolean doBeggar(MoveContext context, Game game, Player player, Card responsible, Card reactionCard) {
     Card beggar = null;
 
