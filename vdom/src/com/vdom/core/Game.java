@@ -34,13 +34,13 @@ import com.vdom.players.*;
 public class Game {
 
   protected int numGames = 1;   // Number of Games to Play
+
   public    int numPlayers = 0; // Number of Players Per Game
   public    Player[] players;   // Array of Players in Each Game
 
   protected int playersTurn;                // Index of Current Player
   protected int gameTurnCount = 0;          // Current Game Turn Counter
   protected int consecutiveTurnCounter = 0; // Current Player Consecutive Turn Counter
-
   protected ArrayList<Card>[] cardsObtainedLastTurn; // Cards obtained per Player
 
   // The CARD SET to use for the game (See com.vdom.api.GameType)
@@ -54,7 +54,7 @@ public class Game {
   protected static final String BLACKMARKET = "blackMarket+";
 
   // Array to Hold Specially Named Cards (Specified-at-Launch and Un-Found)
-  protected String[] cardsSpecifiedAtLaunch;
+  protected String[] cardsSpecifiedAtLaunch = null;
   protected ArrayList<String> unfoundCards = new ArrayList<String>();
   protected String cardListText = "";
   protected String unfoundCardText = "";
@@ -147,14 +147,8 @@ public class Game {
   public ArrayList<GameEventListener> listeners = new ArrayList<GameEventListener>();
   public GameEventListener gameListener;
 
-  // Debug Output Option
-  public static boolean debug = false;
-
   // Win Stat Trackers
-  public static HashMap<String, Double> GAME_TYPE_WINS = new HashMap<String, Double>();
   public static HashMap<String, Integer> winStats = new HashMap<String, Integer>();
-
-  // Tracks Overall Wins per each Player type (i.e. ClassName)
   static HashMap<String, Double> overallWins = new HashMap<String, Double>();
 
   // Overall Stat Tracker per GameType
@@ -225,12 +219,8 @@ public class Game {
 
 
     // Reset Containers
-    overallWins.clear();
-    GAME_TYPE_WINS.clear();
     gameTypeStats.clear();
-
-    // Set Debug to True to Print Move Info
-    debug = true;
+    overallWins.clear();
 
   }
 
@@ -258,7 +248,6 @@ public class Game {
 
     // Print Overall Game Stats
     printStats(overallWins, game.numGames * GameType.values().length, "Total");
-    // printStats(GAME_TYPE_WINS, GameType.values().length, "Types");
     printGameTypeStats();
 
   }
@@ -367,8 +356,7 @@ public class Game {
 
     // Mark Game Winner and Print Results
     Util.log("");
-    Util.log("RESULTS: -----------------------");
-    markWinner(playerToWins);
+    Util.log("THE RESULTS: -------------------");
     printStats(playerToWins, numGames, gameType.toString());
     Util.log("--------------------------------");
 
@@ -3349,50 +3337,13 @@ public class Game {
   ** SECTION 4: GAME END & STATS CALCULATION FUNCTIONS
   ***************************************/
 
-  /*
-  * Adds points for winner's total game win tally used to generate stats on the set of games played.
-  * Each winner of a game gets 1 / number of winners (2 for tie, 1 otherwise). In a tie, there are two
-  * winners.
-  */
-  protected void markWinner(HashMap<String, Double> gameTypeSpecificWins) {
-    double highWins = 0;
-    int winners = 0;
-
-    for (String player : gameTypeSpecificWins.keySet()) {
-      if (gameTypeSpecificWins.get(player) > highWins) {
-        highWins = gameTypeSpecificWins.get(player);
-      }
-    }
-
-    for (String player : gameTypeSpecificWins.keySet()) {
-      if (gameTypeSpecificWins.get(player) == highWins) {
-        winners++;
-      }
-    }
-
-    double points = 1.0 / winners;
-    for (String player : gameTypeSpecificWins.keySet()) {
-      if (gameTypeSpecificWins.get(player) == highWins) {
-        double playerWins = 0;
-        if (GAME_TYPE_WINS.containsKey(player)) {
-          playerWins = GAME_TYPE_WINS.get(player);
-        }
-        playerWins += points;
-
-        GAME_TYPE_WINS.put(player, playerWins);
-      }
-    }
-
-    GAME_TYPE_WINS.toString();
-  }
-
 
   /*
   ** gameOver - Determines Game's Winner and Broadcasts "Game Over" Event
   */
   public int[] gameOver(HashMap<String, Double> gameTypeSpecificWins) {
 
-    if (debug) {
+    if (Util.debug_on) {
       printPlayerTurn();
     }
 
@@ -3480,7 +3431,7 @@ public class Game {
       s = start + (gameType.equals("Types") ? " types " : " games ") + s;
     }
 
-    if (!debug) {
+    if (!Util.debug_on) {
       while (s.length() < 30) {
         s += " ";
       }

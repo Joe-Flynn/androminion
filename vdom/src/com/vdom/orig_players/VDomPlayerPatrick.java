@@ -398,7 +398,7 @@ public class VDomPlayerPatrick extends BasePlayer {
 
 	}
 
-	private boolean debug = Game.debug;
+	private boolean debug = Util.debug_on;
 	private StrategyOption strategy = StrategyOption.Nothing;
 	private Card strategyCard = null;
 	private ArrayList<Card> strategyPossibleCards = new ArrayList<Card>();
