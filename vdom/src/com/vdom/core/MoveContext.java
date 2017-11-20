@@ -333,7 +333,7 @@ public class MoveContext {
   }
 
   public GameType getGameType() {
-    return Game.gameType;
+    return game.gameType;
   }
 
   public boolean canPlay(Card card) {

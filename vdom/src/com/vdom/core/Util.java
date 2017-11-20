@@ -146,17 +146,6 @@ public class Util {
     }
   }
 
-  /*
-  ** sensitiveDebug -
-  ** Shows a debug out only if the game is not being played interactively, or if the player is the current
-  ** player. Used for "private" information that an interactive player needs to know about for themselves,
-  ** but shouldn't know about other players.
-  */
-  public static void sensitiveDebug(Player player, String msg, boolean interactiveAsWell) {
-    //        if (!Game.interactive || (player == Game.players[Game.playersTurn]) {
-    debug(player, msg, interactiveAsWell);
-    //        }
-  }
 
   /*
   ** getShortText - Returns Card Name and Stats

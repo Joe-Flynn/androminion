@@ -886,9 +886,9 @@ public abstract class BasePlayer extends Player implements GameEventListener {
     }
 
     boolean latest = game.isColonyInGame()?
-    context.getCardsLeftInPile(Cards.province) < Game.numPlayers || context.getCardsLeftInPile(Cards.colony) < Game.numPlayers : context.getCardsLeftInPile(Cards.province) < Game.numPlayers;
+    context.getCardsLeftInPile(Cards.province) < game.numPlayers || context.getCardsLeftInPile(Cards.colony) < game.numPlayers : context.getCardsLeftInPile(Cards.province) < game.numPlayers;
 
-    if (changeList.contains(Cards.seaHag) && context.getCardsLeftInPile(Cards.curse) <= Game.numPlayers) {
+    if (changeList.contains(Cards.seaHag) && context.getCardsLeftInPile(Cards.curse) <= game.numPlayers) {
       return Cards.seaHag;
     } else if (changeList.contains(Cards.illGottenGains) && context.getCardsLeftInPile(Cards.curse) == 0) {
       return Cards.illGottenGains;

@@ -14,6 +14,8 @@ public class CardImpl implements Card, Comparable<Card>{
 
 	private static final long serialVersionUID = 1L;
 
+	private static Integer cardSequence = 1;
+
 	// Template (immutable)
 	Cards.Kind kind;
 	CardImpl templateCard;
@@ -406,7 +408,7 @@ public class CardImpl implements Card, Comparable<Card>{
 	protected void copyValues(CardImpl c) {
 
 		c.templateCard = this;
-		c.id = Game.cardSequence++;
+		c.id = cardSequence++;
 
 		c.kind = kind;
 		c.name = name;
@@ -906,7 +908,7 @@ public class CardImpl implements Card, Comparable<Card>{
 	}
 
 	public String toString() {
-		return name; // + " (id=" + id + ")";
+		return name;
 	}
 
 	public boolean equals(Object object) {

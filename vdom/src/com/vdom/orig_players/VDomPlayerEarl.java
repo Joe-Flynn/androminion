@@ -167,7 +167,7 @@ public class VDomPlayerEarl extends BasePlayer
 
   @Override
   public String getPlayerName() {
-    return getPlayerName(Game.maskPlayerNames);
+    return getPlayerName(game.maskPlayerNames);
   }
 
   @Override
