@@ -3905,6 +3905,7 @@ public class Game {
     clone.randomExpansions         = null; // Unimplemented above
     clone.randomExcludedExpansions = null; // Unimplemented above
     clone.cardsSpecifiedAtLaunch   = null; // Unimplemented above
+
     clone.unfoundCards    = new ArrayList<String>(unfoundCards);
     clone.cardListText    = cardListText;
     clone.unfoundCardText = unfoundCardText;
@@ -3956,8 +3957,6 @@ public class Game {
     clone.nextPossessionsToProcess    = nextPossessionsToProcess;
     nextPossessingPlayer        = null;  // NEED TO DEEP COPY
     clone.tradeRouteValue             = tradeRouteValue;
-    baneCard                    = null;  // NEED TO DEEP COPY?
-    obeliskCard                 = null;  // NEED TO DEEP COPY?
     clone.sheltersInPlay              = sheltersInPlay;
     clone.bakerInPlay                 = bakerInPlay;
     clone.journeyTokenInPlay          = journeyTokenInPlay;
@@ -3965,8 +3964,12 @@ public class Game {
     clone.doMountainPassAfterThisTurn = doMountainPassAfterThisTurn;
     clone.firstProvinceGainedBy       = firstProvinceGainedBy;
 
+    // Clone Special Cards
+    if (baneCard != null) { clone.baneCard = baneCard.clone(); }
+    if (obeliskCard != null) { clone.obeliskCard = obeliskCard.clone(); }
+
     ignoreList = new HashSet<String>();  // NEED TO DEEP COPY
-    listeners = new ArrayList<GameEventListener>();  // NEED TO DEEP COPY
+    listeners  = new ArrayList<GameEventListener>();  // NEED TO DEEP COPY
     overallWins   = new HashMap<String, Double>();  // NEED TO DEEP COPY?
     gameTypeStats = new ArrayList<GameStats>();     // NEED TO DEEP COPY?
 
