@@ -2,6 +2,7 @@ package com.vdom.players;
 
 // ??? - KEEP WHAT YOU NEED
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -22,6 +23,13 @@ import com.vdom.core.Util;
 
 
 public class VDomPlayerJoe extends BasePlayer  {
+
+    private Evaluator evaluator;
+
+    public VDomPlayerJoe() {
+        super();
+        this.evaluator = new Evaluator(this);
+    }
 
     @Override
     public String getPlayerName() {
@@ -56,17 +64,27 @@ public class VDomPlayerJoe extends BasePlayer  {
     public Card doBuy(MoveContext context) {
 
       int coins = context.getCoinAvailableForBuy();
+      Card retCard;
+
       if (coins == 0) {
-        return null;
+          retCard = null;
+      }
+      else if (context.canBuy(Cards.province)) {
+          retCard = Cards.province;
+      }
+      else if (context.canBuy(Cards.gold)) {
+          retCard = Cards.gold;
+      }
+      else if (context.canBuy(Cards.silver)) {
+          retCard = Cards.silver;
+      }
+      else {
+          retCard = null;
       }
 
-      // Buy Province or Gold
-      if (context.canBuy(Cards.province)) {
-        return Cards.province;
-      }
-      if (context.canBuy(Cards.gold)) {
-        return Cards.gold;
-      }
+      evaluator.updateWithBuyChoice(retCard);
+      return retCard;
+
 
       // // Buy a Duchy
       // if (context.canBuy(Cards.duchy)) {
@@ -82,10 +100,6 @@ public class VDomPlayerJoe extends BasePlayer  {
       // }
 
       // Buy Silver
-      if (context.canBuy(Cards.silver)) {
-        return Cards.silver;
-      }
-      return null;
     }
 
 }

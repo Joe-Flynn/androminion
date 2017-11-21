@@ -416,6 +416,10 @@ public class MoveContext {
     return game.getCardsInGame(opt, supplyOnly, type);
   }
 
+  public Card[] getSupply() {
+    return game.getCardsInGame(GetCardsInGameOptions.TopOfPiles, true);
+  }
+
   public boolean cardInGame(Card card) {
     return game.cardInGame(card);
   }
