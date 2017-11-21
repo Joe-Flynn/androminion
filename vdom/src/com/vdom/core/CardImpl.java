@@ -405,6 +405,16 @@ public class CardImpl implements Card, Comparable<Card>{
 		return c;
 	}
 
+
+	// TODO: SET UP RIGHT TYPE AND COPY INNARDS
+	public CardImpl clone() {
+
+		CardImpl clone = new CardImpl(); // Type?
+		return clone;
+
+	}
+
+
 	protected void copyValues(CardImpl c) {
 
 		c.templateCard = this;
