@@ -118,6 +118,7 @@ public class CardImpl implements Card, Comparable<Card>{
 		protected boolean costPotion = false;
 		protected String description = "";
 		protected Expansion expansion = null;
+		protected String expansionString = "";
 		protected Type[] types = null;
 		protected int addActions;
 		protected int addBuys;
@@ -168,6 +169,11 @@ public class CardImpl implements Card, Comparable<Card>{
 
 		public Builder expansion(Expansion val) {
 			expansion = val;
+			return this;
+		}
+
+		public Builder expansion(String val) {
+			expansionString = val;
 			return this;
 		}
 
@@ -319,7 +325,44 @@ public class CardImpl implements Card, Comparable<Card>{
 			}
 		}
 
+		// Drew's hack to build based on an expansion string
+		public CardImpl build2() {
+			if (expansionString == "") {
+				return new CardImpl(this);
+			}
+			switch (expansionString) {
+				case "Base":
+					return new CardImplBase(this);
+				case "Intrigue":
+					return new CardImplIntrigue(this);
+				case "Seaside":
+					return new CardImplSeaside(this);
+				case "Alchemy":
+					return new CardImplAlchemy(this);
+				case "Prosperity":
+					return new CardImplProsperity(this);
+				case "Cornucopia":
+					return new CardImplCornucopia(this);
+				case "Hinterlands":
+					return new CardImplHinterlands(this);
+				case "DarkAges":
+					return new CardImplDarkAges(this);
+				case "Guilds":
+					return new CardImplGuilds(this);
+				case "Adventures":
+					return new CardImplAdventures(this);
+				case "Empires":
+					return new CardImplEmpires(this);
+				case "Promo":
+					return new CardImplPromo(this);
+				default:
+					return new CardImpl(this);
+			}
+		}
+
 	}
+
+
 
 	protected CardImpl() {
 	}
