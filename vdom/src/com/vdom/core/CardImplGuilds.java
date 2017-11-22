@@ -16,6 +16,14 @@ public class CardImplGuilds extends CardImpl {
 
 	protected CardImplGuilds() { }
 
+    @Override
+    public CardImpl instantiate() {
+        checkInstantiateOK();
+        CardImplGuilds c = new CardImplGuilds();
+        copyValues(c);
+        return c;
+    }
+
 	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch (getKind()) {

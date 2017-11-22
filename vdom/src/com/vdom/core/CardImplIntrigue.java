@@ -18,6 +18,14 @@ public class CardImplIntrigue extends CardImpl {
 
 	protected CardImplIntrigue() { }
 
+    @Override
+    public CardImpl instantiate() {
+        checkInstantiateOK();
+        CardImplIntrigue c = new CardImplIntrigue();
+        copyValues(c);
+        return c;
+    }
+
 	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch(getKind()) {

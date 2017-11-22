@@ -19,6 +19,14 @@ public class CardImplDarkAges extends CardImpl {
 
 	protected CardImplDarkAges() { }
 
+    @Override
+    public CardImpl instantiate() {
+        checkInstantiateOK();
+        CardImplDarkAges c = new CardImplDarkAges();
+        copyValues(c);
+        return c;
+    }
+
 	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch(getKind()) {

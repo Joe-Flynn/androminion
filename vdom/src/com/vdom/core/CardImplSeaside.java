@@ -15,6 +15,14 @@ public class CardImplSeaside extends CardImpl {
 	
 	protected CardImplSeaside() { }
 
+    @Override
+    public CardImpl instantiate() {
+        checkInstantiateOK();
+        CardImplSeaside c = new CardImplSeaside();
+        copyValues(c);
+        return c;
+    }
+
 	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch(getKind()) {

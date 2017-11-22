@@ -20,6 +20,14 @@ public class CardImplCornucopia extends CardImpl {
 	
 	protected CardImplCornucopia() { }
 
+    @Override
+    public CardImpl instantiate() {
+        checkInstantiateOK();
+        CardImplCornucopia c = new CardImplCornucopia();
+        copyValues(c);
+        return c;
+    }
+
 	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch(getKind()) {

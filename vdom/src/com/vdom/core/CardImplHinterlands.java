@@ -15,6 +15,14 @@ public class CardImplHinterlands extends CardImpl {
 
 	protected CardImplHinterlands() { }
 
+    @Override
+    public CardImpl instantiate() {
+        checkInstantiateOK();
+        CardImplHinterlands c = new CardImplHinterlands();
+        copyValues(c);
+        return c;
+    }
+
 	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch(getKind()) {
