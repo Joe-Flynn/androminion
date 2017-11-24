@@ -285,8 +285,6 @@ public class Game {
     // Print Overall Game Stats
     game.printGameTypeStats();
 
-    game.cloneGame();
-
   }
 
   /*
@@ -295,7 +293,7 @@ public class Game {
   void start() {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
-    playerToWins.put("com.vdom.players.VDomPlayerJoe", 0.0);
+    playerToWins.put("com.vdom.players.VDomPlayerPhil", 0.0);
     playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
 
     // Variables for Overall Stats over all Games
@@ -461,7 +459,7 @@ public class Game {
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerJoe();
+        players[i] = new VDomPlayerPhil();
       }
       else {
         players[i] = new VDomPlayerAndrew();

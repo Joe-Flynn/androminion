@@ -148,23 +148,23 @@ public class VDomPlayerAndrew extends BasePlayer  {
       return Cards.province;
     }
 
-    // Buy Duchy if piles are low
+    // Buy Duchy if Province Pile is Getting Low
     if (game.piles.get(Cards.province.getName()).getCount() <= 2 && context.canBuy(Cards.duchy)) {
       return Cards.duchy;
     }
 
-    // Buy Gold if possible
+    // Buy Gold if Possible
     if (numGolds < maxGolds && context.canBuy(Cards.gold)) {
       numGolds = numGolds + 1;
       return Cards.gold;
     }
 
-    // Buy Duchy if piles are low and cannot buy Gold
+    // Buy Duchy if Province Pile is Getting Low and Cannot Buy Gold
     if (game.piles.get(Cards.province.getName()).getCount() <= 4 && context.canBuy(Cards.duchy)) {
       return Cards.duchy;
     }
 
-    // Buy Estate over Silver if piles are extremely low
+    // Buy Estate over Silver if Province Pile is Getting Extremely Low
     if (game.piles.get(Cards.province.getName()).getCount() <= 1 && context.canBuy(Cards.estate)) {
       return Cards.estate;
     }
