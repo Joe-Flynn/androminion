@@ -15,6 +15,14 @@ public class CardImplPromo extends CardImpl {
 	
 	protected CardImplPromo() { }
 
+    @Override
+    public CardImpl instantiate() {
+        checkInstantiateOK();
+        CardImplPromo c = new CardImplPromo();
+        copyValues(c);
+        return c;
+    }
+
 	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch(getKind()) {

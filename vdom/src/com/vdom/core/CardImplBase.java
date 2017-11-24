@@ -19,6 +19,14 @@ public class CardImplBase extends CardImpl {
 	protected CardImplBase() { }
 
 	@Override
+	public CardImpl instantiate() {
+		checkInstantiateOK();
+		CardImplBase c = new CardImplBase();
+		copyValues(c);
+		return c;
+	}
+
+	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch (this.getKind()) {
 			case Adventurer:

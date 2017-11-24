@@ -103,8 +103,8 @@ public class VDomPlayerAndrew extends BasePlayer  {
   };
 
   // Max Numbers of Cards to Buy
-  protected int maxSilvers    = 6;
-  protected int maxGolds      = 8;
+  protected int maxSilvers    = 99;
+  protected int maxGolds      = 99;
   protected int maxTerminals  = 2;
 
   // Current Numbers of Each Card Bought
@@ -124,8 +124,8 @@ public class VDomPlayerAndrew extends BasePlayer  {
     int terminalIndex = 0;
     while (terminalCard == null && terminalIndex < favoriteTerminals.length) {
       Card terminal = favoriteTerminals[terminalIndex++];
-      for (String p : context.game.placeholderPiles.keySet()) {
-        Card supplyCard = context.game.placeholderPiles.get(p).placeholderCard();
+      for (String p : context.game.piles.keySet()) {
+        Card supplyCard = context.game.piles.get(p).placeholderCard();
         if (supplyCard.getKind() == terminal.getKind()) {
           terminalCard = terminal;
           System.out.println("TERMINAL SELECTED: " + terminal);
@@ -133,7 +133,7 @@ public class VDomPlayerAndrew extends BasePlayer  {
       }
     }
     if (terminalCard == null) {
-      terminalCard = Cards.duchy; // Default Terminal Card
+      terminalCard = Cards.province; // Default Terminal Card
       System.out.println("TERMINAL SELECTED: " + Cards.province);
     }
 
@@ -143,13 +143,30 @@ public class VDomPlayerAndrew extends BasePlayer  {
       return terminalCard;
     }
 
-    // Buy Province or Gold if Possible
+    // Buy Province if Possible
     if (context.canBuy(Cards.province)) {
       return Cards.province;
     }
+
+    // Buy Duchy if piles are low
+    if (game.piles.get(Cards.province.getName()).getCount() <= 2 && context.canBuy(Cards.duchy)) {
+      return Cards.duchy;
+    }
+
+    // Buy Gold if possible
     if (numGolds < maxGolds && context.canBuy(Cards.gold)) {
       numGolds = numGolds + 1;
       return Cards.gold;
+    }
+
+    // Buy Duchy if piles are low and cannot buy Gold
+    if (game.piles.get(Cards.province.getName()).getCount() <= 4 && context.canBuy(Cards.duchy)) {
+      return Cards.duchy;
+    }
+
+    // Buy Estate over Silver if piles are extremely low
+    if (game.piles.get(Cards.province.getName()).getCount() <= 1 && context.canBuy(Cards.estate)) {
+      return Cards.estate;
     }
 
     // Buy Silver if Possible
