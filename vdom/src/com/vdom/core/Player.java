@@ -1376,6 +1376,109 @@ public abstract class Player {
     return vp;
   }
 
+  public int getTotalVictoryPoints() {
+    Map<Object, Integer> counts = this.getVictoryCardCounts();
+    int total = 0;
+
+    for(Map.Entry<Object, Integer> entry : counts.entrySet()) {
+      if(entry.getKey() instanceof Card && ((Card)entry.getKey()).is(Type.Victory, this)) {
+        Card victoryCard = (Card) entry.getKey();
+        total += victoryCard.getVictoryPoints() * entry.getValue();
+      } else if((entry.getKey() instanceof Card) && ((Card)entry.getKey()).is(Type.Curse, null)) {
+        Card curseCard = (Card) entry.getKey();
+		  total += curseCard.getVictoryPoints() * entry.getValue();
+      }
+    }
+
+    ArrayList<Card> allCards = this.getAllCards();
+
+    if(counts.containsKey(Cards.gardens)) {
+		total += counts.get(Cards.gardens) * (allCards.size() / 10);
+    }
+
+    if(counts.containsKey(Cards.duke)) {
+		total += counts.get(Cards.duke) * counts.get(Cards.duchy);
+    }
+
+    if(counts.containsKey(Cards.fairgrounds)) {
+		total += counts.get(Cards.fairgrounds) * ((counts.get(DISTINCT_CARDS) / 5) * 2);
+    }
+    if(counts.containsKey(Cards.vineyard)) {
+		total += counts.get(Cards.vineyard) * (this.getActionCardCount(this) / 3);
+    }
+    if(counts.containsKey(Cards.silkRoad)) {
+		total += counts.get(Cards.silkRoad) * (this.getVictoryCardCount() / 4);
+    }
+    if(counts.containsKey(Cards.feodum)) {
+		total += counts.get(Cards.feodum) * (Util.getCardCount(allCards, Cards.silver)  / 3);
+    }
+    if(counts.containsKey(Cards.distantLands)) {
+      // counts only if on tavern
+      counts.put(Cards.distantLands, Util.getCardCount(this.tavern, Cards.distantLands));
+		total += counts.get(Cards.distantLands) * 4;
+    }
+    if (counts.containsKey(Cards.humbleCastle)) {
+		total += counts.get(Cards.humbleCastle) * this.getCastleCardCount(this);
+    }
+    if (counts.containsKey(Cards.kingsCastle)) {
+		total += counts.get(Cards.kingsCastle) * this.getCastleCardCount(this) * 2;
+    }
+
+    // landmarks
+    if (this.game.cardInGame(Cards.banditFort)) {
+		total += (Util.getCardCount(allCards, Cards.silver) + Util.getCardCount(allCards, Cards.gold)) * -2;
+    }
+    if (this.game.cardInGame(Cards.fountain)) {
+		total += (Util.getCardCount(allCards, Cards.copper) >= 10) ? 15 : 0;
+    }
+    if (this.game.cardInGame(Cards.museum)) {
+		total += counts.get(DISTINCT_CARDS) * 2;
+    }
+    if (this.game.cardInGame(Cards.obelisk)) {
+		total += game.obeliskCard != null ? Util.countCardsOfSamePile(game, allCards, game.obeliskCard) * 2 : 0;
+    }
+    if (this.game.cardInGame(Cards.orchard)) {
+		total += counts.get(THREE_PLUS_COPY_ACTION_CARDS) * 4;
+    }
+    if (this.game.cardInGame(Cards.palace)) {
+		total += (Math.min(Util.getCardCount(allCards, Cards.copper),
+              Math.min(Util.getCardCount(allCards, Cards.silver), Util.getCardCount(allCards, Cards.gold)))) * 3;
+    }
+    if (this.game.cardInGame(Cards.tower)) {
+		total += counts.get(NON_VICTORY_EMPTY_SUPPLY_PILE_CARDS);
+    }
+    if (this.game.cardInGame(Cards.triumphalArch)) {
+		total += counts.get(SECOND_MOST_COMMON_ACTION_CARDS) * 3;
+    }
+    if (this.game.cardInGame(Cards.wall)) {
+		total += allCards.size() > 15 ? 15 - allCards.size() : 0;
+    }
+    if (this.game.cardInGame(Cards.wolfDen)) {
+		total += counts.get(ONE_COPY_CARDS) * -3;
+    }
+    if (this.game.cardInGame(Cards.keep)) {
+      Map<Card, Integer> myWinningTreasures = getTreasureCardCounts();
+      for (Iterator<Map.Entry<Card, Integer>> it = myWinningTreasures.entrySet().iterator(); it.hasNext(); ) {
+        if (it.next().getValue() == 0)
+          it.remove();
+      }
+      for(Player p : game.getPlayersInTurnOrder()) {
+        if (p == this) continue;
+        Map<Card, Integer> otherTreasureCounts = p.getTreasureCardCounts();
+        for (Iterator<Map.Entry<Card, Integer>> it = myWinningTreasures.entrySet().iterator(); it.hasNext(); ) {
+          Map.Entry<Card, Integer> entry = it.next();
+          if (otherTreasureCounts.containsKey(entry.getKey()) && otherTreasureCounts.get(entry.getKey()) > entry.getValue())
+            it.remove();
+        }
+      }
+		total += myWinningTreasures.size() * 5;
+    }
+
+    total += this.getVictoryTokens();
+
+    return total;
+  }
+
   public Map<Card, Integer> getVictoryPointTotals() {
     return getVictoryPointTotals(null);
   }
@@ -1483,6 +1586,8 @@ public abstract class Player {
 
     return totals;
   }
+
+
 
   /*
   ** getWin - Returns True if Player wins

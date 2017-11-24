@@ -123,6 +123,13 @@ public class CardList implements Iterable<Card> {
     }
   }
 
+  public void addAll(CardList cardList) {
+    for (Card card : cardList) {
+      if (checkValid(card)) {
+        a.add(card);
+      }
+    }
+  }
   public int size() {
     return a.size();
   }
