@@ -26,7 +26,7 @@ public abstract class Player {
   public static final String SECOND_MOST_COMMON_ACTION_CARDS = "Second Most Common Action Cards";
 
   // Player Name and Number
-  private String name;
+  protected String name;
   public int playerNumber;
 
   // Player's Counters and Win Status
@@ -64,14 +64,14 @@ public abstract class Player {
 
   protected Map<Player, Map<Cards.Kind, Integer>> attackDurationEffectsOnOthers;
 
-  private int  guildsCoinTokenCount = 0; // The number of coin tokens held by the player
-  private int  debtTokenCount = 0;
-  private Card checkLeadCard;
-  private int  victoryTokens;
-  private Map<Card, Integer> victoryTokensSource = new TreeMap<Card, Integer>();
-  private boolean journeyTokenFaceUp;
-  private boolean minusOneCoinTokenOn;
-  private boolean minusOneCardTokenOn;
+  private   int  guildsCoinTokenCount = 0; // The number of coin tokens held by the player
+  private   int  debtTokenCount = 0;
+  protected Card checkLeadCard;
+  private   int  victoryTokens;
+  protected Map<Card, Integer> victoryTokensSource = new TreeMap<Card, Integer>();
+  private   boolean journeyTokenFaceUp;
+  private   boolean minusOneCoinTokenOn;
+  private   boolean minusOneCardTokenOn;
 
 
   // ////////////////////////////////////////////
@@ -332,8 +332,16 @@ public abstract class Player {
     return guildsCoinTokenCount;
   }
 
+  public void setGuildsCoinTokenCount(int count) {
+    guildsCoinTokenCount = count;
+  }
+
   public int getDebtTokenCount() {
     return debtTokenCount;
+  }
+
+  public void setDebtTokenCount(int count) {
+    debtTokenCount = count;
   }
 
   public boolean getMinusOneCoinToken() {
@@ -366,6 +374,10 @@ public abstract class Player {
 
   public boolean getJourneyToken() {
     return journeyTokenFaceUp;
+  }
+
+  public void setJourneyToken(boolean faceup) {
+    journeyTokenFaceUp = faceup;
   }
 
   public boolean flipJourneyToken(MoveContext context) {
@@ -442,6 +454,13 @@ public abstract class Player {
   */
   public int getVictoryTokens() {
     return victoryTokens;
+  }
+
+  /*
+  ** setVictoryTokens - Setter for the total Number of Victory Tokens
+  */
+  public void setVictoryTokens(int numTokens) {
+    victoryTokens = numTokens;
   }
 
   /*

@@ -72,4 +72,6 @@ public interface Card extends Serializable {
   public CardImpl    instantiate();
   public PileCreator getPileCreator();
 
+  public CardImpl    clone();
+
 }
