@@ -333,7 +333,7 @@ public class MoveContext {
   }
 
   public GameType getGameType() {
-    return Game.gameType;
+    return game.gameType;
   }
 
   public boolean canPlay(Card card) {
@@ -414,6 +414,10 @@ public class MoveContext {
 
   public Card[] getCardsInGame(GetCardsInGameOptions opt, boolean supplyOnly, Type type) {
     return game.getCardsInGame(opt, supplyOnly, type);
+  }
+
+  public Card[] getSupply() {
+    return game.getCardsInGame(GetCardsInGameOptions.TopOfPiles, true);
   }
 
   public boolean cardInGame(Card card) {

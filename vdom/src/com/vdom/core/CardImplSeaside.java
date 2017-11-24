@@ -12,7 +12,7 @@ public class CardImplSeaside extends CardImpl {
 	public CardImplSeaside(CardImpl.Builder builder) {
 		super(builder);
 	}
-	
+
 	protected CardImplSeaside() { }
 
     @Override
@@ -149,7 +149,7 @@ public class CardImplSeaside extends CardImpl {
             }
         }
     }
-	
+
 	private void cutpurse(Game game, MoveContext context, Player currentPlayer) {
         for (Player player : game.getPlayersInTurnOrder()) {
             if (player != currentPlayer && !Util.isDefendedFromAttack(game, player, this)) {
@@ -169,7 +169,7 @@ public class CardImplSeaside extends CardImpl {
             }
         }
     }
-	
+
     private void embargo(Game game, MoveContext context, Player currentPlayer) {
         Card card = currentPlayer.controlPlayer.embargo_supplyToEmbargo(context);
 
@@ -185,7 +185,7 @@ public class CardImplSeaside extends CardImpl {
         event.card = card;
         game.broadcastEvent(event);
     }
-    
+
     private void explorer(MoveContext context, Player currentPlayer) {
         Card province = null;
         for (Card card : currentPlayer.hand) {
@@ -236,10 +236,10 @@ public class CardImplSeaside extends CardImpl {
                             cards[i] = player.hand.get(i);
                         }
                     }
-                    
+
                     GameEvent event = new GameEvent(GameEvent.EventType.CardOnTopOfDeck, context);
                     event.setPlayer(player);
-                    
+
                     for (int i = cards.length - 1; i >= 0; i--) {
                         player.hand.remove(cards[i]);
                         player.putOnTopOfDeck(cards[i]);
@@ -249,7 +249,7 @@ public class CardImplSeaside extends CardImpl {
             }
         }
     }
-    
+
     private void haven(MoveContext context, Player currentPlayer) {
         Card card = currentPlayer.getHand().size() == 0 ? null : currentPlayer.controlPlayer.haven_cardToSetAside(context);
         if ((card == null && currentPlayer.getHand().size() > 0) || (card != null && !currentPlayer.getHand().contains(card))) {
@@ -297,7 +297,7 @@ public class CardImplSeaside extends CardImpl {
             game.broadcastEvent(event);
         }
     }
-    
+
     private void lookout(Game game, MoveContext context, Player currentPlayer) {
         ArrayList<Card> cards = new ArrayList<Card>();
         for (int i = 0; i < 3; i++) {
@@ -351,7 +351,7 @@ public class CardImplSeaside extends CardImpl {
             currentPlayer.putOnTopOfDeck(cards.get(0));
         }
     }
-    
+
     private void nativeVillage(Game game, MoveContext context, Player currentPlayer) {
         if (currentPlayer.controlPlayer.nativeVillage_takeCards(context)) {
             while (!currentPlayer.nativeVillage.isEmpty()) {
@@ -361,7 +361,7 @@ public class CardImplSeaside extends CardImpl {
             Card draw = game.draw(context, Cards.nativeVillage, 1);
             if (draw != null) {
                 currentPlayer.nativeVillage.add(draw);
-                Util.sensitiveDebug(currentPlayer, "Added to Native Village:" + draw.getName(), true);
+                Util.debug(currentPlayer, "Added to Native Village:" + draw.getName(), true);
             }
         }
     }
@@ -418,7 +418,7 @@ public class CardImplSeaside extends CardImpl {
             }
         }
     }
-    
+
     private void pearlDiver(MoveContext context, Player currentPlayer) {
         if (currentPlayer.getDeckSize() == 0 && currentPlayer.discard.size() > 0) {
             context.game.replenishDeck(context, Cards.pearlDiver, 0);
@@ -432,7 +432,7 @@ public class CardImplSeaside extends CardImpl {
             }
         }
     }
-    
+
     private void pirateShip(Game game, MoveContext context, Player currentPlayer) {
         ArrayList<Player> playersToAttack = new ArrayList<Player>();
         for (Player targetPlayer : game.getPlayersInTurnOrder()) {
@@ -499,7 +499,7 @@ public class CardImplSeaside extends CardImpl {
             }
         }
     }
-    
+
     private void salvager(MoveContext context, Player currentPlayer) {
         if (currentPlayer.hand.size() == 0) {
             return;
@@ -516,7 +516,7 @@ public class CardImplSeaside extends CardImpl {
         currentPlayer.hand.remove(card);
         currentPlayer.trash(card, this.getControlCard(), context);
     }
-    
+
     private void seaHag(Game game, MoveContext context, Player currentPlayer) {
         for (Player player : game.getPlayersInTurnOrder()) {
             if (player != currentPlayer && !Util.isDefendedFromAttack(game, player, this)) {
@@ -533,7 +533,7 @@ public class CardImplSeaside extends CardImpl {
             }
         }
     }
-    
+
     private void smugglers(MoveContext context, Player currentPlayer) {
         Card card = currentPlayer.controlPlayer.smugglers_cardToObtain(context);
         if (card != null) {
@@ -564,7 +564,7 @@ public class CardImplSeaside extends CardImpl {
             }
         }
     }
-    
+
     private void tactician(MoveContext context, Player currentPlayer) {
         // throneroom has no effect since hand is already empty
         if (this.getControlCard().numberTimesAlreadyPlayed == 0) {
@@ -582,7 +582,7 @@ public class CardImplSeaside extends CardImpl {
             this.getControlCard().cloneCount = 1;
         }
     }
-    
+
     private void treasureMap(MoveContext context, Player currentPlayer) {
         // Check for Treasure Map in hand
         Card anotherMap = null;
@@ -615,7 +615,7 @@ public class CardImplSeaside extends CardImpl {
             }
         }
     }
-    
+
     private void warehouse(MoveContext context, Player currentPlayer) {
         if (currentPlayer.hand.size() == 0) {
             return;
@@ -656,8 +656,8 @@ public class CardImplSeaside extends CardImpl {
             currentPlayer.discard(cards[i], this.getControlCard(), context);
         }
     }
-    
-    
+
+
     protected void increasePirateShipTreasure(Player player) {
         (player).pirateShipTreasure++;
     }

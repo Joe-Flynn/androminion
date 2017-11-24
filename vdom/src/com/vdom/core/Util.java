@@ -16,6 +16,9 @@ import com.vdom.core.Cards.Kind;
 
 public class Util {
 
+  // Set <debug_on> to True to Print Move Info
+  public static boolean debug_on = true;
+
   /*
   ** cardArrayToString - Returns a String of Card Names
   */
@@ -141,22 +144,9 @@ public class Util {
   ** is not always a "debug" message, but it still seems to make sense to use the term.
   */
   public static void debug(String msg, boolean interactiveAsWell) {
-    if (Game.debug) {
-      log(msg);
-    }
+    if (debug_on) { log(msg); }
   }
 
-  /*
-  ** sensitiveDebug -
-  ** Shows a debug out only if the game is not being played interactively, or if the player is the current
-  ** player. Used for "private" information that an interactive player needs to know about for themselves,
-  ** but shouldn't know about other players.
-  */
-  public static void sensitiveDebug(Player player, String msg, boolean interactiveAsWell) {
-    //        if (!Game.interactive || (player == Game.players[Game.playersTurn]) {
-    debug(player, msg, interactiveAsWell);
-    //        }
-  }
 
   /*
   ** getShortText - Returns Card Name and Stats

@@ -13,7 +13,7 @@ import com.vdom.core.Type;
 
 public class VDomPlayerChuck extends BasePlayer  {
     protected final Random rand = new Random(System.currentTimeMillis());
-    
+
     protected static final int ACTION_CARDS_MAX = 5;
 
     @Override
@@ -24,14 +24,14 @@ public class VDomPlayerChuck extends BasePlayer  {
 
     @Override
     public String getPlayerName() {
-        return getPlayerName(Game.maskPlayerNames);
+        return getPlayerName(game.maskPlayerNames);
     }
-    
+
     @Override
     public String getPlayerName(boolean maskName) {
         return maskName ? "Player " + (playerNumber + 1) : "Chuck";
     }
-    
+
     @Override
     public boolean isAi() {
         return true;
@@ -50,7 +50,7 @@ public class VDomPlayerChuck extends BasePlayer  {
         if (treasureMapCount >= 2) {
             return fromHand(Cards.treasureMap);
         }
-        
+
         // play prince if action card candidate available
         Card[] princeCards;
         if (getHand().contains(Cards.prince)) {
@@ -63,7 +63,7 @@ public class VDomPlayerChuck extends BasePlayer  {
         else {
             princeCards = new Card[0];
         }
-                
+
         Card action;
         for (final Card card : getHand()) {
             if (context.canPlay(card)) {
@@ -78,22 +78,22 @@ public class VDomPlayerChuck extends BasePlayer  {
         if (princeCards.length != 0) {
             return fromHand(Cards.prince);
         }
-            
+
         if(inHand(Cards.throneRoom) && context.canPlay(Cards.throneRoom)) {
             return fromHand(Cards.throneRoom);
         }
-        
+
         if(inHand(Cards.disciple) && context.canPlay(Cards.disciple)) {
             return fromHand(Cards.disciple);
         }
-        
+
         //TODO: ...
         //if(context.getKingsCourtsInEffect() == 0) {
             if(inHand(Cards.kingsCourt) && context.canPlay(Cards.kingsCourt)) {
                 return fromHand(Cards.kingsCourt);
             }
         //}
-        
+
         int cost = COST_MAX;
         while (cost >= 0) {
             final ArrayList<Card> randList = new ArrayList<Card>();
@@ -107,7 +107,7 @@ public class VDomPlayerChuck extends BasePlayer  {
                    ) {
                     continue;
                 }
-                
+
                 if(card.getCost(context) == cost) {
                     randList.add(card);
                 }
@@ -130,25 +130,25 @@ public class VDomPlayerChuck extends BasePlayer  {
         if (coinAvailableForBuy == 0) {
             return null;
         }
-        
+
         if(context.canBuy(Cards.colony)) {
             return Cards.colony;
         }
-        
+
         if(context.canBuy(Cards.platinum) && turnCount < midGame) {
             return Cards.platinum;
         }
-        
+
         if(context.canBuy(Cards.prince) && turnCount < midGame && context.cardInGame(Cards.colony) && getMyCardCount(Cards.prince) < 2) {
             ArrayList<Card> allCards = new ArrayList<Card>(getAllCards());
             if (prince_cardCandidates(context, allCards, false).length >= 2 + 2*getMyCardCount(Cards.prince))
                 return Cards.prince;
         }
-        
+
         if(context.canBuy(Cards.province)) {
             return Cards.province;
         }
-        
+
         if (turnCount > midGame && context.canBuy(Cards.vineyard) && actionCardCount >=9 ) {
             if(context.getEmbargosIfCursesLeft(Cards.vineyard) == 0) {
                 return Cards.vineyard;
@@ -159,8 +159,8 @@ public class VDomPlayerChuck extends BasePlayer  {
                 return Cards.duchy;
             }
         }
-        
-        //try cards with potion before silver 
+
+        //try cards with potion before silver
         if (turnCount > midGame && context.canBuy(Cards.vineyard) && actionCardCount >=6 ) {
             if(context.getEmbargosIfCursesLeft(Cards.vineyard) == 0) {
                 return Cards.vineyard;
@@ -206,12 +206,12 @@ public class VDomPlayerChuck extends BasePlayer  {
         while (cost >= 0) {
             for (final Card card : context.getCardsInGame(GetCardsInGameOptions.Buyables)) {
                 if (
-                        card.getCost(context) != cost || 
-                        !context.canBuy(card) || 
-                        card.equals(Cards.curse) || 
-                        card.equals(Cards.virtualRuins) || 
-                        card.equals(Cards.copper) || 
-                        card.equals(Cards.rats) || 
+                        card.getCost(context) != cost ||
+                        !context.canBuy(card) ||
+                        card.equals(Cards.curse) ||
+                        card.equals(Cards.virtualRuins) ||
+                        card.equals(Cards.copper) ||
+                        card.equals(Cards.rats) ||
                         card.equals(Cards.potion) && !shouldBuyPotion() ||
                         card.equals(Cards.throneRoom) && throneRoomAndKingsCourtCount >= 2 ||
                         card.equals(Cards.disciple) && throneRoomAndKingsCourtCount >= 2 ||
@@ -220,15 +220,15 @@ public class VDomPlayerChuck extends BasePlayer  {
                    ) {
                     continue;
                 }
-                
+
                 if (card.is(Type.Action, context.getPlayer()) && actionCardCount >= ACTION_CARDS_MAX) {
                     continue;
                 }
-                
+
                 if(context.getEmbargosIfCursesLeft(card) > 0) {
                     continue;
                 }
-                            
+
                 if(highestCost == 0) {
                     highestCost = card.getCost(context);
                 }
@@ -244,7 +244,7 @@ public class VDomPlayerChuck extends BasePlayer  {
         if (randList.contains(Cards.masterpiece) && randList.contains(Cards.silver) && coinAvailableForBuy < 5) {
             randList.remove(Cards.masterpiece);
         }
-        
+
         if (randList.size() > 0) {
             return randList.get(rand.nextInt(randList.size()));
         }
@@ -256,11 +256,11 @@ public class VDomPlayerChuck extends BasePlayer  {
         if(context.canBuy(Cards.silver) && context.getEmbargosIfCursesLeft(Cards.silver) == 0) {
             return Cards.silver;
         }
-        
+
         if(context.canBuy(Cards.estate) && turnCount > midGame && context.getEmbargosIfCursesLeft(Cards.estate) == 0) {
             return Cards.estate;
         }
-        
+
         return null;
     }
 

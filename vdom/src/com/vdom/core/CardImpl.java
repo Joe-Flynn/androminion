@@ -14,11 +14,12 @@ public class CardImpl implements Card, Comparable<Card>{
 
 	private static final long serialVersionUID = 1L;
 
+	private static Integer cardSequence = 1;
+
 	// Template (immutable)
 	Cards.Kind kind;
 	CardImpl templateCard;
 	String name;
-	String safeName;
 	int cost;
 	int debtCost;
 	boolean costPotion = false;
@@ -446,11 +447,35 @@ public class CardImpl implements Card, Comparable<Card>{
 		return c;
 	}
 
+
+	/*
+	** clone - Returns a "deep copy" of the CardImpl
+	*/
+	public CardImpl clone() {
+
+		CardImpl clone = isTemplateCard() ? instantiate() : templateCard.instantiate();
+
+		clone.isPlaceholderCard = isPlaceholderCard;
+		clone.pileCreator = null; // OK?
+
+		clone.movedToNextTurnPile = movedToNextTurnPile;
+		clone.trashAfterPlay = trashAfterPlay;
+		clone.numberTimesAlreadyPlayed = numberTimesAlreadyPlayed;
+		clone.cloneCount = cloneCount; // WHAT IS THIS?
+
+		// TODO (PHIL): IMPLEMENT A COPY OF THESE REFERENCED CARDS?
+		clone.impersonatingCard = null;
+		clone.inheritingAbilitiesCard = null;
+		clone.controlCard = null;
+
+		return clone;
+
+	}
+
+
 	protected void copyValues(CardImpl c) {
-
 		c.templateCard = this;
-		c.id = Game.cardSequence++;
-
+		c.id = cardSequence++;
 		c.kind = kind;
 		c.name = name;
 		c.cost = cost;
@@ -475,7 +500,6 @@ public class CardImpl implements Card, Comparable<Card>{
 		c.isOverpay = isOverpay;
 		c.vp = vp;
 		c.trashOnUse = trashOnUse;
-
 		c.callableWhenCardGained = callableWhenCardGained;
 		c.callableWhenActionResolved = callableWhenActionResolved;
 		c.callableWhenTurnStarts = callableWhenTurnStarts;
@@ -949,7 +973,7 @@ public class CardImpl implements Card, Comparable<Card>{
 	}
 
 	public String toString() {
-		return name; // + " (id=" + id + ")";
+		return name;
 	}
 
 	public boolean equals(Object object) {
