@@ -3904,10 +3904,13 @@ public class Game {
     clone.numGames   = numGames;
     clone.numPlayers = numPlayers;
 
-    // Clone Game's Players (Hard-coded for 2 Players Max Only)
-    clone.players = new BasePlayer[2];
-    clone.players[0] = ((BasePlayer) players[0]).clone(clone);
-    clone.players[1] = ((BasePlayer) players[1]).clone(clone);
+    // Clone Game's Players
+    clone.players = new BasePlayer[numPlayers];
+    clone.listeners = new ArrayList<GameEventListener>();
+    for (int i = 0; i < numPlayers; i++) {
+      clone.players[i] = ((BasePlayer) players[i]).clone(clone);
+      clone.listeners.add((GameEventListener)players[i]);
+    }
 
     // Update Cloned Game's Parameters
     clone.gameType                   = gameType;
@@ -4018,12 +4021,7 @@ public class Game {
     if (baneCard != null) { clone.baneCard = baneCard.clone(); }
     if (obeliskCard != null) { clone.obeliskCard = obeliskCard.clone(); }
 
-    //
-    // listeners  = new ArrayList<GameEventListener>();  // NEED TO DEEP COPY
-    //
-    
-    //clone.gameListener;
-
+    // Don't Clone Stats Trackers
     overallWins   = new HashMap<String, Double>();  // Don't need to clone
     gameTypeStats = new ArrayList<GameStats>();     // Don't need to clone
 
