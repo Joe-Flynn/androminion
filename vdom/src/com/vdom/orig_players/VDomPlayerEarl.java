@@ -52,7 +52,7 @@ public class VDomPlayerEarl extends BasePlayer
   public void gameEvent(GameEvent event)
   {
     super.gameEvent(event);
-    if (Game.debug) {
+    if (Util.debug_on) {
       if ((event.getPlayer() != this) ||
       (event.getType() == GameEvent.EventType.GameStarting)) return;
       if (event.getType() == GameEvent.EventType.TurnBegin) {
@@ -167,7 +167,7 @@ public class VDomPlayerEarl extends BasePlayer
 
   @Override
   public String getPlayerName() {
-    return getPlayerName(Game.maskPlayerNames);
+    return getPlayerName(game.maskPlayerNames);
   }
 
   @Override
