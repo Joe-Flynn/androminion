@@ -16,7 +16,6 @@ public class CardPile  {
 
 	protected boolean allCardsVisible = true;
 	protected boolean isSupply = true;
-
 	protected boolean isBlackMarket = false;
 	protected boolean tradeRouteToken = false;
 
@@ -134,6 +133,22 @@ public class CardPile  {
 		}
 		return 0;
 	}
+
+  /*
+	** clone - Copies a Card Pile and clones the Cards within the pile
+	*/
+	public CardPile clone() {
+		CardPile clone = new CardPile(placeholderCard.getTemplateCard(), null, true, allCardsVisible);
+		clone.cards = new ArrayList<Card>();
+		for (Card card : cards) { clone.cards.add(card.clone()); }
+		clone.templateCards = new ArrayList<Card>();
+		for (Card card : templateCards) { clone.templateCards.add(card.clone()); }
+		clone.isSupply = isSupply;
+		clone.isBlackMarket = isBlackMarket;
+		clone.tradeRouteToken = tradeRouteToken;
+		return clone;
+	}
+
 
 	@Override
 	public String toString() {

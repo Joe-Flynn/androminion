@@ -285,6 +285,8 @@ public class Game {
     // Print Overall Game Stats
     game.printGameTypeStats();
 
+    game.cloneGame();
+
   }
 
   /*
@@ -3894,22 +3896,29 @@ public class Game {
   ** SECTION 6: GAME CLONING FUNCTIONS
   ***************************************/
 
+  @SuppressWarnings("unchecked")
   public Game cloneGame() {
 
     Game clone = new Game();
 
     clone.numGames   = numGames;
     clone.numPlayers = numPlayers;
-    clone.gameType   = gameType;
 
-    clone.randomExpansions         = null; // Unimplemented above
-    clone.randomExcludedExpansions = null; // Unimplemented above
-    clone.cardsSpecifiedAtLaunch   = null; // Unimplemented above
+    // Clone Game's Players (Hard-coded for 2 Players Max Only)
+    clone.players = new BasePlayer[2];
+    clone.players[0] = ((BasePlayer) players[0]).clone(clone);
+    clone.players[1] = ((BasePlayer) players[1]).clone(clone);
 
-    clone.unfoundCards    = new ArrayList<String>(unfoundCards);
-    clone.cardListText    = cardListText;
-    clone.unfoundCardText = unfoundCardText;
+    // Update Cloned Game's Parameters
+    clone.gameType                   = gameType;
+    clone.randomExpansions           = (randomExpansions == null) ? null : new ArrayList(randomExpansions);
+    clone.randomExcludedExpansions   = (randomExcludedExpansions == null) ? null : new ArrayList(randomExcludedExpansions);
+    clone.cardsSpecifiedAtLaunch     = cardsSpecifiedAtLaunch;
+    clone.unfoundCards               = new ArrayList<String>(unfoundCards);
+    clone.cardListText               = cardListText;
+    clone.unfoundCardText            = unfoundCardText;
 
+    // Clone Expansion-specific Options
     clone.platColonyNotPassedIn      = platColonyNotPassedIn;
     clone.platColonyPassedIn         = platColonyPassedIn;
     clone.chanceForPlatColony        = chanceForPlatColony;
@@ -3924,38 +3933,76 @@ public class Game {
     clone.blackMarketOnlyCardsFromUsedExpansions = blackMarketOnlyCardsFromUsedExpansions;
     clone.blackMarketSplitPileOptions = blackMarketSplitPileOptions;
 
-    clone.quickPlay       = quickPlay;
-    clone.actionChains    = actionChains;
-    clone.equalStartHands = equalStartHands;
-    clone.maskPlayerNames = maskPlayerNames;
+    // Clone General Game Options
+    clone.quickPlay                  = quickPlay;
+    clone.actionChains               = actionChains;
+    clone.equalStartHands            = equalStartHands;
+    clone.maskPlayerNames            = maskPlayerNames;
 
-    clone.playersTurn            = playersTurn;
-    clone.gameTurnCount          = gameTurnCount;
-    clone.consecutiveTurnCounter = consecutiveTurnCounter;
-    clone.cardsObtainedLastTurn  = cardsObtainedLastTurn;
+    // Clone Turn Info
+    clone.playersTurn                = playersTurn;
+    clone.gameTurnCount              = gameTurnCount;
+    clone.consecutiveTurnCounter     = consecutiveTurnCounter;
+    clone.cardsObtainedLastTurn      = cardsObtainedLastTurn;
 
-    // Initialize Game Card Piles
-    piles            = new HashMap<String, CardPile>(); // NEED TO DEEP COPY
-    placeholderPiles = new HashMap<String, CardPile>(); // NEED TO DEEP COPY
-    trashPile        = new ArrayList<Card>();           // NEED TO DEEP COPY
+    // Clone Game Card Piles
+    clone.piles = new HashMap<String, CardPile>();
+    for (String key : piles.keySet()) {
+      clone.piles.put(key, piles.get(key).clone());
+    }
 
-    // Initialize Special Card-Specific Card Piles
-    possessedTrashPile      = new ArrayList<Card>();    // NEED TO DEEP COPY
-    possessedBoughtPile     = new ArrayList<Card>();    // NEED TO DEEP COPY
-    blackMarketPile         = new ArrayList<Card>();    // NEED TO DEEP COPY
-    blackMarketPileShuffled = new ArrayList<Card>();    // NEED TO DEEP COPY
+    clone.placeholderPiles = new HashMap<String, CardPile>();
+    for (String key : placeholderPiles.keySet()) {
+      clone.placeholderPiles.put(key, placeholderPiles.get(key).clone());
+    }
 
-    // Initialize Game Tokens
-    embargos = new HashMap<String, Integer>();       // NEED TO DEEP COPY
-    pileVpTokens = new HashMap<String, Integer>();   // NEED TO DEEP COPY
-    pileDebtTokens = new HashMap<String, Integer>(); // Number of Debt Tokens (a.k.a. "Tax") per Card Pile
-    playerSupplyTokens = new HashMap<String, HashMap<Player, List<PlayerSupplyToken>>>();
+    clone.trashPile = new ArrayList<Card>();
+    for (Card card : trashPile) { clone.trashPile.add(card.clone()); }
 
-    // Initialize Special Card-Specific Game Values
-    clone.possessionsToProcess        = possessionsToProcess;
-    possessingPlayer            = null;  // NEED TO DEEP COPY
-    clone.nextPossessionsToProcess    = nextPossessionsToProcess;
-    nextPossessingPlayer        = null;  // NEED TO DEEP COPY
+    clone.possessedTrashPile = new ArrayList<Card>();
+    for (Card card : possessedTrashPile) { clone.possessedTrashPile.add(card.clone()); }
+
+    clone.possessedBoughtPile = new ArrayList<Card>();
+    for (Card card : possessedBoughtPile) { clone.possessedBoughtPile.add(card.clone()); }
+
+    clone.blackMarketPile = new ArrayList<Card>();
+    for (Card card : blackMarketPile) { clone.blackMarketPile.add(card.clone()); }
+
+    clone.blackMarketPileShuffled = new ArrayList<Card>();
+    for (Card card : blackMarketPileShuffled) { clone.blackMarketPileShuffled.add(card.clone()); }
+
+    // Clone Game Tokens
+    clone.embargos = new HashMap<String, Integer>();
+    for (String key : embargos.keySet()) {
+      clone.embargos.put(key, embargos.get(key));
+    }
+
+    clone.pileVpTokens = new HashMap<String, Integer>();
+    for (String key : pileVpTokens.keySet()) {
+      clone.pileVpTokens.put(key, pileVpTokens.get(key));
+    }
+
+    clone.pileDebtTokens = new HashMap<String, Integer>();
+    for (String key : pileDebtTokens.keySet()) {
+      clone.pileDebtTokens.put(key, pileDebtTokens.get(key));
+    }
+
+    // Clone Adventures Tokens
+    clone.playerSupplyTokens = new HashMap<String, HashMap<Player, List<PlayerSupplyToken>>>();
+    for (String key : playerSupplyTokens.keySet()) {
+      HashMap playerToTokens = new HashMap<Player, List<PlayerSupplyToken>>();
+      playerToTokens.put(clone.players[0], new ArrayList(playerSupplyTokens.get(key).get(players[0])));
+      playerToTokens.put(clone.players[1], new ArrayList(playerSupplyTokens.get(key).get(players[1])));
+      clone.playerSupplyTokens.put(key, playerToTokens);
+    }
+
+    // Possession is NOT implemented in this version of clone()
+    clone.possessionsToProcess     = 0;
+    clone.nextPossessionsToProcess = 0;
+    clone.possessingPlayer         = null;
+    clone.nextPossessingPlayer     = null;
+
+    // Clone Special Card-Specific Game Values
     clone.tradeRouteValue             = tradeRouteValue;
     clone.sheltersInPlay              = sheltersInPlay;
     clone.bakerInPlay                 = bakerInPlay;
@@ -3968,11 +4015,12 @@ public class Game {
     if (baneCard != null) { clone.baneCard = baneCard.clone(); }
     if (obeliskCard != null) { clone.obeliskCard = obeliskCard.clone(); }
 
-    ignoreList = new HashSet<String>();  // NEED TO DEEP COPY
-    listeners  = new ArrayList<GameEventListener>();  // NEED TO DEEP COPY
-    overallWins   = new HashMap<String, Double>();  // NEED TO DEEP COPY?
-    gameTypeStats = new ArrayList<GameStats>();     // NEED TO DEEP COPY?
+    //
+    // listeners  = new ArrayList<GameEventListener>();  // NEED TO DEEP COPY
+    //
 
+    overallWins   = new HashMap<String, Double>();  // Don't need to clone
+    gameTypeStats = new ArrayList<GameStats>();     // Don't need to clone
 
     return clone;
 
