@@ -33,20 +33,10 @@ import com.vdom.players.*;
 
 public class Game {
 
-  protected int numGames = 1;   // Number of Games to Play
-
-  public    int numPlayers = 0; // Number of Players Per Game
-  public    Player[] players;   // Array of Players in Each Game
-
-  protected int playersTurn;                // Index of Current Player
-  protected int gameTurnCount = 0;          // Current Game Turn Counter
-  protected int consecutiveTurnCounter = 0; // Current Player Consecutive Turn Counter
-  protected ArrayList<Card>[] cardsObtainedLastTurn; // Cards obtained per Player
-
   // The CARD SET to use for the game (See com.vdom.api.GameType)
-  public GameType gameType = null;
-  protected List<Expansion> randomExpansions = null;
-  protected List<Expansion> randomExcludedExpansions = null;
+  public    GameType gameType;
+  protected List<Expansion> randomExpansions;
+  protected List<Expansion> randomExcludedExpansions;
 
   // Prefixes for Specially Named Cards (Specified at Launch)
   protected static final String BANE = "bane+";
@@ -54,105 +44,114 @@ public class Game {
   protected static final String BLACKMARKET = "blackMarket+";
 
   // Array to Hold Specially Named Cards (Specified-at-Launch and Un-Found)
-  protected String[] cardsSpecifiedAtLaunch = null;
-  protected ArrayList<String> unfoundCards = new ArrayList<String>();
-  protected String cardListText = "";
-  protected String unfoundCardText = "";
+  protected String[] cardsSpecifiedAtLaunch;
+  protected ArrayList<String> unfoundCards;
+  protected String cardListText;
+  protected String unfoundCardText;
 
   // Game Configurations for Platinum and Colony (from "Properity" Expansion)
-  protected boolean platColonyNotPassedIn = false;
-  protected boolean platColonyPassedIn    = false;
-  protected double  chanceForPlatColony   = -1;
+  protected boolean platColonyNotPassedIn;
+  protected boolean platColonyPassedIn;
+  protected double  chanceForPlatColony;
 
   // Game Configurations for Shelters (from "Dark Ages" Expansion)
-  protected boolean sheltersNotPassedIn = false;
-  protected boolean sheltersPassedIn    = false;
-  protected double  chanceForShelters   = 0.0;
+  protected boolean sheltersNotPassedIn;
+  protected boolean sheltersPassedIn;
+  protected double  chanceForShelters;
 
   // Game Configurations for Events & Landmarks (from "Adventures" / "Empires Expansion")
-  protected boolean randomIncludesEvents       = false;
-  protected boolean randomIncludesLandmarks    = false;
-  protected int     numRandomEvents            = 0;
-  protected int     numRandomLandmarks         = 0;
-  protected boolean splitMaxEventsAndLandmarks = true;
+  protected boolean randomIncludesEvents;
+  protected boolean randomIncludesLandmarks;
+  protected int     numRandomEvents;
+  protected int     numRandomLandmarks;
+  protected boolean splitMaxEventsAndLandmarks;
 
   // Game Configurations for Black Market (from "Promo" Expansion)
   protected static enum BlackMarketSplitPileOptions { NONE, ONE, ANY, ALL }
-  protected int blackMarketCount = 25;
-  protected boolean blackMarketOnlyCardsFromUsedExpansions = false;
-  protected BlackMarketSplitPileOptions blackMarketSplitPileOptions = BlackMarketSplitPileOptions.NONE;
+  protected static final int blackMarketCount = 25;
+  protected boolean blackMarketOnlyCardsFromUsedExpansions;
+  protected BlackMarketSplitPileOptions blackMarketSplitPileOptions;
 
   // General Game Configurations
-  protected boolean quickPlay       = false; // Simple Treasure Selection
-  protected boolean actionChains    = false; // Allow Multiple Actions
-  protected boolean equalStartHands = false; // Start Players with Equal Hands
-  public    boolean maskPlayerNames = false; // Mask Player Name on Output
+  protected boolean quickPlay;       // Simple Treasure Selection
+  protected boolean actionChains;    // Allow Multiple Actions
+  protected boolean equalStartHands; // Start Players with Equal Hands
+  public    boolean maskPlayerNames; // Mask Player Name on Output
 
   // Game Errata Configurations
-  public static boolean errataPossessedTakesTokens    = false; // Errata introduced May 2016 - true enables old behavior
-  public static boolean errataMasqueradeAlwaysAffects = false; // Errata introduced Oct 2016 - true enables old behavior
-  public static boolean errataMineForced              = false; // Errata introduced Oct 2016 - true enables old behavior
-  public static boolean errataMoneylenderForced       = false; // Errata introduced Oct 2016 - true enables old behavior
-  public static boolean errataShuffleDeckEmptyOnly    = false; // Errata introduced Oct 2016 - true enables old behavior
+  public static final boolean errataPossessedTakesTokens    = false; // Introduced May 2016 - True enables old behavior
+  public static final boolean errataMasqueradeAlwaysAffects = false; // Introduced Oct 2016 - True enables old behavior
+  public static final boolean errataMineForced              = false; // Introduced Oct 2016 - True enables old behavior
+  public static final boolean errataMoneylenderForced       = false; // Introduced Oct 2016 - True enables old behavior
+  public static final boolean errataShuffleDeckEmptyOnly    = false; // Introduced Oct 2016 - True enables old behavior
 
   // Selection Randomizer
   public static Random rand = new Random(System.currentTimeMillis());
 
   // Game Pile Size Configurations
   protected static final int kingdomCardPileSize = 10;
-  protected int victoryCardPileSize = 12;
+  protected int victoryCardPileSize;
+
+  // Number of Total Games and Players
+  protected int numGames;
+  public    int numPlayers;   // Number of Players Per Game
+  public    Player[] players; // Array of Players in Each Game
+
+  // Game's PLayer's Turns
+  protected int playersTurn;                         // Index of Current Player
+  protected int gameTurnCount;                       // Current Game Turn Counter
+  protected int consecutiveTurnCounter;              // Current Player Consecutive Turn Counter
+  protected ArrayList<Card>[] cardsObtainedLastTurn; // Cards obtained per Player
 
   // Game Card Piles
-  public HashMap<String, CardPile> piles = new HashMap<String, CardPile>();            // Card Piles in play in Game
-  public HashMap<String, CardPile> placeholderPiles = new HashMap<String, CardPile>(); // Placeholder Piles for Setup
-  public ArrayList<Card> trashPile = new ArrayList<Card>();                            // Trash Pile
+  public HashMap<String, CardPile> piles;            // Card Piles in play in Game
+  public HashMap<String, CardPile> placeholderPiles; // Placeholder Piles for Setup
+  public ArrayList<Card> trashPile;                  // Trash Pile
 
   // Special Card-Specific Card Piles
-  public ArrayList<Card> possessedTrashPile = new ArrayList<Card>();
-  public ArrayList<Card> possessedBoughtPile = new ArrayList<Card>();
-  public ArrayList<Card> blackMarketPile = new ArrayList<Card>();
-  public ArrayList<Card> blackMarketPileShuffled = new ArrayList<Card>();
+  public ArrayList<Card> possessedTrashPile;
+  public ArrayList<Card> possessedBoughtPile;
+  public ArrayList<Card> blackMarketPile;
+  public ArrayList<Card> blackMarketPileShuffled;
 
   // Game Tokens
-  public HashMap<String, Integer> embargos = new HashMap<String, Integer>();       // Number of Embargo Tokens per Card Pile
-  public HashMap<String, Integer> pileVpTokens = new HashMap<String, Integer>();   // Number of VP Tokens per Card Pile (i.e. Landmarks)
-  public HashMap<String, Integer> pileDebtTokens = new HashMap<String, Integer>(); // Number of Debt Tokens (a.k.a. "Tax") per Card Pile
-
-  protected HashMap<String, HashMap<Player, List<PlayerSupplyToken>>> playerSupplyTokens = new HashMap<String, HashMap<Player, List<PlayerSupplyToken>>>();
+  public HashMap<String, Integer> embargos;       // Number of Embargo Tokens per Card Pile
+  public HashMap<String, Integer> pileVpTokens;   // Number of VP Tokens per Card Pile (i.e. Landmarks)
+  public HashMap<String, Integer> pileDebtTokens; // Number of Debt Tokens (a.k.a. "Tax") per Card Pile
+  protected HashMap<String, HashMap<Player, List<PlayerSupplyToken>>> playerSupplyTokens; // Adventures Tokens
 
   // Special Card-Specific Game Values
-  public int    possessionsToProcess = 0;             // Needed for Possession (from "Alchemy" Expansion)
-  public Player possessingPlayer = null;              // Needed for Possession (from "Alchemy" Expansion)
-  public int    nextPossessionsToProcess = 0;         // Needed for Possession (from "Alchemy" Expansion)
-  public Player nextPossessingPlayer = null;          // Needed for Possession (from "Alchemy" Expansion)
+  public int    possessionsToProcess;         // Needed for Possession (from "Alchemy" Expansion)
+  public Player possessingPlayer;             // Needed for Possession (from "Alchemy" Expansion)
+  public int    nextPossessionsToProcess;     // Needed for Possession (from "Alchemy" Expansion)
+  public Player nextPossessingPlayer;         // Needed for Possession (from "Alchemy" Expansion)
 
-  public int    tradeRouteValue = 0;                  // Trade Route's Value (from "Prosperity" Expansion)
-  public Card   baneCard = null;                      // Young Witch's Bane (from "Cornucopia" Expansion)
-  public Card   obeliskCard = null;                   // Obelisk's Action Card (from "Empires" Expansion)
+  public int    tradeRouteValue;              // Trade Route's Value (from "Prosperity" Expansion)
+  public Card   baneCard;                     // Young Witch's Bane (from "Cornucopia" Expansion)
+  public Card   obeliskCard;                  // Obelisk's Action Card (from "Empires" Expansion)
 
-  public boolean sheltersInPlay = false;              // Shelters in Game (from "Dark Ages" Expansion)
-  public boolean bakerInPlay = false;                 // Baker Supply in Game (from "Guilds" Expansion)
-  public boolean journeyTokenInPlay = false;          // Journey Token in Game (from "Adventures" Expansion)
+  public boolean sheltersInPlay;              // Shelters in Game (from "Dark Ages" Expansion)
+  public boolean bakerInPlay;                 // Baker Supply in Game (from "Guilds" Expansion)
+  public boolean journeyTokenInPlay;          // Journey Token in Game (from "Adventures" Expansion)
 
-  public boolean firstProvinceWasGained = false;      // Needed for Mountain Pass (from "Empires" Expansion)
-  public boolean doMountainPassAfterThisTurn = false; // Needed for Mountain Pass (from "Empires" Expansion)
-  public int     firstProvinceGainedBy = -1;          // Needed for Mountain Pass (from "Empires" Expansion)
+  public boolean firstProvinceWasGained;      // Needed for Mountain Pass (from "Empires" Expansion)
+  public boolean doMountainPassAfterThisTurn; // Needed for Mountain Pass (from "Empires" Expansion)
+  public int     firstProvinceGainedBy;       // Needed for Mountain Pass (from "Empires" Expansion)
 
   // Error Logging Options
-  protected static boolean ignoreAllPlayerErrors = false;
-  protected static boolean ignoreSomePlayerErrors = false;
-  protected static HashSet<String> ignoreList = new HashSet<String>();
+  public static boolean ignoreAllPlayerErrors;
+  public static boolean ignoreSomePlayerErrors;
+  public static HashSet<String> ignoreList;
 
   // Game Listeners (For Logging Game Data)
-  public ArrayList<GameEventListener> listeners = new ArrayList<GameEventListener>();
+  public ArrayList<GameEventListener> listeners;
   public GameEventListener gameListener;
 
-  // Win Stat Trackers
-  public static HashMap<String, Integer> winStats = new HashMap<String, Integer>();
-  static HashMap<String, Double> overallWins = new HashMap<String, Double>();
+  // Win Stat Trackers (Player to # Wins Over ALL Games and GameTypes)
+  protected HashMap<String, Double> overallWins;
 
   // Overall Stat Tracker per GameType
-  static ArrayList<GameStats> gameTypeStats = new ArrayList<GameStats>();
+  protected ArrayList<GameStats> gameTypeStats;
 
 
   // Extra Turn Info Class
@@ -163,64 +162,98 @@ public class Game {
   }
 
 
-  // Game Constructor
+  /*
+  ** Game Constructor
+  */
   public Game() {
 
-    // Set GameType
-    gameType = GameType.RandomBaseGame;
-    randomExpansions = null;
+    // Num Games and Players
+    numGames   = 20;
+    numPlayers = 2;
+
+    // CARD SET to use for the game (See com.vdom.api.GameType)
+    gameType                 = GameType.RandomBaseGame;
+    randomExpansions         = null;
     randomExcludedExpansions = null;
 
-    // Set Main Gain Parameters
-    numGames   = 100;
-    numPlayers = 2;
-    players    = null;
-
-    playersTurn = 0;
-    gameTurnCount = 0;
-    consecutiveTurnCounter = 0;
-
-    cardsObtainedLastTurn = null;
-
-    // Maybe Move these to function only?
+    // Array to Hold Specially Named Cards (Specified-at-Launch and Un-Found)
     cardsSpecifiedAtLaunch = null;
-    unfoundCards = new ArrayList<String>();
-    cardListText = "";
-    unfoundCardText = "";
+    unfoundCards           = new ArrayList<String>();
+    cardListText           = "";
+    unfoundCardText        = "";
 
-
+    // Game Configurations for Platinum and Colony (from "Prosperity" Expansion)
     platColonyNotPassedIn = false;
     platColonyPassedIn    = false;
     chanceForPlatColony   = -1;
 
-    sheltersNotPassedIn = false;
-    sheltersPassedIn    = false;
-    chanceForShelters   = -1;
+    // Game Configurations for Shelters (from "Dark Ages" Expansion)
+    sheltersNotPassedIn   = false;
+    sheltersPassedIn      = false;
+    chanceForShelters     = 0.0;
 
-    // Set up Event and Landmark Game Options
-    numRandomEvents = 0;
-    numRandomLandmarks = 0;
-    randomIncludesEvents = false;
-    randomIncludesLandmarks = false;
-    splitMaxEventsAndLandmarks = false;
+    // Game Configurations for Events & Landmarks (from "Adventures" / "Empires Expansion")
+    randomIncludesEvents       = false;
+    randomIncludesLandmarks    = false;
+    numRandomEvents            = 0;
+    numRandomLandmarks         = 0;
+    splitMaxEventsAndLandmarks = true;
 
-    // Set up Black Market Game Options
-    blackMarketCount = 25;
+    // Game Configurations for Black Market (from "Promo" Expansion)
     blackMarketOnlyCardsFromUsedExpansions = false;
     blackMarketSplitPileOptions = BlackMarketSplitPileOptions.NONE;
 
-    quickPlay = false;
-    actionChains = false;
-    equalStartHands = false;
-    maskPlayerNames = false;
+    // General Game Configurations
+    quickPlay       = false; // Simple Treasure Selection
+    actionChains    = false; // Allow Multiple Actions
+    equalStartHands = false; // Start Players with Equal Hands
+    maskPlayerNames = false; // Mask Player Name on Output
+
+    // Game's PLayer's Turns
+    playersTurn   = 0;
+    gameTurnCount = 0;
+    consecutiveTurnCounter = 0;
+    cardsObtainedLastTurn  = null;
+
+    // Initialize Game Card Piles
+    piles            = new HashMap<String, CardPile>(); // Card Piles in play in Game
+    placeholderPiles = new HashMap<String, CardPile>(); // Placeholder Piles for Setup
+    trashPile        = new ArrayList<Card>();           // Trash Pile
+
+    // Initialize Special Card-Specific Card Piles
+    possessedTrashPile      = new ArrayList<Card>();
+    possessedBoughtPile     = new ArrayList<Card>();
+    blackMarketPile         = new ArrayList<Card>();
+    blackMarketPileShuffled = new ArrayList<Card>();
+
+    // Initialize Game Tokens
+    embargos = new HashMap<String, Integer>();       // Number of Embargo Tokens per Card Pile
+    pileVpTokens = new HashMap<String, Integer>();   // Number of VP Tokens per Card Pile (i.e. Landmarks)
+    pileDebtTokens = new HashMap<String, Integer>(); // Number of Debt Tokens (a.k.a. "Tax") per Card Pile
+    playerSupplyTokens = new HashMap<String, HashMap<Player, List<PlayerSupplyToken>>>();
+
+    // Initialize Special Card-Specific Game Values
+    possessionsToProcess        = 0;     // Needed for Possession (from "Alchemy" Expansion)
+    possessingPlayer            = null;  // Needed for Possession (from "Alchemy" Expansion)
+    nextPossessionsToProcess    = 0;     // Needed for Possession (from "Alchemy" Expansion)
+    nextPossessingPlayer        = null;  // Needed for Possession (from "Alchemy" Expansion)
+    tradeRouteValue             = 0;     // Trade Route's Value (from "Prosperity" Expansion)
+    baneCard                    = null;  // Young Witch's Bane (from "Cornucopia" Expansion)
+    obeliskCard                 = null;  // Obelisk's Action Card (from "Empires" Expansion)
+    sheltersInPlay              = false; // Shelters in Game (from "Dark Ages" Expansion)
+    bakerInPlay                 = false; // Baker Supply in Game (from "Guilds" Expansion)
+    journeyTokenInPlay          = false; // Journey Token in Game (from "Adventures" Expansion)
+    firstProvinceWasGained      = false; // Needed for Mountain Pass (from "Empires" Expansion)
+    doMountainPassAfterThisTurn = false; // Needed for Mountain Pass (from "Empires" Expansion)
+    firstProvinceGainedBy       = -1;    // Needed for Mountain Pass (from "Empires" Expansion)
 
 
-    victoryCardPileSize = 12;
+    // Game Listeners (For Logging Game Data)
+    listeners = new ArrayList<GameEventListener>();
 
-
-    // Reset Containers
-    gameTypeStats.clear();
-    overallWins.clear();
+    // Initialize Overall Stat Trackers
+    overallWins   = new HashMap<String, Double>();
+    gameTypeStats = new ArrayList<GameStats>();
 
   }
 
@@ -247,8 +280,12 @@ public class Game {
     Util.log("--------------------------------");
 
     // Print Overall Game Stats
-    printStats(overallWins, game.numGames * GameType.values().length, "Total");
-    printGameTypeStats();
+    game.printStats(game.overallWins, game.numGames * GameType.values().length, "Total");
+
+    // Print Overall Game Stats
+    game.printGameTypeStats();
+
+    game.cloneGame();
 
   }
 
@@ -261,7 +298,7 @@ public class Game {
     playerToWins.put("com.vdom.players.VDomPlayerJoe", 0.0);
     playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
 
-    // Variables for averaging over all Games
+    // Variables for Overall Stats over all Games
     long turnCountTotal = 0;
     long vpTotal        = 0;
     long numCardsTotal  = 0;
@@ -344,7 +381,7 @@ public class Game {
         }
       }
 
-      // Update Aggregate Game Stats
+      // Update Overall Stats over all Games
       turnCountTotal += gameTurnCount;
       int vps[] = gameOver(playerToWins);
       for (int i = 0; i < vps.length; i++) {
@@ -360,7 +397,7 @@ public class Game {
     printStats(playerToWins, numGames, gameType.toString());
     Util.log("--------------------------------");
 
-    // Update Game Stats (stats)
+    // Complete Overall Stats over all Games
     ArrayList<Card> gameCards = new ArrayList<Card>();
     for (CardPile pile : piles.values()) {
       Card card = pile.placeholderCard();
@@ -371,11 +408,12 @@ public class Game {
       }
     }
     GameStats stats = new GameStats();
-    stats.gameType = gameType;
-    stats.cards = gameCards.toArray(new Card[0]);
-    stats.aveTurns = (int) (turnCountTotal / numGames);
-    stats.aveNumCards = (int) (numCardsTotal / (numGames * numPlayers));
+    stats.gameType         = gameType;
+    stats.cards            = gameCards.toArray(new Card[0]);
+    stats.aveTurns         = (int) (turnCountTotal / numGames);
+    stats.aveNumCards      = (int) (numCardsTotal / (numGames * numPlayers));
     stats.aveVictoryPoints = (int) (vpTotal / (numGames * numPlayers));
+
     gameTypeStats.add(stats);
 
   }
@@ -3218,9 +3256,9 @@ public class Game {
     HashMap<Player, List<PlayerSupplyToken>> tokenMap = new HashMap<Player, List<PlayerSupplyToken>>();
     playerSupplyTokens.put(card.getName(), tokenMap);
 
-    //Add the to the list for each templateCard used (this replaces addLinkedPile)
-    //Also add the an entry for each templateCardName to the playerSupplyTokens because at some places in the code
-    //the token is checked with the actual card and not the placeholder.
+    // Add the to the list for each templateCard used (this replaces addLinkedPile)
+    // Also add the an entry for each templateCardName to the playerSupplyTokens because at some places in the code
+    // the token is checked with the actual card and not the placeholder.
 
     for (Card templateCard : pile.getTemplateCards()) {
       if (!piles.containsKey(templateCard.getName())) {
@@ -3411,7 +3449,7 @@ public class Game {
   /*
   ** printStats - Prints Results of Playing Games
   */
-  protected static void printStats(HashMap<String, Double> wins, int gameCount, String gameType) {
+  protected void printStats(HashMap<String, Double> wins, int gameCount, String gameType) {
 
     double totalGameCount = 0;
     Iterator<Entry<String, Double>> it = wins.entrySet().iterator();
@@ -3467,15 +3505,16 @@ public class Game {
         sb.append(" ");
       }
       sb.append(className + " " + numStr + "%");
-      winStats.put(className, Integer.parseInt(numStr.trim()));
     }
 
     Util.log(sb.toString());
   }
 
 
-  // printGameTypeStats - Prints the summary stats of each GameType played
-  protected static void printGameTypeStats() {
+  /*
+  ** printGameTypeStats - Prints the summary stats of each GameType played
+  */
+  protected void printGameTypeStats() {
     for (int i = 0; i < gameTypeStats.size(); i++) {
       GameStats stats = gameTypeStats.get(i);
       StringBuilder sb = new StringBuilder();
@@ -3857,13 +3896,137 @@ public class Game {
   ** SECTION 6: GAME CLONING FUNCTIONS
   ***************************************/
 
+  @SuppressWarnings("unchecked")
   public Game cloneGame() {
 
     Game clone = new Game();
+
+    clone.numGames   = numGames;
+    clone.numPlayers = numPlayers;
+
+    // Clone Game's Players
+    clone.players = new BasePlayer[numPlayers];
+    clone.listeners = new ArrayList<GameEventListener>();
+    for (int i = 0; i < numPlayers; i++) {
+      clone.players[i] = ((BasePlayer) players[i]).clone(clone);
+      clone.listeners.add((GameEventListener)players[i]);
+    }
+
+    // Update Cloned Game's Parameters
+    clone.gameType                   = gameType;
+    clone.randomExpansions           = (randomExpansions == null) ? null : new ArrayList(randomExpansions);
+    clone.randomExcludedExpansions   = (randomExcludedExpansions == null) ? null : new ArrayList(randomExcludedExpansions);
+    clone.cardsSpecifiedAtLaunch     = cardsSpecifiedAtLaunch;
+    clone.unfoundCards               = new ArrayList<String>(unfoundCards);
+    clone.cardListText               = cardListText;
+    clone.unfoundCardText            = unfoundCardText;
+
+    // Clone Expansion-specific Options
+    clone.platColonyNotPassedIn      = platColonyNotPassedIn;
+    clone.platColonyPassedIn         = platColonyPassedIn;
+    clone.chanceForPlatColony        = chanceForPlatColony;
+    clone.sheltersNotPassedIn        = sheltersNotPassedIn;
+    clone.sheltersPassedIn           = sheltersPassedIn;
+    clone.chanceForShelters          = chanceForShelters;
+    clone.randomIncludesEvents       = randomIncludesEvents;
+    clone.randomIncludesLandmarks    = randomIncludesLandmarks;
+    clone.numRandomEvents            = numRandomEvents;
+    clone.numRandomLandmarks         = numRandomLandmarks;
+    clone.splitMaxEventsAndLandmarks = splitMaxEventsAndLandmarks;
+    clone.blackMarketOnlyCardsFromUsedExpansions = blackMarketOnlyCardsFromUsedExpansions;
+    clone.blackMarketSplitPileOptions = blackMarketSplitPileOptions;
+
+    // Clone General Game Options
+    clone.quickPlay                  = quickPlay;
+    clone.actionChains               = actionChains;
+    clone.equalStartHands            = equalStartHands;
+    clone.maskPlayerNames            = maskPlayerNames;
+
+    // Clone Turn Info
+    clone.playersTurn                = playersTurn;
+    clone.gameTurnCount              = gameTurnCount;
+    clone.consecutiveTurnCounter     = consecutiveTurnCounter;
+    clone.cardsObtainedLastTurn      = cardsObtainedLastTurn;
+
+    // Clone Game Card Piles
+    clone.piles = new HashMap<String, CardPile>();
+    for (String key : piles.keySet()) {
+      clone.piles.put(key, piles.get(key).clone());
+    }
+
+    clone.placeholderPiles = new HashMap<String, CardPile>();
+    for (String key : placeholderPiles.keySet()) {
+      clone.placeholderPiles.put(key, placeholderPiles.get(key).clone());
+    }
+
+    clone.trashPile = new ArrayList<Card>();
+    for (Card card : trashPile) { clone.trashPile.add(card.clone()); }
+
+    clone.possessedTrashPile = new ArrayList<Card>();
+    for (Card card : possessedTrashPile) { clone.possessedTrashPile.add(card.clone()); }
+
+    clone.possessedBoughtPile = new ArrayList<Card>();
+    for (Card card : possessedBoughtPile) { clone.possessedBoughtPile.add(card.clone()); }
+
+    clone.blackMarketPile = new ArrayList<Card>();
+    for (Card card : blackMarketPile) { clone.blackMarketPile.add(card.clone()); }
+
+    clone.blackMarketPileShuffled = new ArrayList<Card>();
+    for (Card card : blackMarketPileShuffled) { clone.blackMarketPileShuffled.add(card.clone()); }
+
+    // Clone Game Tokens
+    clone.embargos = new HashMap<String, Integer>();
+    for (String key : embargos.keySet()) {
+      clone.embargos.put(key, embargos.get(key));
+    }
+
+    clone.pileVpTokens = new HashMap<String, Integer>();
+    for (String key : pileVpTokens.keySet()) {
+      clone.pileVpTokens.put(key, pileVpTokens.get(key));
+    }
+
+    clone.pileDebtTokens = new HashMap<String, Integer>();
+    for (String key : pileDebtTokens.keySet()) {
+      clone.pileDebtTokens.put(key, pileDebtTokens.get(key));
+    }
+
+    // Clone Adventures Tokens
+    clone.playerSupplyTokens = new HashMap<String, HashMap<Player, List<PlayerSupplyToken>>>();
+    for (String key : playerSupplyTokens.keySet()) {
+      HashMap playerToTokens = new HashMap<Player, List<PlayerSupplyToken>>();
+      for (int i = 0; i < 2; i++) {
+        if (playerSupplyTokens.get(key).containsKey(players[i])) {
+          playerToTokens.put(clone.players[i], new ArrayList(playerSupplyTokens.get(key).get(players[i])));
+        }
+      }
+      clone.playerSupplyTokens.put(key, playerToTokens);
+    }
+
+    // Possession is NOT implemented in this version of clone()
+    clone.possessionsToProcess     = 0;
+    clone.nextPossessionsToProcess = 0;
+    clone.possessingPlayer         = null;
+    clone.nextPossessingPlayer     = null;
+
+    // Clone Special Card-Specific Game Values
+    clone.tradeRouteValue             = tradeRouteValue;
+    clone.sheltersInPlay              = sheltersInPlay;
+    clone.bakerInPlay                 = bakerInPlay;
+    clone.journeyTokenInPlay          = journeyTokenInPlay;
+    clone.firstProvinceWasGained      = firstProvinceWasGained;
+    clone.doMountainPassAfterThisTurn = doMountainPassAfterThisTurn;
+    clone.firstProvinceGainedBy       = firstProvinceGainedBy;
+
+    // Clone Special Cards
+    if (baneCard != null) { clone.baneCard = baneCard.clone(); }
+    if (obeliskCard != null) { clone.obeliskCard = obeliskCard.clone(); }
+
+    // Don't Clone Stats Trackers
+    overallWins   = new HashMap<String, Double>();  // Don't need to clone
+    gameTypeStats = new ArrayList<GameStats>();     // Don't need to clone
+
     return clone;
 
   }
-
-
 
 }

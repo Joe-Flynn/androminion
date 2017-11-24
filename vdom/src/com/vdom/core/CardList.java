@@ -14,6 +14,7 @@ public class CardList implements Iterable<Card> {
   Player player;
   String name;
 
+
   public CardList(Player player, String name) {
     this.player = player;
     this.name = name;
@@ -177,6 +178,17 @@ public class CardList implements Iterable<Card> {
   @Override
   public String toString() {
     return name + "(" + player.getPlayerName() + "): " + a.toString();
+  }
+
+  /*
+  ** clone - Clones a CardList and the Cards in it
+  */
+  public CardList clone() {
+    CardList clone = new CardList(player, name);
+    for (Card card : a) {
+      clone.a.add(card.clone());
+    }
+    return clone;
   }
 
 }
