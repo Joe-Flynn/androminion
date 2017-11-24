@@ -5,54 +5,28 @@ import com.vdom.core.*;
 
 public class Evaluator {
 
-    private MoveContext context;
     private Player player;
-    private double totalTreasureInDeck;
-    private int totalActionsInDeck;
 
     public Evaluator(Player player) {
         this.player = player;
-        totalTreasureInDeck = 7;
-        totalActionsInDeck = 0;
-    }
-
-    /**
-     * Updates the totalTreasureInDeck and totalActionsInDeck from the card just bought during the buy phase.
-     * Must be called in doBuy before you return a chosen card.
-     * @param card the card just chosen during doBuy
-     */
-    public void updateWithBuyChoice(Card card) {
-        if (card.is(Type.Treasure)) {
-            totalTreasureInDeck += card.getAddGold();
-        }
-        else if (card.is(Type.Action)) {
-            totalActionsInDeck++;
-        }
-
-    }
-
-    /**
-     * Updates the totalTreasureInDeck and totalActionsInDeck from the card just played during the action phase.
-     * Must be called in doAction before you return a chosen card.
-     * @param card the card just chosen during doAction
-     */
-    public void updateWithActionChoice(Card card) {
-        if (card.is(Type.Treasure)) {
-            totalTreasureInDeck += card.getAddGold();
-        }
-        else if (card.is(Type.Action)) {
-            totalActionsInDeck--;
-        }
     }
 
     public double evaluate(MoveContext context) {
 
-        double avgTreasurePerCard = totalTreasureInDeck / (double) player.getDeckSize();
+        double totalTreasure = 0;
+        double totalActions = 0;
+        for (Card card : player.getAllCards()) {
+            if (card.is(Type.Treasure)) {
+                totalTreasure += card.getAddGold();
+            }
+            else if (card.is(Type.Action)) {
+                totalActions++;
+            }
+        }
+
+        double avgTreasurePerCard = totalTreasure / (double) player.getDeckSize();
         double avgTreasurePerHand = avgTreasurePerCard * 5.0;
         double deltaFromProvincing = avgTreasurePerHand - 1.6;
-
-        int idealTerminalCount = player.getDeckSize() / 7;
-        double deltaFromIdealActionCount = (double) player.getDeckSize() / (totalActionsInDeck - (1.0 /8.0));
 
         double provincesInSupply = 0;
         for (Card card : context.getSupply()) {
@@ -61,8 +35,14 @@ public class Evaluator {
             }
         }
 
-        double actionDeltaImpact = Math.abs(deltaFromIdealActionCount * provincesInSupply);
+		double treasureDeltaImpact = deltaFromProvincing * provincesInSupply;
+		//int idealTerminalCount = player.getDeckSize() / 7; do we need this?
+		double deltaFromIdealActionCount = (double) player.getDeckSize() / (totalActions - (1.0 /8.0));
 
-        return 0;
+		double actionDeltaImpact = Math.abs(deltaFromIdealActionCount * provincesInSupply);
+		double vpImpact = (double) player.getTotalVictoryPoints() * (double) (8.0  - provincesInSupply);
+
+		return treasureDeltaImpact + actionDeltaImpact + (vpImpact / 6.0);
     }
+
 }
