@@ -410,7 +410,7 @@ public class CardImpl implements Card, Comparable<Card>{
 	*/
 	public CardImpl clone() {
 
-		CardImpl clone = templateCard.instantiate();
+		CardImpl clone = isTemplateCard() ? instantiate() : templateCard.instantiate();
 
 		clone.isPlaceholderCard = isPlaceholderCard;
 		clone.pileCreator = null; // OK?

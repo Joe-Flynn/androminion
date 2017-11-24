@@ -138,7 +138,7 @@ public class CardPile  {
 	** clone - Copies a Card Pile and clones the Cards within the pile
 	*/
 	public CardPile clone() {
-		CardPile clone = new CardPile(placeholderCard.getTemplateCard(), null, true, allCardsVisible);
+		CardPile clone = new CardPile(placeholderCard.getTemplateCard(), new ArrayList<CardMultiplicity>(), true, allCardsVisible);
 		clone.cards = new ArrayList<Card>();
 		for (Card card : cards) { clone.cards.add(card.clone()); }
 		clone.templateCards = new ArrayList<Card>();

@@ -3991,8 +3991,11 @@ public class Game {
     clone.playerSupplyTokens = new HashMap<String, HashMap<Player, List<PlayerSupplyToken>>>();
     for (String key : playerSupplyTokens.keySet()) {
       HashMap playerToTokens = new HashMap<Player, List<PlayerSupplyToken>>();
-      playerToTokens.put(clone.players[0], new ArrayList(playerSupplyTokens.get(key).get(players[0])));
-      playerToTokens.put(clone.players[1], new ArrayList(playerSupplyTokens.get(key).get(players[1])));
+      for (int i = 0; i < 2; i++) {
+        if (playerSupplyTokens.get(key).containsKey(players[i])) {
+          playerToTokens.put(clone.players[i], new ArrayList(playerSupplyTokens.get(key).get(players[i])));
+        }
+      }
       clone.playerSupplyTokens.put(key, playerToTokens);
     }
 
@@ -4018,6 +4021,8 @@ public class Game {
     //
     // listeners  = new ArrayList<GameEventListener>();  // NEED TO DEEP COPY
     //
+    
+    //clone.gameListener;
 
     overallWins   = new HashMap<String, Double>();  // Don't need to clone
     gameTypeStats = new ArrayList<GameStats>();     // Don't need to clone
