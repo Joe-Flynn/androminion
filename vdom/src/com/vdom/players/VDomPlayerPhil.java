@@ -106,7 +106,7 @@ public class VDomPlayerPhil extends BasePlayer  {
     }
 
     // Update Game Evaluator
-    if (returnCard != null) { gameEvaluator.updateWithActionChoice(returnCard); }
+    //if (returnCard != null) { gameEvaluator.updateWithActionChoice(returnCard); }
     return returnCard;
 
   }
@@ -152,7 +152,7 @@ public class VDomPlayerPhil extends BasePlayer  {
     }
 
     // Update Game Evaluator
-    if (returnCard != null) { gameEvaluator.updateWithBuyChoice(returnCard); }
+    //if (returnCard != null) { gameEvaluator.updateWithBuyChoice(returnCard); }
     return returnCard;
 
   }
