@@ -25,10 +25,6 @@ public class VDomPlayerPhil extends BasePlayer  {
 
   Evaluator gameEvaluator = new Evaluator(this);
 
-  Game    clonedGameForSearch = null;
-  boolean clonedAlready = false;
-
-
   @Override
   public String getPlayerName() {
     return getPlayerName(game.maskPlayerNames);
@@ -52,81 +48,136 @@ public class VDomPlayerPhil extends BasePlayer  {
 
 
   /*
+  ** doActionEvalSearch - Evaluate Best Action to Play
+  */
+  public Card doActionEvalSearch(MoveContext context) {
+
+    double currentEvaluation = gameEvaluator.evaluate(context);
+    int    indexActionToPlay = -1;
+
+    System.out.println("STARTING EVAL SEARCH");
+    System.out.println("--------------------");
+    System.out.println("Initial Eval: " + currentEvaluation);
+
+    for (int i = 0; i < hand.size(); i++) {
+      if (hand.get(i).is(Type.Action)) {
+
+        // Clone Game and Players
+        Game clonedGame = context.game.cloneGame();
+        VDomPlayerPhil clonedSelf = null;
+        for (Player clonedPlayer : clonedGame.players) {
+          if (clonedPlayer.getPlayerName() == "Phil") {
+            clonedSelf = (VDomPlayerPhil) clonedPlayer;
+          }
+        }
+        Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
+        MoveContext clonedContext = new MoveContext(clonedGame, clonedSelf, true);
+
+        // Try the Indexed Action
+        if (clonedGame.isValidAction(clonedContext, clonedSelf.hand.get(i))) {
+          clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
+          clonedSelf.hand.get(i).play(clonedGame, clonedContext, true);
+          if (clonedEvaluator.evaluate(clonedContext) > currentEvaluation) {
+            currentEvaluation = clonedEvaluator.evaluate(clonedContext);
+            indexActionToPlay = i;
+
+            System.out.println("Updated Eval: " + currentEvaluation);
+
+          }
+        }
+      }
+    }
+
+    System.out.println("--------------------");
+
+    // If Better State is Found, Return Action Card
+    if (indexActionToPlay > -1) {
+      return hand.get(indexActionToPlay);
+    } else {
+      return null;
+    }
+
+  }
+
+
+  /*
   ** doAction - Action Card Selection, based on Very Simple Heuristics
   */
   @Override
   public Card doAction(MoveContext context) {
 
-    Card returnCard = null;
+    // Card returnCard = null;
+    //
+    // // Run Evaluator
+    // System.out.println(">>>>>> PHIL'S GAME EVALUATION: " + gameEvaluator.evaluate(context));
+    //
+    // // Clone and Print Cloned Game's Evaulation
+    // if (turnCount == 5 && !clonedAlready) {
+    //   clonedGameForSearch = context.game.cloneGame();
+    //   clonedAlready = true;
+    // }
+    // if (turnCount > 5) {
+    //   VDomPlayerPhil clonedSelf = null;
+    //   for (Player clonedPlayer : clonedGameForSearch.players) {
+    //     if (clonedPlayer.getPlayerName() == "Phil") {
+    //       clonedSelf = (VDomPlayerPhil) clonedPlayer;
+    //     }
+    //   }
+    //   Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
+    //   MoveContext clonedContext = new MoveContext(clonedGameForSearch, clonedSelf, true);
+    //   double clonedEvaluation   = clonedEvaluator.evaluate(clonedContext);
+    //   System.out.println(">>>>>> PHIL'S CLONED GAME EVAL = " + clonedEvaluation);
+    // }
+    //
+    // // Get +Action Cards First
+    // for (int i = 0; i < hand.size(); i++) {
+    //   Card cardInHand = hand.get(i);
+    //   if (cardInHand.is(Type.Action) && cardInHand.getAddActions() > 0) {
+    //     returnCard = cardInHand;
+    //   }
+    // }
+    //
+    // // Get +Draw Cards Next
+    // if (returnCard == null && context.actions > 1) {
+    //   for (int i = 0; i < hand.size(); i++) {
+    //     Card cardInHand = hand.get(i);
+    //     if (cardInHand.is(Type.Action) && cardInHand.getAddCards() > 0) {
+    //       returnCard = cardInHand;
+    //     }
+    //   }
+    // }
+    //
+    // // Get +Gold Cards Next
+    // if (returnCard == null && context.actions > 1) {
+    //   for (int i = 0; i < hand.size(); i++) {
+    //     Card cardInHand = hand.get(i);
+    //     if (cardInHand.is(Type.Action) && cardInHand.getAddGold() > 0) {
+    //       returnCard = cardInHand;
+    //     }
+    //   }
+    // }
+    //
+    // // Pick a Terminal Card (optimally with the highest value)
+    // if (returnCard == null) {
+    //   int  highestValue = 0;
+    //   Card highestValueCard = null;
+    //   for (int i = 0; i < hand.size(); i++) {
+    //     Card cardInHand = hand.get(i);
+    //     if (cardInHand.is(Type.Action)) {
+    //       if (cardInHand.getCost(context) > highestValue) {
+    //         highestValue = cardInHand.getCost(context);
+    //         highestValueCard = cardInHand;
+    //       }
+    //     }
+    //   }
+    //   returnCard = highestValueCard;
+    // }
+    //
+    // // Update Game Evaluator
+    // //if (returnCard != null) { gameEvaluator.updateWithActionChoice(returnCard); }
+    // return returnCard;
 
-    // Run Evaluator
-    System.out.println(">>>>>> PHIL'S GAME EVALUATION: " + gameEvaluator.evaluate(context));
-
-    // Clone and Print Cloned Game's Evaulation
-    if (turnCount == 5 && !clonedAlready) {
-      clonedGameForSearch = context.game.cloneGame();
-      clonedAlready = true;
-    }
-    if (turnCount > 5) {
-      VDomPlayerPhil clonedSelf = null;
-      for (Player clonedPlayer : clonedGameForSearch.players) {
-        if (clonedPlayer.getPlayerName() == "Phil") {
-          clonedSelf = (VDomPlayerPhil) clonedPlayer;
-        }
-      }
-      Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
-      MoveContext clonedContext = new MoveContext(clonedGameForSearch, clonedSelf, true);
-      double clonedEvaluation   = clonedEvaluator.evaluate(clonedContext);
-      System.out.println(">>>>>> PHIL'S CLONED GAME EVAL = " + clonedEvaluation);
-    }
-
-    // Get +Action Cards First
-    for (int i = 0; i < hand.size(); i++) {
-      Card cardInHand = hand.get(i);
-      if (cardInHand.is(Type.Action) && cardInHand.getAddActions() > 0) {
-        returnCard = cardInHand;
-      }
-    }
-
-    // Get +Draw Cards Next
-    if (returnCard == null && context.actions > 1) {
-      for (int i = 0; i < hand.size(); i++) {
-        Card cardInHand = hand.get(i);
-        if (cardInHand.is(Type.Action) && cardInHand.getAddCards() > 0) {
-          returnCard = cardInHand;
-        }
-      }
-    }
-
-    // Get +Gold Cards Next
-    if (returnCard == null && context.actions > 1) {
-      for (int i = 0; i < hand.size(); i++) {
-        Card cardInHand = hand.get(i);
-        if (cardInHand.is(Type.Action) && cardInHand.getAddGold() > 0) {
-          returnCard = cardInHand;
-        }
-      }
-    }
-
-    // Pick a Terminal Card (optimally with the highest value)
-    if (returnCard == null) {
-      int  highestValue = 0;
-      Card highestValueCard = null;
-      for (int i = 0; i < hand.size(); i++) {
-        Card cardInHand = hand.get(i);
-        if (cardInHand.is(Type.Action)) {
-          if (cardInHand.getCost(context) > highestValue) {
-            highestValue = cardInHand.getCost(context);
-            highestValueCard = cardInHand;
-          }
-        }
-      }
-      returnCard = highestValueCard;
-    }
-
-    // Update Game Evaluator
-    //if (returnCard != null) { gameEvaluator.updateWithActionChoice(returnCard); }
-    return returnCard;
+    return doActionEvalSearch(context);
 
   }
 

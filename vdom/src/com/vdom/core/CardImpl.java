@@ -463,10 +463,12 @@ public class CardImpl implements Card, Comparable<Card>{
 		clone.numberTimesAlreadyPlayed = numberTimesAlreadyPlayed;
 		clone.cloneCount = cloneCount; // WHAT IS THIS?
 
+		clone.controlCard = clone;
+
 		// TODO (PHIL): IMPLEMENT A COPY OF THESE REFERENCED CARDS?
 		clone.impersonatingCard = null;
 		clone.inheritingAbilitiesCard = null;
-		clone.controlCard = null;
+
 
 		return clone;
 
