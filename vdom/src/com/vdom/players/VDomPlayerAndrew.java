@@ -23,6 +23,22 @@ import com.vdom.core.Util;
 
 public class VDomPlayerAndrew extends BasePlayer  {
 
+  // Max Numbers of Cards to Buy
+  protected int maxSilvers    = 99;
+  protected int maxGolds      = 99;
+  protected int maxTerminals  = 2;
+
+  // Current Numbers of Each Card Bought
+  protected int  numSilvers   = 0;
+  protected int  numGolds     = 0;
+  protected int  numTerminals = 0;
+  protected Card terminalCard = null;
+
+  protected Evaluator evaluator;
+
+  public VDomPlayerAndrew() {
+    evaluator = new Evaluator(this);
+  }
   @Override
   public String getPlayerName() {
     return getPlayerName(game.maskPlayerNames);
@@ -102,23 +118,13 @@ public class VDomPlayerAndrew extends BasePlayer  {
     Cards.harem
   };
 
-  // Max Numbers of Cards to Buy
-  protected int maxSilvers    = 99;
-  protected int maxGolds      = 99;
-  protected int maxTerminals  = 2;
-
-  // Current Numbers of Each Card Bought
-  protected int  numSilvers   = 0;
-  protected int  numGolds     = 0;
-  protected int  numTerminals = 0;
-  protected Card terminalCard = null;
-
   /*
   ** doBuy - Simple Single Terminal Card Buyer, with limits on Number of
   ** Silvers, Goals, and Terminal (Cards) to Buy
   */
   @Override
   public Card doBuy(MoveContext context) {
+  	System.out.println("!!!!!!!!!!!!!! DREW eval: " + evaluator.evaluate(context));
 
     // Select the Terminal Card
     int terminalIndex = 0;

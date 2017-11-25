@@ -15,8 +15,32 @@
       <file leaf-file-name="Game.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="35" column="26" lean-forward="false" selection-start-line="35" selection-start-column="16" selection-end-line="35" selection-end-column="26" />
+            <state relative-caret-position="185">
+              <caret line="295" column="38" lean-forward="false" selection-start-line="295" selection-start-column="31" selection-end-line="295" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VDomPlayerAndrew.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerAndrew.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="125" column="42" lean-forward="true" selection-start-line="125" selection-start-column="42" selection-end-line="125" selection-end-column="42" />
+              <folding>
+                <element signature="e#953#954#0" expanded="true" />
+                <element signature="e#994#995#0" expanded="true" />
+                <element signature="method#newGame#0;class#VDomPlayerAndrew#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VDomPlayerPhil.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerPhil.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1003">
+              <caret line="23" column="13" lean-forward="false" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -25,18 +49,16 @@
       <file leaf-file-name="Evaluator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/players/Evaluator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="646">
-              <caret line="38" column="77" lean-forward="false" selection-start-line="38" selection-start-column="77" selection-end-line="38" selection-end-column="77" />
+            <state relative-caret-position="91">
+              <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#168#169#0" expanded="true" />
-                <element signature="e#204#205#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VDomPlayerJoe.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="VDomPlayerJoe.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJoe.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="329">
@@ -49,7 +71,7 @@
       <file leaf-file-name="BasePlayer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/core/BasePlayer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
+            <state relative-caret-position="5627">
               <caret line="351" column="0" lean-forward="false" selection-start-line="351" selection-start-column="0" selection-end-line="351" selection-end-column="0" />
               <folding />
             </state>
@@ -59,122 +81,9 @@
       <file leaf-file-name="CardImplPromo.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardImplPromo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2126">
-              <caret line="1476" column="4" lean-forward="false" selection-start-line="1476" selection-start-column="4" selection-end-line="1476" selection-end-column="4" />
-              <folding>
-                <element signature="e#2204#2219#0" expanded="true" />
-                <element signature="e#2343#2390#0" expanded="false" />
-                <element signature="method#getStashesInHand#0;class#Player#0" expanded="false" />
-                <element signature="method#getTreasuresInHand#0;class#Player#0" expanded="false" />
-                <element signature="method#getVictoryInHand#0;class#Player#0" expanded="false" />
-                <element signature="method#getActionsInHand#0;class#Player#0" expanded="false" />
-                <element signature="method#isStashOnDeck#0;class#Player#0" expanded="false" />
-                <element signature="method#inHand#0;class#Player#0" expanded="false" />
-                <element signature="method#fromHand#0;class#Player#0" expanded="false" />
-                <element signature="method#isInCardArray#0;class#Player#0" expanded="false" />
-                <element signature="method#mineableCards#0;class#Player#0" expanded="false" />
-                <element signature="method#getCurrencyTotal#0;class#Player#0" expanded="false" />
-                <element signature="method#getMyCardCount#0;class#Player#0" expanded="false" />
-                <element signature="method#getMyAddActions#0;class#Player#0" expanded="false" />
-                <element signature="e#8305#8344#0" expanded="false" />
-                <element signature="method#setMinusOneCoinToken#0;class#Player#0" expanded="false" />
-                <element signature="method#setMinusOneCardToken#0;class#Player#0" expanded="false" />
-                <element signature="method#flipJourneyToken#0;class#Player#0" expanded="false" />
-                <element signature="method#gainGuildsCoinTokens#0;class#Player#0" expanded="false" />
-                <element signature="method#spendGuildsCoinTokens#0;class#Player#0" expanded="false" />
-                <element signature="method#payOffDebtTokens#0;class#Player#0" expanded="false" />
-                <element signature="method#addVictoryTokens#0;class#Player#0" expanded="false" />
-                <element signature="e#12326#12365#0" expanded="false" />
-                <element signature="method#getVictoryCardCounts#0;class#Player#0" expanded="false" />
-                <element signature="e#13924#13932#0" expanded="true" />
-                <element signature="e#13994#14011#0" expanded="true" />
-                <element signature="e#14070#14087#0" expanded="true" />
-                <element signature="method#getTreasureCardCounts#0;class#Player#0" expanded="false" />
-                <element signature="e#16402#16417#0" expanded="true" />
-                <element signature="method#getCardCount#1;class#Player#0" expanded="false" />
-                <element signature="method#getActionCardCount#1;class#Player#0" expanded="false" />
-                <element signature="method#getCastleCardCount#1;class#Player#0" expanded="false" />
-                <element signature="e#18013#18052#0" expanded="false" />
-                <element signature="method#putOnTopOfDeck#0;class#Player#0" expanded="false" />
-                <element signature="method#replenishDeck#0;class#Player#0" expanded="false" />
-                <element signature="method#shuffleIntoDeck#0;class#Player#0" expanded="false" />
-                <element signature="e#19612#19644#0" expanded="false" />
-                <element signature="method#shuffleDeck#0;class#Player#0" expanded="false" />
-                <element signature="method#checkCardsValid#0;class#Player#0" expanded="false" />
-                <element signature="method#namedCard#0;class#Player#0" expanded="false" />
-                <element signature="method#revealFromHand#0;class#Player#0" expanded="false" />
-                <element signature="method#reveal#0;class#Player#0" expanded="false" />
-                <element signature="method#attacked#0;class#Player#0" expanded="false" />
-                <element signature="method#gainNewCard#0;class#Player#0" expanded="false" />
-                <element signature="e#22947#23046#0" expanded="false" />
-                <element signature="method#gainCardAlreadyInPlay#0;class#Player#0" expanded="false" />
-                <element signature="method#discardRemainingCardsFromHand#0;class#Player#0" expanded="false" />
-                <element signature="method#discard#0;class#Player#0" expanded="false" />
-                <element signature="method#discard#1;class#Player#0" expanded="false" />
-                <element signature="method#traveller_exchange#0;class#Player#0" expanded="false" />
-                <element signature="method#trash#0;class#Player#0" expanded="false" />
-                <element signature="method#getPutBackOptions#0;class#Player#0" expanded="false" />
-                <element signature="method#cleanupOutOfTurn#0;class#Player#0" expanded="false" />
-                <element signature="e#32782#32841#0" expanded="false" />
-                <element signature="method#cleanup#0;class#Player#0" expanded="false" />
-                <element signature="e#35797#35889#0" expanded="false" />
-                <element signature="method#findCard#0;class#Player#0" expanded="false" />
-                <element signature="method#princeCardLeftThePlay#0;class#Player#0" expanded="false" />
-                <element signature="e#40352#40391#0" expanded="false" />
-                <element signature="method#stopBeingControlled#0;class#Player#0" expanded="false" />
-                <element signature="method#startBeingControlled#0;class#Player#0" expanded="false" />
-                <element signature="method#addDurationEffectOnOtherPlayer#0;class#Player#0" expanded="false" />
-                <element signature="method#getDurationEffectsOnOtherPlayer#0;class#Player#0" expanded="false" />
-                <element signature="e#41767#41806#0" expanded="false" />
-                <element signature="method#calculateLead#0;class#Player#0" expanded="false" />
-                <element signature="method#getVPs#1;class#Player#0" expanded="false" />
-                <element signature="e#46484#46485#0" expanded="true" />
-                <element signature="e#46528#46529#0" expanded="true" />
-                <element signature="e#46717#46732#0" expanded="true" />
-                <element signature="e#51685#51732#0" expanded="false" />
-                <element signature="class#SentryOption#0;class#Player#0" expanded="false" />
-                <element signature="class#CourtierOption#0;class#Player#0" expanded="false" />
-                <element signature="class#LurkerOption#0;class#Player#0" expanded="false" />
-                <element signature="class#NoblesOption#0;class#Player#0" expanded="false" />
-                <element signature="class#TorturerOption#0;class#Player#0" expanded="false" />
-                <element signature="class#MinionOption#0;class#Player#0" expanded="false" />
-                <element signature="class#PawnOption#0;class#Player#0" expanded="false" />
-                <element signature="class#StewardOption#0;class#Player#0" expanded="false" />
-                <element signature="class#WatchTowerOption#0;class#Player#0" expanded="false" />
-                <element signature="class#JesterOption#0;class#Player#0" expanded="false" />
-                <element signature="class#TournamentOption#0;class#Player#0" expanded="false" />
-                <element signature="class#TrustySteedOption#0;class#Player#0" expanded="false" />
-                <element signature="class#SpiceMerchantOption#0;class#Player#0" expanded="false" />
-                <element signature="class#PutBackOption#0;class#Player#0" expanded="false" />
-                <element signature="class#SquireOption#0;class#Player#0" expanded="false" />
-                <element signature="class#CountFirstOption#0;class#Player#0" expanded="false" />
-                <element signature="class#CountSecondOption#0;class#Player#0" expanded="false" />
-                <element signature="class#GraverobberOption#0;class#Player#0" expanded="false" />
-                <element signature="class#HuntingGroundsOption#0;class#Player#0" expanded="false" />
-                <element signature="class#GovernorOption#0;class#Player#0" expanded="false" />
-                <element signature="class#DoctorOverpayOption#0;class#Player#0" expanded="false" />
-                <element signature="class#AmuletOption#0;class#Player#0" expanded="false" />
-                <element signature="class#ExtraTurnOption#0;class#Player#0" expanded="false" />
-                <element signature="class#QuestOption#0;class#Player#0" expanded="false" />
-                <element signature="class#CharmOption#0;class#Player#0" expanded="false" />
-                <element signature="class#EncampmentOption#0;class#Player#0" expanded="false" />
-                <element signature="class#WildHuntOption#0;class#Player#0" expanded="false" />
-                <element signature="class#FoolsGoldOption#0;class#Player#0" expanded="false" />
-                <element signature="e#54239#54286#0" expanded="false" />
-                <element signature="e#54912#54959#0" expanded="false" />
-                <element signature="e#56991#57038#0" expanded="false" />
-                <element signature="e#59897#59944#0" expanded="false" />
-                <element signature="e#61864#61911#0" expanded="false" />
-                <element signature="e#62654#62701#0" expanded="false" />
-                <element signature="e#64507#64554#0" expanded="false" />
-                <element signature="e#65743#65790#0" expanded="false" />
-                <element signature="e#68857#68904#0" expanded="false" />
-                <element signature="e#72514#72561#0" expanded="false" />
-                <element signature="e#74151#74198#0" expanded="false" />
-                <element signature="e#76438#76488#0" expanded="false" />
-                <element signature="e#78096#78143#0" expanded="false" />
-                <element signature="e#81152#81199#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="5372">
+              <caret line="322" column="0" lean-forward="false" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -182,11 +91,9 @@
       <file leaf-file-name="CardList.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardList.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
+            <state relative-caret-position="1615">
               <caret line="117" column="37" lean-forward="false" selection-start-line="117" selection-start-column="37" selection-end-line="117" selection-end-column="37" />
-              <folding>
-                <marker date="1511547382979" expanded="true" signature="2938:3041" ph="{...}" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -194,7 +101,7 @@
       <file leaf-file-name="CardImplSeaside.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardImplSeaside.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
+            <state relative-caret-position="68">
               <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
               <folding />
             </state>
@@ -232,6 +139,8 @@
       <find>getAllCards</find>
       <find>getVictoryPointTotal</find>
       <find>numGames =</find>
+      <find>EVALUATION: 0</find>
+      <find>players</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -248,13 +157,14 @@
         <option value="$PROJECT_DIR$/src/com/vdom/core/MoveContext.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/core/CardList.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/core/Player.java" />
+        <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJoe.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/players/Evaluator.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/core/Game.java" />
-        <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJoe.java" />
+        <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerAndrew.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="683" />
     <option name="width" value="683" />
     <option name="height" value="728" />
@@ -275,8 +185,8 @@
     </navigator>
     <panes>
       <pane id="AndroidView" />
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -328,10 +238,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -461,55 +367,35 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32753164" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23892406" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.009516837" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18354431" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30921987" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30921987" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Code Iris" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5063291" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.95035464" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2228013" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22254759" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30921987" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Code Iris" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18354431" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -532,8 +418,8 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.094936706" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.95035464" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2228013" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18354431" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -612,162 +498,8 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerPatrick.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="13" lean-forward="false" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerChuck.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/BasePlayer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7769">
-          <caret line="457" column="47" lean-forward="false" selection-start-line="457" selection-start-column="47" selection-end-line="457" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Player.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5219">
-          <caret line="307" column="0" lean-forward="false" selection-start-line="307" selection-start-column="0" selection-end-line="307" selection-end-column="0" />
-          <folding>
-            <element signature="e#2204#2219#0" expanded="true" />
-            <element signature="e#2343#2390#0" expanded="false" />
-            <element signature="method#getStashesInHand#0;class#Player#0" expanded="false" />
-            <element signature="method#getTreasuresInHand#0;class#Player#0" expanded="false" />
-            <element signature="method#getVictoryInHand#0;class#Player#0" expanded="false" />
-            <element signature="method#getActionsInHand#0;class#Player#0" expanded="false" />
-            <element signature="method#isStashOnDeck#0;class#Player#0" expanded="false" />
-            <element signature="method#inHand#0;class#Player#0" expanded="false" />
-            <element signature="method#fromHand#0;class#Player#0" expanded="false" />
-            <element signature="method#isInCardArray#0;class#Player#0" expanded="false" />
-            <element signature="method#mineableCards#0;class#Player#0" expanded="false" />
-            <element signature="method#getCurrencyTotal#0;class#Player#0" expanded="false" />
-            <element signature="method#getMyCardCount#0;class#Player#0" expanded="false" />
-            <element signature="method#getMyAddActions#0;class#Player#0" expanded="false" />
-            <element signature="method#setMinusOneCoinToken#0;class#Player#0" expanded="false" />
-            <element signature="method#setMinusOneCardToken#0;class#Player#0" expanded="false" />
-            <element signature="method#flipJourneyToken#0;class#Player#0" expanded="false" />
-            <element signature="method#gainGuildsCoinTokens#0;class#Player#0" expanded="false" />
-            <element signature="method#spendGuildsCoinTokens#0;class#Player#0" expanded="false" />
-            <element signature="method#payOffDebtTokens#0;class#Player#0" expanded="false" />
-            <element signature="method#addVictoryTokens#0;class#Player#0" expanded="false" />
-            <element signature="e#12326#12365#0" expanded="false" />
-            <element signature="method#getVictoryCardCounts#0;class#Player#0" expanded="false" />
-            <element signature="e#13924#13932#0" expanded="true" />
-            <element signature="e#13994#14011#0" expanded="true" />
-            <element signature="e#14070#14087#0" expanded="true" />
-            <element signature="method#getTreasureCardCounts#0;class#Player#0" expanded="false" />
-            <element signature="e#16402#16417#0" expanded="true" />
-            <element signature="method#getCardCount#1;class#Player#0" expanded="false" />
-            <element signature="method#getCastleCardCount#1;class#Player#0" expanded="false" />
-            <element signature="method#putOnTopOfDeck#0;class#Player#0" expanded="false" />
-            <element signature="method#replenishDeck#0;class#Player#0" expanded="false" />
-            <element signature="method#shuffleIntoDeck#0;class#Player#0" expanded="false" />
-            <element signature="method#shuffleDeck#0;class#Player#0" expanded="false" />
-            <element signature="method#checkCardsValid#0;class#Player#0" expanded="false" />
-            <element signature="method#namedCard#0;class#Player#0" expanded="false" />
-            <element signature="method#revealFromHand#0;class#Player#0" expanded="false" />
-            <element signature="method#reveal#0;class#Player#0" expanded="false" />
-            <element signature="method#attacked#0;class#Player#0" expanded="false" />
-            <element signature="method#gainNewCard#0;class#Player#0" expanded="false" />
-            <element signature="method#gainCardAlreadyInPlay#0;class#Player#0" expanded="false" />
-            <element signature="method#discardRemainingCardsFromHand#0;class#Player#0" expanded="false" />
-            <element signature="method#discard#0;class#Player#0" expanded="false" />
-            <element signature="method#discard#1;class#Player#0" expanded="false" />
-            <element signature="method#traveller_exchange#0;class#Player#0" expanded="false" />
-            <element signature="method#trash#0;class#Player#0" expanded="false" />
-            <element signature="method#getPutBackOptions#0;class#Player#0" expanded="false" />
-            <element signature="method#cleanupOutOfTurn#0;class#Player#0" expanded="false" />
-            <element signature="method#cleanup#0;class#Player#0" expanded="false" />
-            <element signature="method#findCard#0;class#Player#0" expanded="false" />
-            <element signature="method#princeCardLeftThePlay#0;class#Player#0" expanded="false" />
-            <element signature="method#stopBeingControlled#0;class#Player#0" expanded="false" />
-            <element signature="method#startBeingControlled#0;class#Player#0" expanded="false" />
-            <element signature="method#addDurationEffectOnOtherPlayer#0;class#Player#0" expanded="false" />
-            <element signature="method#getDurationEffectsOnOtherPlayer#0;class#Player#0" expanded="false" />
-            <element signature="method#calculateLead#0;class#Player#0" expanded="false" />
-            <element signature="method#getVPs#1;class#Player#0" expanded="false" />
-            <element signature="e#46484#46485#0" expanded="true" />
-            <element signature="e#46528#46529#0" expanded="true" />
-            <element signature="e#46717#46732#0" expanded="true" />
-            <element signature="e#51685#51732#0" expanded="false" />
-            <element signature="class#SentryOption#0;class#Player#0" expanded="false" />
-            <element signature="class#CourtierOption#0;class#Player#0" expanded="false" />
-            <element signature="class#LurkerOption#0;class#Player#0" expanded="false" />
-            <element signature="class#NoblesOption#0;class#Player#0" expanded="false" />
-            <element signature="class#TorturerOption#0;class#Player#0" expanded="false" />
-            <element signature="class#MinionOption#0;class#Player#0" expanded="false" />
-            <element signature="class#PawnOption#0;class#Player#0" expanded="false" />
-            <element signature="class#StewardOption#0;class#Player#0" expanded="false" />
-            <element signature="class#WatchTowerOption#0;class#Player#0" expanded="false" />
-            <element signature="class#JesterOption#0;class#Player#0" expanded="false" />
-            <element signature="class#TournamentOption#0;class#Player#0" expanded="false" />
-            <element signature="class#TrustySteedOption#0;class#Player#0" expanded="false" />
-            <element signature="class#SpiceMerchantOption#0;class#Player#0" expanded="false" />
-            <element signature="class#PutBackOption#0;class#Player#0" expanded="false" />
-            <element signature="class#SquireOption#0;class#Player#0" expanded="false" />
-            <element signature="class#CountFirstOption#0;class#Player#0" expanded="false" />
-            <element signature="class#CountSecondOption#0;class#Player#0" expanded="false" />
-            <element signature="class#GraverobberOption#0;class#Player#0" expanded="false" />
-            <element signature="class#HuntingGroundsOption#0;class#Player#0" expanded="false" />
-            <element signature="class#GovernorOption#0;class#Player#0" expanded="false" />
-            <element signature="class#DoctorOverpayOption#0;class#Player#0" expanded="false" />
-            <element signature="class#AmuletOption#0;class#Player#0" expanded="false" />
-            <element signature="class#ExtraTurnOption#0;class#Player#0" expanded="false" />
-            <element signature="class#QuestOption#0;class#Player#0" expanded="false" />
-            <element signature="class#CharmOption#0;class#Player#0" expanded="false" />
-            <element signature="class#EncampmentOption#0;class#Player#0" expanded="false" />
-            <element signature="class#WildHuntOption#0;class#Player#0" expanded="false" />
-            <element signature="class#FoolsGoldOption#0;class#Player#0" expanded="false" />
-            <element signature="e#54239#54286#0" expanded="false" />
-            <element signature="e#54912#54959#0" expanded="false" />
-            <element signature="e#56991#57038#0" expanded="false" />
-            <element signature="e#59897#59944#0" expanded="false" />
-            <element signature="e#61864#61911#0" expanded="false" />
-            <element signature="e#62654#62701#0" expanded="false" />
-            <element signature="e#64507#64554#0" expanded="false" />
-            <element signature="e#65743#65790#0" expanded="false" />
-            <element signature="e#68857#68904#0" expanded="false" />
-            <element signature="e#72514#72561#0" expanded="false" />
-            <element signature="e#74151#74198#0" expanded="false" />
-            <element signature="e#76438#76488#0" expanded="false" />
-            <element signature="e#78096#78143#0" expanded="false" />
-            <element signature="e#81152#81199#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/api/FrameworkEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="20" column="16" lean-forward="false" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
-          <folding>
-            <element signature="e#582#583#0" expanded="true" />
-            <element signature="e#608#609#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/api/FrameworkEvent.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/util/AbstractMap.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerAndrew.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1343">
-          <caret line="101" column="15" lean-forward="true" selection-start-line="101" selection-start-column="15" selection-end-line="101" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Cards.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -780,83 +512,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
           <caret line="2433" column="9" lean-forward="true" selection-start-line="2433" selection-start-column="9" selection-end-line="2433" selection-end-column="9" />
-          <folding>
-            <element signature="docComment;field#gameType#0;class#Game#0" expanded="false" />
-            <element signature="class#BlackMarketSplitPileOptions#0;class#Game#0" expanded="false" />
-            <element signature="class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
-            <element signature="method#ExtraTurnInfo#1;class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
-            <element signature="method#go#0;class#Game#0" expanded="false" />
-            <element signature="method#initPlayerCards#0;class#Game#0" expanded="false" />
-            <element signature="method#setPlayersTurn#0;class#Game#0" expanded="false" />
-            <element signature="method#printPlayerTurn#0;class#Game#0" expanded="false" />
-            <element signature="method#playerEndTurn#0;class#Game#0" expanded="false" />
-            <element signature="method#playerAfterTurn#0;class#Game#0" expanded="false" />
-            <element signature="method#playerBeginTurn#0;class#Game#0" expanded="false" />
-            <element signature="method#getNextPlayer#0;class#Game#0" expanded="false" />
-            <element signature="method#getPlayersInTurnOrder#1;class#Game#0" expanded="false" />
-            <element signature="method#getPlayersInTurnOrder#2;class#Game#0" expanded="false" />
-            <element signature="method#playTreasures#0;class#Game#0" expanded="false" />
-            <element signature="method#playGuildsTokens#0;class#Game#0" expanded="false" />
-            <element signature="method#playerPayOffDebt#0;class#Game#0" expanded="false" />
-            <element signature="method#playerBeginBuy#0;class#Game#0" expanded="false" />
-            <element signature="method#isValidAction#0;class#Game#0" expanded="false" />
-            <element signature="method#isValidBuy#0;class#Game#0" expanded="false" />
-            <element signature="method#isValidBuy#1;class#Game#0" expanded="false" />
-            <element signature="method#playBuy#0;class#Game#0" expanded="false" />
-            <element signature="method#drawToHand#0;class#Game#0" expanded="false" />
-            <element signature="method#drawToHand#1;class#Game#0" expanded="false" />
-            <element signature="method#draw#0;class#Game#0" expanded="false" />
-            <element signature="method#replenishDeck#0;class#Game#0" expanded="false" />
-            <element signature="method#addPileVpTokens#0;class#Game#0" expanded="false" />
-            <element signature="method#removePileVpTokens#0;class#Game#0" expanded="false" />
-            <element signature="method#addPileDebtTokens#0;class#Game#0" expanded="false" />
-            <element signature="method#removePileDebtTokens#0;class#Game#0" expanded="false" />
-            <element signature="method#getPileVpTokens#0;class#Game#0" expanded="false" />
-            <element signature="method#getPileDebtTokens#0;class#Game#0" expanded="false" />
-            <element signature="method#getPlayerSupplyTokens#0;class#Game#0" expanded="false" />
-            <element signature="method#isPlayerSupplyTokenOnPile#0;class#Game#0" expanded="false" />
-            <element signature="method#movePlayerSupplyToken#0;class#Game#0" expanded="false" />
-            <element signature="method#removePlayerSupplyToken#0;class#Game#0" expanded="false" />
-            <element signature="method#takeFromPile#1;class#Game#0" expanded="false" />
-            <element signature="method#takeFromPileCheckTrader#0;class#Game#0" expanded="false" />
-            <element signature="method#pileSize#0;class#Game#0" expanded="false" />
-            <element signature="method#emptyPiles#0;class#Game#0" expanded="false" />
-            <element signature="method#getCardsInGame#1;class#Game#0" expanded="false" />
-            <element signature="method#getCardsInGame#2;class#Game#0" expanded="false" />
-            <element signature="method#cardInGame#0;class#Game#0" expanded="false" />
-            <element signature="method#isCardOnTop#0;class#Game#0" expanded="false" />
-            <element signature="method#pileInGame#0;class#Game#0" expanded="false" />
-            <element signature="method#getCardsLeftInPile#0;class#Game#0" expanded="false" />
-            <element signature="e#120591#120624#0" expanded="true" />
-            <element signature="method#getCardsObtainedByLastPlayer#0;class#Game#0" expanded="false" />
-            <element signature="method#broadcastEvent#0;class#Game#0" expanded="false" />
-            <element signature="method#getHandString#0;class#Game#0" expanded="false" />
-            <element signature="method#playerShouldSelectCoinsToPlay#0;class#Game#0" expanded="false" />
-            <element signature="method#getPile#0;class#Game#0" expanded="false" />
-            <element signature="method#printStats#0;class#Game#0" expanded="false" />
-            <element signature="method#printGameTypeStats#0;class#Game#0" expanded="false" />
-            <element signature="method#calculateVps#0;class#Game#0" expanded="false" />
-            <element signature="method#buyWouldEndGame#0;class#Game#0" expanded="false" />
-            <element signature="method#checkGameOver#0;class#Game#0" expanded="false" />
-            <element signature="method#isModifierCard#0;class#Game#0" expanded="false" />
-            <element signature="method#haggler#0;class#Game#0" expanded="false" />
-            <element signature="method#charmWhenBuy#0;class#Game#0" expanded="false" />
-            <element signature="method#validCharmCardLeft#0;class#Game#0" expanded="false" />
-            <element signature="method#isValidCharmCard#0;class#Game#0" expanded="false" />
-            <element signature="method#arena#0;class#Game#0" expanded="false" />
-            <element signature="method#basilicaWhenBuy#0;class#Game#0" expanded="false" />
-            <element signature="method#colonnadeWhenBuy#0;class#Game#0" expanded="false" />
-            <element signature="method#defiledShrineWhenBuy#0;class#Game#0" expanded="false" />
-            <element signature="method#hasLighthouse#0;class#Game#0" expanded="false" />
-            <element signature="method#countChampionsInPlay#0;class#Game#0" expanded="false" />
-            <element signature="method#addEmbargo#0;class#Game#0" expanded="false" />
-            <element signature="method#isValidEmbargoPile#0;class#Game#0" expanded="false" />
-            <element signature="method#getEmbargos#0;class#Game#0" expanded="false" />
-            <element signature="method#trashHovelsInHandOption#0;class#Game#0" expanded="false" />
-            <element signature="method#hauntedWoodsAttacks#0;class#Game#0" expanded="false" />
-            <element signature="method#enchantressAttacks#0;class#Game#0" expanded="false" />
-            <element signature="method#swampHagAttacks#0;class#Game#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -868,53 +524,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/DumpCardResources.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="9" column="5" lean-forward="false" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/DumpCardResources.java" />
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/VDomServer.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/DumpCardResources.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="9" column="5" lean-forward="false" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/DumpCardResources.java" />
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/VDomServer.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerMary.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerPatrick.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="23" column="13" lean-forward="false" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerChuck.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerEarl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="177" column="0" lean-forward="false" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerMary.java" />
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerPatrick.java" />
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerChuck.java" />
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerEarl.java" />
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/UI.java" />
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/BasePlayer.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1053,14 +670,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/api/FrameworkEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="20" column="16" lean-forward="false" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/api/FrameworkEvent.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/util/AbstractMap.java" />
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Game.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1242,27 +852,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1943">
           <caret line="34" column="18" lean-forward="false" selection-start-line="34" selection-start-column="18" selection-end-line="34" selection-end-column="18" />
-          <folding>
-            <element signature="e#14642#14643#0" expanded="false" />
-            <element signature="e#14663#14664#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerPhil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1974">
-          <caret line="0" column="25" lean-forward="true" selection-start-line="0" selection-start-column="25" selection-end-line="0" selection-end-column="25" />
-          <folding>
-            <element signature="e#611#612#0" expanded="false" />
-            <element signature="e#667#668#0" expanded="false" />
-            <element signature="e#734#735#0" expanded="false" />
-            <element signature="e#805#806#0" expanded="false" />
-            <element signature="e#848#849#0" expanded="false" />
-            <element signature="e#873#874#0" expanded="false" />
-            <element signature="e#935#936#0" expanded="false" />
-            <element signature="e#971#972#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1284,17 +874,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardList.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
+        <state relative-caret-position="1615">
           <caret line="117" column="37" lean-forward="false" selection-start-line="117" selection-start-column="37" selection-end-line="117" selection-end-column="37" />
-          <folding>
-            <marker date="1511547382979" expanded="true" signature="2938:3041" ph="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/BasePlayer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
+        <state relative-caret-position="5627">
           <caret line="351" column="0" lean-forward="false" selection-start-line="351" selection-start-column="0" selection-end-line="351" selection-end-column="0" />
           <folding />
         </state>
@@ -1421,31 +1009,49 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/Evaluator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="38" column="77" lean-forward="false" selection-start-line="38" selection-start-column="77" selection-end-line="38" selection-end-column="77" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#168#169#0" expanded="true" />
-            <element signature="e#204#205#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Game.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="35" column="26" lean-forward="false" selection-start-line="35" selection-start-column="16" selection-end-line="35" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJoe.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="329">
           <caret line="65" column="39" lean-forward="false" selection-start-line="65" selection-start-column="39" selection-end-line="65" selection-end-column="39" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Game.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="295" column="38" lean-forward="false" selection-start-line="295" selection-start-column="31" selection-end-line="295" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerPhil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1003">
+          <caret line="23" column="13" lean-forward="false" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/Evaluator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="91">
+          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerAndrew.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="125" column="42" lean-forward="true" selection-start-line="125" selection-start-column="42" selection-end-line="125" selection-end-column="42" />
+          <folding>
+            <element signature="e#953#954#0" expanded="true" />
+            <element signature="e#994#995#0" expanded="true" />
+            <element signature="method#newGame#0;class#VDomPlayerAndrew#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
