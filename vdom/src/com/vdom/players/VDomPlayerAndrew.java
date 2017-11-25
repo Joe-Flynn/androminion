@@ -124,7 +124,7 @@ public class VDomPlayerAndrew extends BasePlayer  {
   */
   @Override
   public Card doBuy(MoveContext context) {
-  	System.out.println("!!!!!!!!!!!!!! DREW eval: " + evaluator.evaluate(context));
+  	System.out.println("!!!!!!!!!!!!!! DREW eval: " + evaluator.evaluate(context, this.getAllCards()));
 
     // Select the Terminal Card
     int terminalIndex = 0;

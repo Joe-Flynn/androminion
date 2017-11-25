@@ -54,7 +54,7 @@ public class VDomPlayerJoe extends BasePlayer  {
 
     @Override
     public Card doAction(MoveContext context) {
-		System.out.printf("<EVALUATOR> Action eval: %s\n", evaluator.evaluate(context));
+		System.out.printf("<EVALUATOR> Action eval: %s\n", evaluator.evaluate(context, this.getAllCards()));
       return null;
     }
 
@@ -63,7 +63,7 @@ public class VDomPlayerJoe extends BasePlayer  {
     */
     @Override
     public Card doBuy(MoveContext context) {
-        System.out.printf("<EVALUATOR> Buy eval: %s\n", evaluator.evaluate(context));
+        System.out.printf("<EVALUATOR> Buy eval: %s\n", evaluator.evaluate(context, this.getAllCards()));
 
       int coins = context.getCoinAvailableForBuy();
       Card retCard;

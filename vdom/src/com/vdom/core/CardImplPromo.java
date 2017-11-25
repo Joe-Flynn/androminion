@@ -182,7 +182,8 @@ public class CardImplPromo extends CardImpl {
             toDiscard = cards.get(0);
         }
 
-        currentPlayer.discard(toDiscard, this.getControlCard(), context);
+		if (cards.size() == 5)
+			currentPlayer.discard(toDiscard, this.getControlCard(), context);
 
         cards.remove(toDiscard);
 
