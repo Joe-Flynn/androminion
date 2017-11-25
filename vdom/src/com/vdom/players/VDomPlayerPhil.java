@@ -47,17 +47,24 @@ public class VDomPlayerPhil extends BasePlayer  {
   }
 
 
+  @Override
+  public Card doAction(MoveContext context) {
+    return doActionHeuristic(context);
+  }
+
+  @Override
+  public Card doBuy(MoveContext context) {
+    return doBuyEvalSearch(context);
+  }
+
   /*
-  ** doActionEvalSearch - Evaluate Best Action to Play
+  ** doActionEvalSearch - Evaluate Best Action to Play Using a Cloned Game
+  ** State, and evaluating the effect of each Card in the Player's hand on it.
   */
   public Card doActionEvalSearch(MoveContext context) {
 
     double currentEvaluation = gameEvaluator.evaluate(context);
     int    indexActionToPlay = -1;
-
-    System.out.println("STARTING EVAL SEARCH");
-    System.out.println("--------------------");
-    System.out.println("Initial Eval: " + currentEvaluation);
 
     for (int i = 0; i < hand.size(); i++) {
       if (hand.get(i).is(Type.Action)) {
@@ -80,15 +87,10 @@ public class VDomPlayerPhil extends BasePlayer  {
           if (clonedEvaluator.evaluate(clonedContext) > currentEvaluation) {
             currentEvaluation = clonedEvaluator.evaluate(clonedContext);
             indexActionToPlay = i;
-
-            System.out.println("Updated Eval: " + currentEvaluation);
-
           }
         }
       }
     }
-
-    System.out.println("--------------------");
 
     // If Better State is Found, Return Action Card
     if (indexActionToPlay > -1) {
@@ -101,92 +103,130 @@ public class VDomPlayerPhil extends BasePlayer  {
 
 
   /*
-  ** doAction - Action Card Selection, based on Very Simple Heuristics
+  ** doActionHeuristic - Action Card Selection, based on Very Simple Heuristics
   */
-  @Override
-  public Card doAction(MoveContext context) {
+  public Card doActionHeuristic(MoveContext context) {
 
-    // Card returnCard = null;
-    //
-    // // Run Evaluator
-    // System.out.println(">>>>>> PHIL'S GAME EVALUATION: " + gameEvaluator.evaluate(context));
-    //
-    // // Clone and Print Cloned Game's Evaulation
-    // if (turnCount == 5 && !clonedAlready) {
-    //   clonedGameForSearch = context.game.cloneGame();
-    //   clonedAlready = true;
-    // }
-    // if (turnCount > 5) {
-    //   VDomPlayerPhil clonedSelf = null;
-    //   for (Player clonedPlayer : clonedGameForSearch.players) {
-    //     if (clonedPlayer.getPlayerName() == "Phil") {
-    //       clonedSelf = (VDomPlayerPhil) clonedPlayer;
-    //     }
-    //   }
-    //   Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
-    //   MoveContext clonedContext = new MoveContext(clonedGameForSearch, clonedSelf, true);
-    //   double clonedEvaluation   = clonedEvaluator.evaluate(clonedContext);
-    //   System.out.println(">>>>>> PHIL'S CLONED GAME EVAL = " + clonedEvaluation);
-    // }
-    //
-    // // Get +Action Cards First
-    // for (int i = 0; i < hand.size(); i++) {
-    //   Card cardInHand = hand.get(i);
-    //   if (cardInHand.is(Type.Action) && cardInHand.getAddActions() > 0) {
-    //     returnCard = cardInHand;
-    //   }
-    // }
-    //
-    // // Get +Draw Cards Next
-    // if (returnCard == null && context.actions > 1) {
-    //   for (int i = 0; i < hand.size(); i++) {
-    //     Card cardInHand = hand.get(i);
-    //     if (cardInHand.is(Type.Action) && cardInHand.getAddCards() > 0) {
-    //       returnCard = cardInHand;
-    //     }
-    //   }
-    // }
-    //
-    // // Get +Gold Cards Next
-    // if (returnCard == null && context.actions > 1) {
-    //   for (int i = 0; i < hand.size(); i++) {
-    //     Card cardInHand = hand.get(i);
-    //     if (cardInHand.is(Type.Action) && cardInHand.getAddGold() > 0) {
-    //       returnCard = cardInHand;
-    //     }
-    //   }
-    // }
-    //
-    // // Pick a Terminal Card (optimally with the highest value)
-    // if (returnCard == null) {
-    //   int  highestValue = 0;
-    //   Card highestValueCard = null;
-    //   for (int i = 0; i < hand.size(); i++) {
-    //     Card cardInHand = hand.get(i);
-    //     if (cardInHand.is(Type.Action)) {
-    //       if (cardInHand.getCost(context) > highestValue) {
-    //         highestValue = cardInHand.getCost(context);
-    //         highestValueCard = cardInHand;
-    //       }
-    //     }
-    //   }
-    //   returnCard = highestValueCard;
-    // }
-    //
-    // // Update Game Evaluator
-    // //if (returnCard != null) { gameEvaluator.updateWithActionChoice(returnCard); }
-    // return returnCard;
+    Card returnCard = null;
 
-    return doActionEvalSearch(context);
+    // Get +Action Cards First
+    for (int i = 0; i < hand.size(); i++) {
+      Card cardInHand = hand.get(i);
+      if (cardInHand.is(Type.Action) && cardInHand.getAddActions() > 0) {
+        returnCard = cardInHand;
+      }
+    }
+
+    // Get +Draw Cards Next
+    if (returnCard == null && context.actions > 1) {
+      for (int i = 0; i < hand.size(); i++) {
+        Card cardInHand = hand.get(i);
+        if (cardInHand.is(Type.Action) && cardInHand.getAddCards() > 0) {
+          returnCard = cardInHand;
+        }
+      }
+    }
+
+    // Get +Gold Cards Next
+    if (returnCard == null && context.actions > 1) {
+      for (int i = 0; i < hand.size(); i++) {
+        Card cardInHand = hand.get(i);
+        if (cardInHand.is(Type.Action) && cardInHand.getAddGold() > 0) {
+          returnCard = cardInHand;
+        }
+      }
+    }
+
+    // Pick a Terminal Card (optimally with the highest value)
+    if (returnCard == null) {
+      int  highestValue = 0;
+      Card highestValueCard = null;
+      for (int i = 0; i < hand.size(); i++) {
+        Card cardInHand = hand.get(i);
+        if (cardInHand.is(Type.Action)) {
+          if (cardInHand.getCost(context) > highestValue) {
+            highestValue = cardInHand.getCost(context);
+            highestValueCard = cardInHand;
+          }
+        }
+      }
+      returnCard = highestValueCard;
+    }
+
+    // Update Game Evaluator
+    return returnCard;
 
   }
 
   /*
-  ** doBuy - Simple Big Money Strategy, with the option to buy cards if
+  ** doBuyEvalSearch - Evaluate Best Card to Buy Using a Cloned Game State,
+  ** and evaluating the effect of each Buyable Card against the Current State.
+  */
+  public Card doBuyEvalSearch(MoveContext context) {
+
+    Card returnCard = null;
+
+    // Buy Province or Gold, First
+    if (context.getCoinAvailableForBuy() == 0) {
+      returnCard = null;
+    } else if (context.canBuy(Cards.province)) {
+      returnCard = Cards.province;
+    } else if (context.canBuy(Cards.gold)) {
+      returnCard = Cards.gold;
+    } else {
+
+      // Buy Card that Improves Player's Evaluation Most
+      double currentEvaluation = gameEvaluator.evaluate(context);
+      String cardToBuy = "";
+
+      for (String pileName : context.game.piles.keySet()) {
+
+        // Clone Game and Players
+        Game clonedGame = context.game.cloneGame();
+        VDomPlayerPhil clonedSelf = null;
+        for (Player clonedPlayer : clonedGame.players) {
+          if (clonedPlayer.getPlayerName() == "Phil") {
+            clonedSelf = (VDomPlayerPhil) clonedPlayer;
+          }
+        }
+        Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
+        MoveContext clonedContext = new MoveContext(clonedGame, clonedSelf, true);
+
+        // Try the Buy
+        Card supplyCard = clonedContext.game.piles.get(pileName).placeholderCard();
+        Card buyCard = clonedGame.getPile(supplyCard).topCard();
+        if (clonedGame.isValidBuy(clonedContext, buyCard)) {
+          clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
+          clonedGame.playBuy(clonedContext, buyCard);
+          clonedGame.playerPayOffDebt(clonedSelf, clonedContext);
+          if (clonedEvaluator.evaluate(clonedContext) > currentEvaluation) {
+            currentEvaluation = clonedEvaluator.evaluate(clonedContext);
+            cardToBuy = pileName;
+          }
+        }
+      }
+
+      // Update Card to Buy
+      if (cardToBuy != "") {
+        returnCard = context.game.piles.get(cardToBuy).placeholderCard();
+      } else if (context.canBuy(Cards.silver)) {
+        returnCard = Cards.silver;
+      } else {
+        returnCard = null;
+      }
+    }
+
+    // Update Game Evaluator
+    return returnCard;
+
+  }
+
+
+  /*
+  ** doBuyHeuristic - Simple Big Money Strategy, with the option to buy cards if
   ** the price is right.  This can be modified to use the Game State Evaluator.
   */
-  @Override
-  public Card doBuy(MoveContext context) {
+  public Card doBuyHeuristic(MoveContext context) {
 
     Card returnCard = null;
 
@@ -222,10 +262,11 @@ public class VDomPlayerPhil extends BasePlayer  {
     }
 
     // Update Game Evaluator
-    //if (returnCard != null) { gameEvaluator.updateWithBuyChoice(returnCard); }
     return returnCard;
 
   }
+
+
 
 
   // We man want to modify which cards get considered to be "garbage", differently from the Base Player

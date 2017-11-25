@@ -2682,7 +2682,7 @@ public class Game {
   /*
   ** playBuy - ???
   */
-  Card playBuy(MoveContext context, Card buy) {
+  public Card playBuy(MoveContext context, Card buy) {
 
     // Use up one Buy
     Player player = context.getPlayer();
