@@ -320,7 +320,7 @@ public class Game {
       boolean gameOver = false;
       while (!gameOver) {
 
-        // Create MoveContext for New Turn
+        // Create text for New Turn
         Player player = players[playersTurn];
         boolean canBuyCards = extraTurnsInfo.isEmpty() ? true : extraTurnsInfo.remove().canBuyCards;
         MoveContext context = new MoveContext(this, player, canBuyCards);

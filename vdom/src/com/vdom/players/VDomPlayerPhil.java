@@ -23,7 +23,11 @@ import com.vdom.core.Util;
 
 public class VDomPlayerPhil extends BasePlayer  {
 
-  Evaluator gameEvaluator;
+  Evaluator gameEvaluator = new Evaluator(this);
+
+  Game    clonedGameForSearch = null;
+  boolean clonedAlready = false;
+
 
   @Override
   public String getPlayerName() {
@@ -58,8 +62,23 @@ public class VDomPlayerPhil extends BasePlayer  {
     // Run Evaluator
     System.out.println(">>>>>> PHIL'S GAME EVALUATION: " + gameEvaluator.evaluate(context));
 
-    // Clone
-    Game clonedGameForSearch = context.game.cloneGame();
+    // Clone and Print Cloned Game's Evaulation
+    if (turnCount == 5 && !clonedAlready) {
+      clonedGameForSearch = context.game.cloneGame();
+      clonedAlready = true;
+    }
+    if (turnCount > 5) {
+      VDomPlayerPhil clonedSelf = null;
+      for (Player clonedPlayer : clonedGameForSearch.players) {
+        if (clonedPlayer.getPlayerName() == "Phil") {
+          clonedSelf = (VDomPlayerPhil) clonedPlayer;
+        }
+      }
+      Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
+      MoveContext clonedContext = new MoveContext(clonedGameForSearch, clonedSelf, true);
+      double clonedEvaluation   = clonedEvaluator.evaluate(clonedContext);
+      System.out.println(">>>>>> PHIL'S CLONED GAME EVAL = " + clonedEvaluation);
+    }
 
     // Get +Action Cards First
     for (int i = 0; i < hand.size(); i++) {
