@@ -24,7 +24,7 @@ public class Evaluator {
             }
         }
 
-        double avgTreasurePerCard = totalTreasure / (double) player.getDeckSize();
+        double avgTreasurePerCard = totalTreasure / (double) player.getAllCards().size();
         double avgTreasurePerHand = avgTreasurePerCard * 5.0;
         double deltaFromProvincing = avgTreasurePerHand - 1.6;
 
