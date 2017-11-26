@@ -293,7 +293,7 @@ public class Game {
   void start() {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
-    playerToWins.put("com.vdom.players.VDomPlayerPhil", 0.0);
+    playerToWins.put("com.vdom.players.VDomPlayerPhew", 0.0);
     playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
 
     // Variables for Overall Stats over all Games
@@ -459,7 +459,7 @@ public class Game {
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerPhil();
+        players[i] = new VDomPlayerPhew();
       }
       else {
         players[i] = new VDomPlayerAndrew();
