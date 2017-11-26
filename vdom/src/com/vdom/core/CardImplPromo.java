@@ -15,6 +15,14 @@ public class CardImplPromo extends CardImpl {
 	
 	protected CardImplPromo() { }
 
+    @Override
+    public CardImpl instantiate() {
+        checkInstantiateOK();
+        CardImplPromo c = new CardImplPromo();
+        copyValues(c);
+        return c;
+    }
+
 	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch(getKind()) {
@@ -174,7 +182,8 @@ public class CardImplPromo extends CardImpl {
             toDiscard = cards.get(0);
         }
 
-        currentPlayer.discard(toDiscard, this.getControlCard(), context);
+		if (cards.size() == 5)
+			currentPlayer.discard(toDiscard, this.getControlCard(), context);
 
         cards.remove(toDiscard);
 

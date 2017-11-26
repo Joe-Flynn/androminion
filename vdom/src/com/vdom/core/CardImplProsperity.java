@@ -16,6 +16,14 @@ public class CardImplProsperity extends CardImpl {
 	
 	protected CardImplProsperity() { }
 
+    @Override
+    public CardImpl instantiate() {
+        checkInstantiateOK();
+        CardImplProsperity c = new CardImplProsperity();
+        copyValues(c);
+        return c;
+    }
+
 	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch(getKind()) {

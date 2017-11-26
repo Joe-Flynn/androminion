@@ -9,13 +9,13 @@ import java.util.Map;
 import com.vdom.api.Card;
 
 public class CardPile  {
+
 	protected Card placeholderCard = null;
 	protected ArrayList<Card> cards;
 	protected ArrayList<Card> templateCards;
 
 	protected boolean allCardsVisible = true;
 	protected boolean isSupply = true;
-
 	protected boolean isBlackMarket = false;
 	protected boolean tradeRouteToken = false;
 
@@ -26,6 +26,7 @@ public class CardPile  {
 	}
 
 	public CardPile(Card placeholder, List<CardMultiplicity> cardList, boolean ordered, boolean allCardsVisible) {
+
 		this.cards = new ArrayList<Card>();
 		this.templateCards = new ArrayList<Card>();
 
@@ -83,11 +84,14 @@ public class CardPile  {
 		return cards.remove(0);
 	}
 
-	public boolean areAllCardsVisible() { return this.allCardsVisible; }
+	public boolean areAllCardsVisible() {
+		return this.allCardsVisible;
+	}
 
 	public boolean cardAllowedOnPile(Card card) {
-		if (card.isTemplateCard()) return false; //No template card allowed on the pile
-
+		if (card.isTemplateCard()) {
+			return false; //No template card allowed on the pile
+		}
 		for (Card template : this.templateCards) {
 			if (template.equals(card)) {
 				return true;
@@ -129,6 +133,22 @@ public class CardPile  {
 		}
 		return 0;
 	}
+
+  /*
+	** clone - Copies a Card Pile and clones the Cards within the pile
+	*/
+	public CardPile clone() {
+		CardPile clone = new CardPile(placeholderCard.getTemplateCard(), new ArrayList<CardMultiplicity>(), true, allCardsVisible);
+		clone.cards = new ArrayList<Card>();
+		for (Card card : cards) { clone.cards.add(card.clone()); }
+		clone.templateCards = new ArrayList<Card>();
+		for (Card card : templateCards) { clone.templateCards.add(card.clone()); }
+		clone.isSupply = isSupply;
+		clone.isBlackMarket = isBlackMarket;
+		clone.tradeRouteToken = tradeRouteToken;
+		return clone;
+	}
+
 
 	@Override
 	public String toString() {

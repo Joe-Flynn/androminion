@@ -19,6 +19,14 @@ public class CardImplAdventures extends CardImpl {
 	protected CardImplAdventures() { }
 
 	@Override
+    public CardImpl instantiate() {
+	    checkInstantiateOK();
+        CardImplAdventures c = new CardImplAdventures();
+        copyValues(c);
+        return c;
+	}
+
+	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch(getKind()) {
 		case Amulet:

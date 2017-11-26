@@ -14,11 +14,11 @@ public class VDomPlayerMary extends VDomPlayerSarah {
 
     public void setupGameVariables(GameType gameType, Card[] cardsInPlay) {
         super.setupGameVariables(gameType, cardsInPlay);
-        
+
         onlyBuyEarlySingle = false;
         earlyCardBuys = new Card[] { Cards.militia, Cards.seaHag, Cards.familiar, Cards.youngWitch, Cards.torturer, Cards.thief, Cards.minion, Cards.saboteur, Cards.pirateShip, Cards.ghostShip, Cards.rabble, Cards.goons, Cards.followers, Cards.fortuneTeller, Cards.jester };
         earlyCardBuyMax = 3;
-        
+
         ArrayList<Card> cards = new ArrayList<Card>();
 //        for(Card c : valuedCards) {
 //            cards.add(c);
@@ -27,15 +27,15 @@ public class VDomPlayerMary extends VDomPlayerSarah {
             cards.add(c);
         }
         valuedCards = cards.toArray(new Card[0]);
-        
+
         favorSilverGoldPlat = false;
     }
 
     @Override
     public String getPlayerName() {
-        return getPlayerName(Game.maskPlayerNames);
+        return getPlayerName(game.maskPlayerNames);
     }
-    
+
     @Override
     public String getPlayerName(boolean maskName) {
         return maskName ? "Player " + (playerNumber + 1) : "Mary";

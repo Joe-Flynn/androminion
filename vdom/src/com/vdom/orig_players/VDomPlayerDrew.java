@@ -10,7 +10,7 @@ public class VDomPlayerDrew extends VDomPlayerSarah {
     public boolean isAi() {
         return true;
     }
-    
+
     public void setupGameVariables(GameType gameType, Card[] cardsInPlay) {
         //trash in this order!
         trashCards = new Card[] { Cards.curse, Cards.rats, Cards.overgrownEstate, Cards.ruinedVillage, Cards.ruinedMarket, Cards.survivors, Cards.ruinedLibrary, Cards.abandonedMine, Cards.virtualRuins, Cards.hovel, Cards.estate, Cards.copper, Cards.masterpiece };
@@ -23,11 +23,11 @@ public class VDomPlayerDrew extends VDomPlayerSarah {
         buyEstates = true;
         favorSilverGoldPlat = true;
         onlyBuyEarlySingle = false;
-        
+
         earlyCardBuys = new Card[] { Cards.militia, Cards.seaHag, Cards.familiar, Cards.youngWitch, Cards.thief, Cards.pirateShip, Cards.rabble, Cards.goons,
                 Cards.fortuneTeller, Cards.jester };
         earlyCardBuyMax = 1;
-        
+
         silverMax = 4;
 
         if (gameType == GameType.Underlings || gameType == GameType.Repetition) {
@@ -277,9 +277,9 @@ public class VDomPlayerDrew extends VDomPlayerSarah {
 
     @Override
     public String getPlayerName() {
-        return getPlayerName(Game.maskPlayerNames);
+        return getPlayerName(game.maskPlayerNames);
     }
-    
+
     @Override
     public String getPlayerName(boolean maskName) {
         return maskName ? "Player " + (playerNumber + 1) : "Drew";

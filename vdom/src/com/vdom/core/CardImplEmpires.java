@@ -24,6 +24,14 @@ public class CardImplEmpires extends CardImpl {
 	protected CardImplEmpires() { }
 
 	@Override
+	public CardImpl instantiate() {
+		checkInstantiateOK();
+		CardImplEmpires c = new CardImplEmpires();
+		copyValues(c);
+		return c;
+	}
+
+	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch(getKind()) {
 		case Archive:

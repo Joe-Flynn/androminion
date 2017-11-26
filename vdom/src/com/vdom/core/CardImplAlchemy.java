@@ -14,6 +14,15 @@ public class CardImplAlchemy extends CardImpl {
 
 	protected CardImplAlchemy() { }
 
+
+    @Override
+    public CardImpl instantiate() {
+        checkInstantiateOK();
+        CardImplAlchemy c = new CardImplAlchemy();
+        copyValues(c);
+        return c;
+    }
+
 	@Override
 	protected void additionalCardActions(Game game, MoveContext context, Player currentPlayer) {
 		switch(getKind()) {
