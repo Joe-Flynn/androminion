@@ -3899,6 +3899,8 @@ public class Game {
 
     Game clone = new Game();
 
+    clone.initGameListener();
+
     clone.numGames   = numGames;
     clone.numPlayers = numPlayers;
 

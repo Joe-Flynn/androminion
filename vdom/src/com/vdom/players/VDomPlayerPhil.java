@@ -167,16 +167,17 @@ public class VDomPlayerPhil extends BasePlayer  {
     Card returnCard = null;
 
     // Buy Province or Gold, First
-    if (context.getCoinAvailableForBuy() == 0) {
-      returnCard = null;
-    } else if (context.canBuy(Cards.province)) {
-      returnCard = Cards.province;
-    } else if (context.canBuy(Cards.gold)) {
-      returnCard = Cards.gold;
-    } else {
+//    if (context.getCoinAvailableForBuy() == 0) {
+//      returnCard = null;
+//    } else if (context.canBuy(Cards.province)) {
+//      returnCard = Cards.province;
+//    } else if (context.canBuy(Cards.gold)) {
+//      returnCard = Cards.gold;
+//    } else {
 
       // Buy Card that Improves Player's Evaluation Most
-      double currentEvaluation = gameEvaluator.evaluate(context, this.getAllCards());
+      //double currentEvaluation = gameEvaluator.evaluate(context, this.getAllCards());
+      double currentEvaluation = -1000.0;
       String cardToBuy = "";
 
       for (String pileName : context.game.piles.keySet()) {
@@ -190,11 +191,12 @@ public class VDomPlayerPhil extends BasePlayer  {
           }
         }
         Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
-        MoveContext clonedContext = new MoveContext(clonedGame, clonedSelf, true);
+        MoveContext clonedContext = new MoveContext(context, clonedGame, clonedSelf);
 
         // Try the Buy
         Card supplyCard = clonedContext.game.piles.get(pileName).placeholderCard();
         Card buyCard = clonedGame.getPile(supplyCard).topCard();
+
         if (clonedGame.isValidBuy(clonedContext, buyCard)) {
           clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
           clonedGame.playBuy(clonedContext, buyCard);
@@ -214,7 +216,6 @@ public class VDomPlayerPhil extends BasePlayer  {
       } else {
         returnCard = null;
       }
-    }
 
     // Update Game Evaluator
     return returnCard;

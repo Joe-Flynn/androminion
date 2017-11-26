@@ -25,25 +25,28 @@ public class Evaluator {
             }
         }
 
-        double avgTreasurePerCard = totalTreasure / (double) cardPile.size();
-        double avgTreasurePerHand = avgTreasurePerCard * 5.0;
-        double deltaFromProvincing = avgTreasurePerHand - 1.6;
+//        double avgTreasurePerCard = totalTreasure / (double) cardPile.size();
+//        double avgTreasurePerHand = avgTreasurePerCard * 5.0;
+//        double deltaFromProvincing = avgTreasurePerHand - 1.6;
 
-        double provincesInSupply = 0;
-        for (Card card : context.getSupply()) {
-            if (card.equals(Cards.province)) {
-                provincesInSupply++;
-            }
-        }
+//        double provincesInSupply = 0;
+//        for (Card card : context.getSupply()) {
+//            if (card.equals(Cards.province)) {
+//                provincesInSupply++;
+//            }
+//        }
+
+        double deltaFromProvincing = totalTreasure / cardPile.size() - 1.6;
+        double provincesInSupply = context.game.piles.get("Province").getCount();
 
 		double treasureDeltaImpact = deltaFromProvincing * provincesInSupply;
 		//int idealTerminalCount = player.getDeckSize() / 7; do we need this?
-		double deltaFromIdealActionCount = (double) cardPile.size() / (totalActions - (1.0 /8.0));
+		double deltaFromIdealActionCount = (double) cardPile.size() / 8.0 - totalActions;
 
 		double actionDeltaImpact = Math.abs(deltaFromIdealActionCount * provincesInSupply);
 		double vpImpact = (double) player.getTotalVictoryPoints() * (8.0  - provincesInSupply);
 
-		return treasureDeltaImpact + actionDeltaImpact + (vpImpact / 6.0);
+		return treasureDeltaImpact - actionDeltaImpact + (vpImpact / 6.0);
     }
 
     public double evaluate(MoveContext context, ArrayList<Card> cardPile) {
@@ -58,25 +61,28 @@ public class Evaluator {
             }
         }
 
-        double avgTreasurePerCard = totalTreasure / (double) cardPile.size();
-        double avgTreasurePerHand = avgTreasurePerCard * 5.0;
-        double deltaFromProvincing = avgTreasurePerHand - 1.6;
+//        double avgTreasurePerCard = totalTreasure / (double) cardPile.size();
+//        double avgTreasurePerHand = avgTreasurePerCard * 5.0;
+//        double deltaFromProvincing = avgTreasurePerHand - 1.6;
 
-        double provincesInSupply = 0;
-        for (Card card : context.getSupply()) {
-            if (card.equals(Cards.province)) {
-                provincesInSupply++;
-            }
-        }
+//        double provincesInSupply = 0;
+//        for (Card card : context.getSupply()) {
+//            if (card.equals(Cards.province)) {
+//                provincesInSupply++;
+//            }
+//        }
+
+        double deltaFromProvincing = totalTreasure / cardPile.size() - 1.6;
+        double provincesInSupply = context.game.piles.get("Province").getCount();
 
         double treasureDeltaImpact = deltaFromProvincing * provincesInSupply;
         //int idealTerminalCount = player.getDeckSize() / 7; do we need this?
-        double deltaFromIdealActionCount = (double) cardPile.size() / (totalActions - (1.0 /8.0));
+        double deltaFromIdealActionCount = (double) cardPile.size() / 8.0 - totalActions;
 
         double actionDeltaImpact = Math.abs(deltaFromIdealActionCount * provincesInSupply);
         double vpImpact = (double) player.getTotalVictoryPoints() * (8.0  - provincesInSupply);
 
-        return treasureDeltaImpact + actionDeltaImpact + (vpImpact / 6.0);
+        return treasureDeltaImpact - actionDeltaImpact + (vpImpact / 6.0);
     }
 
 }
