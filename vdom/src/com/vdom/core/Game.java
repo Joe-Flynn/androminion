@@ -3899,12 +3899,13 @@ public class Game {
 
     Game clone = new Game();
 
-    clone.initGameListener();
-
     clone.numGames   = numGames;
     clone.numPlayers = numPlayers;
 
-    // Clone Game's Players
+    // Initialize GameListener
+    clone.initGameListener();
+
+    // Clone Game's Players and Listeners
     clone.players = new BasePlayer[numPlayers];
     clone.listeners = new ArrayList<GameEventListener>();
     for (int i = 0; i < numPlayers; i++) {

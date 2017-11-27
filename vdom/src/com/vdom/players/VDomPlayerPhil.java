@@ -197,7 +197,7 @@ public class VDomPlayerPhil extends BasePlayer  {
         Card supplyCard = clonedContext.game.piles.get(pileName).placeholderCard();
         Card buyCard = clonedGame.getPile(supplyCard).topCard();
 
-        if (clonedGame.isValidBuy(clonedContext, buyCard)) {
+        if (buyCard != null && clonedGame.isValidBuy(clonedContext, buyCard)) {
           clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
           clonedGame.playBuy(clonedContext, buyCard);
           clonedGame.playerPayOffDebt(clonedSelf, clonedContext);
