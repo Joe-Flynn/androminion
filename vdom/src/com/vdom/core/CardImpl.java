@@ -364,7 +364,6 @@ public class CardImpl implements Card, Comparable<Card>{
 	}
 
 
-
 	protected CardImpl() {
 	}
 
@@ -453,7 +452,13 @@ public class CardImpl implements Card, Comparable<Card>{
 	*/
 	public CardImpl clone() {
 
-		CardImpl clone = isTemplateCard() ? instantiate() : templateCard.instantiate();
+		CardImpl clone;
+		if (isTemplateCard()) {
+			clone = instantiate();
+		} else {
+			clone = templateCard.instantiate();
+			clone.templateCard = clone;
+		}
 
 		clone.isPlaceholderCard = isPlaceholderCard;
 		clone.pileCreator = null; // OK?
