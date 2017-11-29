@@ -451,10 +451,96 @@ public class MoveContext {
     return cards.toArray(new Card[0]);
   }
 
+
+  /*
+  ** cloneContext - Returns a clone of a MoveContext, including a full clone of
+  ** the Game, Player, and all parameters within the MoveContext as well.
+  */
+  public MoveContext cloneContext() {
+
+    // Clone the Game
+    Game clonedGame = game.cloneGame();
+
+    // Find Cloned Player
+    Player clonedPlayer = null;
+    for (Player clonedGamePlayer : clonedGame.players) {
+      if (clonedGamePlayer.getPlayerName() == player.getPlayerName()) {
+        clonedPlayer = clonedGamePlayer;
+      }
+    }
+
+    // Find Cloned "Attacked Player"
+    Player clonedAttackedPlayer = null;
+    for (Player clonedGamePlayer : clonedGame.players) {
+      if (clonedGamePlayer.getPlayerName() == attackedPlayer.getPlayerName()) {
+        clonedAttackedPlayer = attackedPlayer;
+      }
+    }
+
+    // Create Cloned MoveContext
+    MoveContext clone = new MoveContext(clonedGame, clonedPlayer, canBuyCards);
+
+    // Copy Over Cloned MoveContext Info
+    clone.message = message;
+    clone.attackedPlayer = clonedAttackedPlayer;
+    clone.actions = actions;
+    clone.buys = buys;
+    clone.coins = coins;
+    clone.potions = potions;
+    clone.actionsPlayedSoFar = actionsPlayedSoFar;
+    clone.merchantsPlayed = merchantsPlayed;
+    clone.silversPlayed = silversPlayed;
+    clone.coppersmithsPlayed = coppersmithsPlayed;
+    clone.schemesPlayed = schemesPlayed;
+    clone.overpayAmount = overpayAmount;
+    clone.overpayPotions = overpayPotions;
+    clone.foolsGoldPlayed = foolsGoldPlayed;
+    clone.golemInEffect = golemInEffect;
+    clone.freeActionInEffect = freeActionInEffect;
+    clone.cardCostModifier = cardCostModifier;
+    clone.victoryCardsBoughtThisTurn = victoryCardsBoughtThisTurn;
+    clone.totalCardsBoughtThisTurn = totalCardsBoughtThisTurn;
+    clone.totalEventsBoughtThisTurn = totalEventsBoughtThisTurn;
+    clone.totalExpeditionBoughtThisTurn = totalExpeditionBoughtThisTurn;
+    clone.canBuyCards = canBuyCards;
+    clone.startOfTurn = startOfTurn;
+    clone.phase = phase;
+    clone.blackMarketBuyPhase = blackMarketBuyPhase;
+    clone.returnToActionPhase = returnToActionPhase;
+    clone.beggarSilverIsOnTop = beggarSilverIsOnTop;
+    clone.graverobberGainedCardOnTop = graverobberGainedCardOnTop;
+    clone.travellingFairBought = travellingFairBought;
+    clone.missionBought = missionBought;
+    clone.enchantressAlreadyAffected = enchantressAlreadyAffected;
+    clone.hasDoubledCoins = hasDoubledCoins;
+    clone.donatesBought = donatesBought;
+    clone.charmsNextBuy = charmsNextBuy;
+    clone.hermitTrashCardPile = hermitTrashCardPile;
+    clone.vpsGainedThisTurn = vpsGainedThisTurn;
+    clone.cardsTrashedThisTurn = cardsTrashedThisTurn;
+
+    // Clone Cards in CantBuy ArrayList
+    clone.cantBuy = new ArrayList<Card>();
+    for (Card card : cantBuy) {
+      clone.cantBuy.add(card.clone());
+    }
+
+    // Return Clone
+    return clone;
+
+  }
+
+
+  /*
+  ** debug - Print out Debug Messages
+  */
   public void debug(String msg) {
     debug(msg, true);
   }
 
+  /*
+  ** debug - Print out Debug Messages
+  */
   private void debug(String msg, boolean prefixWithPlayerName) {
     if (!prefixWithPlayerName || player == null) {
       Util.debug(msg);

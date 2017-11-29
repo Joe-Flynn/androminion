@@ -13,6 +13,19 @@ public class Evaluator {
         this.player = player;
     }
 
+    /*
+    ** evaluateActionPhase - Evaluates Action Phase "Turn Economy"
+    */
+    public double evaluateActionPhase(MoveContext context) {
+      return 100.0; // Implement this!
+    }
+
+
+    /*
+    ** evaluate - Probably want to rename this?  Since we need an evaluate
+    ** function for action phase and a separate one for buy phase.  Also,
+    ** what is the cardPile input needed for?
+    */
     public double evaluate(MoveContext context, CardList cardPile) {
         double totalTreasure = 0;
         double totalActions = 0;

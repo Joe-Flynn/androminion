@@ -1,24 +1,15 @@
 package com.vdom.players;
 
-// ??? - KEEP WHAT YOU NEED
-
-//import java.util.ArrayList;
-//import java.util.Random;
-
 import com.vdom.api.Card;
 import com.vdom.api.GameEvent;
-//import com.vdom.api.GameType;
 
 import com.vdom.core.BasePlayer;
 import com.vdom.core.CardPile;
 import com.vdom.core.Cards;
 import com.vdom.core.Game;
-//import com.vdom.core.Expansion;
-//import com.vdom.core.GetCardsInGameOptions;
 import com.vdom.core.MoveContext;
 import com.vdom.core.Player;
 import com.vdom.core.Type;
-//import com.vdom.core.Util;
 
 
 public class VDomPlayerPhil extends BasePlayer  {
@@ -46,7 +37,6 @@ public class VDomPlayerPhil extends BasePlayer  {
     gameEvaluator = new Evaluator(this);
   }
 
-
   @Override
   public Card doAction(MoveContext context) {
     return doActionHeuristic(context);
@@ -56,6 +46,8 @@ public class VDomPlayerPhil extends BasePlayer  {
   public Card doBuy(MoveContext context) {
     return doBuyEvalSearch(context);
   }
+
+
 
   /*
   ** doActionEvalSearch - Evaluate Best Action to Play Using a Cloned Game
@@ -267,10 +259,5 @@ public class VDomPlayerPhil extends BasePlayer  {
 
   }
 
-
-
-
-  // We man want to modify which cards get considered to be "garbage", differently from the Base Player
-  // public Card[] getTrashCards() { return null; }
 
 }
