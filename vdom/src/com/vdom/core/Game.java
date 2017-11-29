@@ -2,19 +2,8 @@ package com.vdom.core;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Queue;
-import java.util.Random;
-import java.util.Set;
 
 import com.vdom.api.Card;
 import com.vdom.api.CardCostComparator;
@@ -257,6 +246,25 @@ public class Game {
 
   }
 
+  public void generateInitialDecks() {
+  	ArrayList<Card> cards = new ArrayList<>();
+    for (CardPile cardPile : piles.values()) {
+    	if (cardPile.topCard().is(Type.Action) && !cardPile.topCard().is(Type.Ruins) && !cardPile.topCard().is(Type.Treasure) && !cardPile.topCard().is(Type.Victory)) {
+			cards.add(cardPile.topCard());
+		}
+    }
+
+    try {
+		DeckGenerator dg = new DeckGenerator(cards, 100, 80, 20);
+		ArrayList s =  dg.generateInitialDecks();
+	}
+	catch (Exception e) {
+		System.out.println("INVALID DECK GENERATOR");
+		System.exit(1);
+	}
+
+
+  }
 
   // NOTE: The remainder of this file is organized into 5 Secions, as such:
   //   - SECTION 1: MAIN FUNCTION (entry point to game engine)
@@ -291,7 +299,6 @@ public class Game {
   ** start - Starts the Dominion game simulator
   */
   void start() {
-
     HashMap<String, Double> playerToWins = new HashMap<>();
     playerToWins.put("com.vdom.players.VDomPlayerPhil", 0.0);
     playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
@@ -309,7 +316,7 @@ public class Game {
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
-
+      generateInitialDecks();
       // Set up Player's Turn Information
       playersTurn = 0;
       gameTurnCount = 1;
