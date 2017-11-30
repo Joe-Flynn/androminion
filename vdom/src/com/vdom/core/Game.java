@@ -246,7 +246,7 @@ public class Game {
 
   }
 
-  public void generateInitialDecks() {
+  public void planBestDeck(Game game) {
   	ArrayList<Card> cards = new ArrayList<>();
     for (CardPile cardPile : piles.values()) {
     	if (cardPile.topCard().is(Type.Action) && !cardPile.topCard().is(Type.Ruins) && !cardPile.topCard().is(Type.Treasure) && !cardPile.topCard().is(Type.Victory)) {
@@ -256,7 +256,6 @@ public class Game {
 
     try {
 		DeckGenerator dg = new DeckGenerator(cards, 100, 80);
-		ArrayList s =  dg.generateInitialDecks();
 	}
 	catch (Exception e) {
 		System.out.println("INVALID DECK GENERATOR");
@@ -316,7 +315,7 @@ public class Game {
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
-      generateInitialDecks();
+
       // Set up Player's Turn Information
       playersTurn = 0;
       gameTurnCount = 1;
@@ -423,6 +422,140 @@ public class Game {
 
   }
 
+  public double startPlanningGame(int numTurns, ArrayList<Card> deck) {
+
+    HashMap<String, Double> playerToWins = new HashMap<>();
+//    playerToWins.put("com.vdom.players.VDomPlayerPhil", 0.0);
+//    playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
+
+    // Variables for Overall Stats over all Games
+    long turnCountTotal = 0;
+    long vpTotal        = 0;
+    long numCardsTotal  = 0;
+
+    // Play <numGames> Game
+
+    Util.debug("---------------------", false);
+    Util.debug("New Planning Game: " + gameType);
+
+    // Initialize the Game (incl. GameEventListeners, Players, and Cards)
+    initGameBoardPlanning();
+    ((VDomPlayerJoe) players[0]).setDeck(deck);
+
+    // Set up Player's Turn Information
+    playersTurn = 0;
+    gameTurnCount = 1;
+    Util.debug("Turn " + gameTurnCount + " --------------------");
+    Queue<ExtraTurnInfo> extraTurnsInfo = new LinkedList<ExtraTurnInfo>();
+
+    // Play Turns until Game Ends
+    boolean gameOver = false;
+    int turnsPlayed = 0;
+    while (!gameOver && turnsPlayed < numTurns) {
+
+      // Create text for New Turn
+      Player player = players[playersTurn];
+      boolean canBuyCards = extraTurnsInfo.isEmpty() ? true : extraTurnsInfo.remove().canBuyCards;
+      MoveContext context = new MoveContext(this, player, canBuyCards);
+
+      // Begin Phase of Turn
+      context.phase = TurnPhase.Action;
+      context.startOfTurn = true;
+      playerBeginTurn(player, context);
+      context.startOfTurn = false;
+
+      do {
+
+        // Action Phase of Turn
+        context.phase = TurnPhase.Action;
+        context.returnToActionPhase = false;
+        playerAction(player, context);
+
+        // Buy Phase of Turn
+        context.phase = TurnPhase.Buy;
+        playerBeginBuy(player, context);
+        playTreasures(player, context, -1, null);
+        playGuildsTokens(player, context);
+        playerBuy(player, context);
+
+      } while (context.returnToActionPhase);
+
+      // Broadcast No-Buy Event
+      if (context.totalCardsBoughtThisTurn + context.totalEventsBoughtThisTurn == 0) {
+        GameEvent event = new GameEvent(GameEvent.EventType.NoBuy, context);
+        broadcastEvent(event);
+        Util.debug(player.getPlayerName() + " did not buy a card with coins:" + context.getCoinAvailableForBuy());
+      }
+
+      // Discard and Draw New Hand
+      context.phase = TurnPhase.CleanUp;
+      player.cleanup(context);
+
+      // Clean up other players cards in play without future duration effects, e.g. Duplicate
+      for (Player otherPlayer : getPlayersInTurnOrder()) {
+        if (otherPlayer != player) {
+          otherPlayer.cleanupOutOfTurn(new MoveContext(this, otherPlayer));
+        }
+      }
+
+      //TODO EVAL CALCULATION IF PLAYER IS JOE
+
+      // Update Turn Information
+      extraTurnsInfo.addAll(playerEndTurn(player, context));
+      gameOver = checkGameOver();
+
+      // Check if Game has ended
+      if (!gameOver) {
+        playerAfterTurn(player, context);
+        if (player.isControlled()) {
+          player.stopBeingControlled();
+        }
+        setPlayersTurn(!extraTurnsInfo.isEmpty());
+      }
+
+
+
+      turnsPlayed++;
+    }
+    return 0.0;
+
+//    // Update Overall Stats over all Games
+//    turnCountTotal += gameTurnCount;
+//    int vps[] = gameOver(playerToWins);
+//    for (int i = 0; i < vps.length; i++) {
+//      vpTotal += vps[i];
+//      numCardsTotal += players[i].getAllCards().size();
+//    }
+
+
+
+//    // Mark Game Winner and Print Results
+//    Util.log("");
+//    Util.log("THE RESULTS: -------------------");
+//    printStats(playerToWins, numGames, gameType.toString());
+//    Util.log("--------------------------------");
+//
+//    // Complete Overall Stats over all Games
+//    ArrayList<Card> gameCards = new ArrayList<Card>();
+//    for (CardPile pile : piles.values()) {
+//      Card card = pile.placeholderCard();
+//      if (!card.equals(Cards.copper) && !card.equals(Cards.silver) && !card.equals(Cards.gold) && !card.equals(Cards.platinum) &&
+//              !card.equals(Cards.estate) && !card.equals(Cards.duchy) && !card.equals(Cards.province) && !card.equals(Cards.colony) &&
+//              !card.equals(Cards.curse)) {
+//        gameCards.add(card);
+//      }
+//    }
+//    GameStats stats = new GameStats();
+//    stats.gameType         = gameType;
+//    stats.cards            = gameCards.toArray(new Card[0]);
+//    stats.aveTurns         = (int) (turnCountTotal / numGames);
+//    stats.aveNumCards      = (int) (numCardsTotal / (numGames * numPlayers));
+//    stats.aveVictoryPoints = (int) (vpTotal / (numGames * numPlayers));
+//
+//    gameTypeStats.add(stats);
+
+  }
+
 
   /***************************************
   ** SECTION 2: GAME SETUP & INITIALIZATION FUNCTIONS
@@ -439,6 +572,16 @@ public class Game {
     initGameListener();
     initCards();
     initPlayers(numPlayers);
+    initPlayerCards();
+  }
+
+  void initGameBoardPlanning() {
+    baneCard = null;
+    firstProvinceWasGained = false;
+    doMountainPassAfterThisTurn = false;
+    initGameListener();
+    initCards();
+    initPlayersPlanning(numPlayers);
     initPlayerCards();
   }
 
@@ -470,6 +613,76 @@ public class Game {
       }
       else {
         players[i] = new VDomPlayerAndrew();
+      }
+
+      players[i].game = this;
+      players[i].playerNumber = i;
+
+      // Interactive player needs this called once for each player on startup so internal counts work properly.
+      players[i].getPlayerName();
+
+      MoveContext context = new MoveContext(this, players[i]);
+      players[i].newGame(context);
+      players[i].initCards();
+
+      context = new MoveContext(this, players[i]);
+      String s = cardListText + "\n---------------\n\n";
+
+      if (platColonyPassedIn || chanceForPlatColony > 0.9999) {
+        s += "Platinum/Colony included...\n";
+      } else if (platColonyNotPassedIn || Math.round(chanceForPlatColony * 100) == 0) {
+        s += "Platinum/Colony not included...\n";
+      } else {
+        s += "Chance for Platinum/Colony\n   " + (Math.round(chanceForPlatColony * 100)) + "% ... " + (isPlatInGame() ? "included\n" : "not included\n");
+      }
+
+      if (baneCard != null) {
+        s += "Bane card: " + baneCard.getName() + "\n";
+      }
+
+      // When Baker is included in the game, each Player starts with 1 coin token
+      if (bakerInPlay) {
+        players[i].gainGuildsCoinTokens(1);
+      }
+
+      /* The journey token is face up at the start of a game.
+      ** It can be turned over by Ranger, Giant and Pilgrimage. */
+      if (journeyTokenInPlay) {
+        players[i].flipJourneyToken(null);
+      }
+
+      if (sheltersPassedIn || chanceForShelters > 0.9999) {
+        s += "Shelters included...\n";
+      } else if (sheltersNotPassedIn || Math.round(chanceForShelters * 100) == 0) {
+        s += "Shelters not included...\n";
+      } else {
+        s += "Chance for Shelters\n   " + (Math.round(chanceForShelters * 100)) + "% ... " + (sheltersInPlay ? "included\n" : "not included\n");
+      }
+
+      s += unfoundCardText;
+      context.message = s;
+      broadcastEvent(new GameEvent(GameEvent.EventType.GameStarting, context));
+
+    }
+  }
+
+  public void initPlayersPlanning(int numPlayers) {
+
+    players = new Player[numPlayers];
+    playersTurn = 0;
+
+    cardsObtainedLastTurn = new ArrayList[numPlayers];
+    for (int i = 0; i < numPlayers; i++) {
+      cardsObtainedLastTurn[i] = new ArrayList<Card>();
+    }
+
+    for (int i = 0; i < numPlayers; i++) {
+
+      if (i == 0) {
+        players[i] = new VDomPlayerJoe();
+      }
+      else {
+        players[i] = new VDomPlayerDummy();
       }
 
       players[i].game = this;
@@ -2458,6 +2671,7 @@ public class Game {
           }
         }
       }
+
 
       while (context.actions > 0 && actionCards != null && !actionCards.isEmpty()) {
 

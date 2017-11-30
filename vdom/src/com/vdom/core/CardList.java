@@ -131,6 +131,15 @@ public class CardList implements Iterable<Card> {
       }
     }
   }
+
+  public void addAll(ArrayList<Card> cardList) {
+    for (Card card : cardList) {
+      if (checkValid(card)) {
+        a.add(card);
+      }
+    }
+  }
+
   public int size() {
     return a.size();
   }

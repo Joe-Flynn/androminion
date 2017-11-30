@@ -3,6 +3,7 @@ package com.vdom.players;
 import com.vdom.api.Card;
 import com.vdom.core.CardList;
 import com.vdom.core.Cards;
+import com.vdom.core.Game;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class DeckGenerator {
 	private int percentAction;
 	private int percentTreasureVictory;
 	private ArrayList<Card> kingdomCards;
+	private class DeckException extends Exception {}
 
 	public DeckGenerator(ArrayList<Card> kingdomCards, int deckSize, int percentAction) throws DeckException {
 		if (percentAction >= 100)
@@ -25,11 +27,20 @@ public class DeckGenerator {
 		this.percentAction = percentAction;
 	}
 
-	private class DeckException extends Exception {}
+	public ArrayList<Cards> findBestDeck(Game game) {
+		ArrayList<ArrayList<Card>> decks = generateInitialDecks();
+		ArrayList<Double> percentWins = new ArrayList<>();
 
-	// This could potentially excede the decksize if the percentOther (non-action) is less than 10, but we shouldn't
+
+
+
+		return null;
+	}
+
+
+	// This could potentially exceed the deck size if the percentOther (non-action) is less than 10, but we shouldn't
 	// run into issues with the size deck we are using
-	public ArrayList<ArrayList<Card>> generateInitialDecks() {
+	private ArrayList<ArrayList<Card>> generateInitialDecks() {
 		ArrayList<Card[]> combos = getCombinations(2, kingdomCards);
 
 		// for actions percentages that split deck into fractional amounts of cards, give action cards the extra card
@@ -77,7 +88,7 @@ public class DeckGenerator {
 			}
 			decks.add(deck);
 		}
-		
+
 		return decks;
 	}
 
@@ -112,5 +123,6 @@ public class DeckGenerator {
 			result[i] = input.get(subset[i]);
 		return result;
 	}
+
 
 }
