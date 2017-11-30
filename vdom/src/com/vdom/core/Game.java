@@ -255,7 +255,7 @@ public class Game {
     }
 
     try {
-		DeckGenerator dg = new DeckGenerator(cards, 100, 80, 20);
+		DeckGenerator dg = new DeckGenerator(cards, 100, 80);
 		ArrayList s =  dg.generateInitialDecks();
 	}
 	catch (Exception e) {
