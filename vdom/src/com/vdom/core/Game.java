@@ -246,7 +246,7 @@ public class Game {
 
   }
 
-  public void planBestDeck(Game game) {
+  public DeckGenerator initDeckGenerator(Game game) {
   	ArrayList<Card> cards = new ArrayList<>();
     for (CardPile cardPile : piles.values()) {
     	if (cardPile.topCard().is(Type.Action) && !cardPile.topCard().is(Type.Ruins) && !cardPile.topCard().is(Type.Treasure) && !cardPile.topCard().is(Type.Victory)) {
@@ -256,13 +256,13 @@ public class Game {
 
     try {
 		DeckGenerator dg = new DeckGenerator(cards, 100, 80);
+		return dg;
 	}
 	catch (Exception e) {
 		System.out.println("INVALID DECK GENERATOR");
 		System.exit(1);
 	}
-
-
+	return null;
   }
 
   // NOTE: The remainder of this file is organized into 5 Secions, as such:
@@ -315,6 +315,7 @@ public class Game {
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
+      DeckGenerator dg = initDeckGenerator(this);
 
       // Set up Player's Turn Information
       playersTurn = 0;
@@ -422,7 +423,9 @@ public class Game {
 
   }
 
-  public double startPlanningGame(int numTurns, ArrayList<Card> deck) {
+
+
+  public double playPlanningGame(int numTurns, ArrayList<Card> deck) {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
 //    playerToWins.put("com.vdom.players.VDomPlayerPhil", 0.0);
@@ -499,6 +502,8 @@ public class Game {
       }
 
       //TODO EVAL CALCULATION IF PLAYER IS JOE
+
+
 
       // Update Turn Information
       extraTurnsInfo.addAll(playerEndTurn(player, context));

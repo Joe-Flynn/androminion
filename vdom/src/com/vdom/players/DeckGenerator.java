@@ -31,8 +31,14 @@ public class DeckGenerator {
 		ArrayList<ArrayList<Card>> decks = generateInitialDecks();
 		ArrayList<Double> percentWins = new ArrayList<>();
 
+		for (ArrayList<Card> deck : decks) {
+			Game clone = game.cloneGame();
+			percentWins.add(game.playPlanningGame(10, deck));
+		}
 
+		// TODO Find best X% , mutate and play more planning games
 
+		// TODO Choose highest score and return that deck
 
 		return null;
 	}
