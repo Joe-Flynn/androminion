@@ -1,6 +1,8 @@
 package com.vdom.players;
 
 import com.vdom.api.Card;
+import com.vdom.api.GameEvent;
+
 import com.vdom.core.*;
 
 import java.util.ArrayList;
@@ -125,24 +127,15 @@ public class SearchTree {
     ** TreeNode (i.e. an ArrayList of all the children, grandchildren, etc.)
     */
     public ArrayList<TreeNode> getLeaves() {
-
       ArrayList<TreeNode> leafNodes = new ArrayList<TreeNode>();
-      ArrayList<TreeNode> nonLeafNodes = new ArrayList<TreeNode>();
-
-      for (TreeNode child : this.children) {
-        if (child.isLeaf()) {
-          leafNodes.add(child);
-        } else {
-          nonLeafNodes.add(child);
+      if (this.isLeaf()) {
+        leafNodes.add(this);
+      } else {
+        for (TreeNode child : this.children) {
+          leafNodes.addAll(child.getLeaves());
         }
       }
-
-      for (TreeNode nonLeafNode : nonLeafNodes) {
-        leafNodes.addAll(nonLeafNode.getLeaves());
-      }
-
       return leafNodes;
-
     }
 
 
@@ -157,13 +150,13 @@ public class SearchTree {
       boolean nodeExpanded = false;
 
       Player player = context.player;
-      for (int i = 0; i < player.hand.size(); i++) {
-        Card playerCard = hand.get(i);
+      for (int i = 0; i < player.getHand().size(); i++) {
+        Card playerCard = player.getHand().get(i);
         if (playerCard.is(Type.Action)) {
 
           // Select Player Decisions
           ArrayList<PlayerDecision> decisions = new ArrayList<PlayerDecision>();
-          decisions.add(NoDecision); // TODO: IMPLEMENT OTHER DECISIONS!!!!!!!!!!!!!!!!!!!!!!!
+          decisions.add(PlayerDecision.NoDecision); // TODO: IMPLEMENT OTHER DECISIONS!!!!!!!!!!!!!!!!!!!!!!!
 
           for (PlayerDecision decision : decisions) {
 
@@ -175,9 +168,9 @@ public class SearchTree {
             child.decision = decision;
 
             // Play The Action in the Cloned Game State
-            if (child.gameState.isValidAction(clonedContext, clonedSelf.hand.get(i))) {
-              child.gameState.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
-              clonedSelf.hand.get(i).play(child.gameState, clonedContext, true);
+            if (child.context.game.isValidAction(child.context, child.context.player.getHand().get(i))) {
+              child.context.game.broadcastEvent(new GameEvent(GameEvent.EventType.Status, child.context));
+              child.context.player.getHand().get(i).play(child.context.game, child.context, true);
             }
 
             // Add New State to the Tree
@@ -198,7 +191,7 @@ public class SearchTree {
     public double getMaxEval() {
       double maxEval = getPlayerEvaluation();
       for (TreeNode child : children) {
-        maxEval = Math.max(maxEval, getMaxEval(child));
+        maxEval = Math.max(maxEval, child.getMaxEval());
       }
       return maxEval;
     }
@@ -239,9 +232,9 @@ public class SearchTree {
     boolean doneExpanding = false;
     while (!doneExpanding) {
       doneExpanding = true;
-      ArrayList<TreeNode> leafNodes = getLeaves(this.root);
+      ArrayList<TreeNode> leafNodes = this.root.getLeaves();
       for (TreeNode node : leafNodes) {
-        if (expandNode(node)) { doneExpanding = false; }
+        if (node.expandNode()) { doneExpanding = false; }
       }
     }
   }

@@ -14,10 +14,30 @@ public class Evaluator {
     }
 
     /*
-    ** evaluateActionPhase - Evaluates Action Phase "Turn Economy"
+    ** evaluateActionPhase - Evaluates Action Phase "Turn Economy", which is based
+    ** on the buyability / gainability of the MoveContext after playing several actions.
     */
     public double evaluateActionPhase(MoveContext context) {
-      return 100.0; // Implement this!
+
+      int usableCoin      = Math.min(context.getCoins(), context.getBuysLeft() * 8);
+      int usablePotion    = context.getPotions();
+      int threeCostGains  = Math.min(context.getCoins() / 3, context.getBuysLeft());
+      int fiveCostGains   = Math.min(context.getCoins() / 5, context.getBuysLeft());
+
+      int coinTokenFactor = context.player.getGuildsCoinTokenCount();
+      int debtTokenFactor = context.player.getDebtTokenCount();
+      int victTokenFactor = context.player.getVictoryTokens();
+
+      // "Turn Economy" is a tunable weighted sum
+      double turnEconomy  = usableCoin + (0.25 * usablePotion) +
+                            threeCostGains + (1.25 * fiveCostGains) +
+                            (1.5 * coinTokenFactor) - (0.25 * debtTokenFactor) +
+                            (0.5 * victTokenFactor);
+
+      // Scale by Inverse of Opponent's Hand Size
+      int enemyHandSize   = context.getOpponent().getHand().size();
+
+      return turnEconomy * (15 - enemyHandSize);
     }
 
 

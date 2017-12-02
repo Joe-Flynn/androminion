@@ -99,6 +99,15 @@ public class MoveContext {
     return player;
   }
 
+  public Player getOpponent() {
+    for (Player opponent : game.players) {
+      if (opponent.getPlayerName() != player.getPlayerName()) {
+        return opponent;
+      }
+    }
+    return null;
+  }
+
   public int getPotions() {
     return potions;
   }
@@ -464,6 +473,7 @@ public class MoveContext {
     // Find Cloned Player
     Player clonedPlayer = null;
     for (Player clonedGamePlayer : clonedGame.players) {
+
       if (clonedGamePlayer.getPlayerName() == player.getPlayerName()) {
         clonedPlayer = clonedGamePlayer;
       }
@@ -471,9 +481,11 @@ public class MoveContext {
 
     // Find Cloned "Attacked Player"
     Player clonedAttackedPlayer = null;
-    for (Player clonedGamePlayer : clonedGame.players) {
-      if (clonedGamePlayer.getPlayerName() == attackedPlayer.getPlayerName()) {
-        clonedAttackedPlayer = attackedPlayer;
+    if (attackedPlayer != null) {
+      for (Player clonedGamePlayer : clonedGame.players) {
+        if (clonedGamePlayer.getPlayerName() == attackedPlayer.getPlayerName()) {
+          clonedAttackedPlayer = attackedPlayer;
+        }
       }
     }
 

@@ -56,9 +56,13 @@ public class VDomPlayerJarvis extends BasePlayer  {
     // Get Node Along Best Action Phase Evaluation's Path
     SearchTree.TreeNode actionNode = actionPath.get(actionPhasePlayCount);
     Card actionCard = actionNode.getActionCard();
-    SearchTree.PlayerDecision decision = actionNode.getPlayerDecision();
+    if (actionCard == null) {
+      return null;
+    }
 
+    SearchTree.PlayerDecision decision = actionNode.getPlayerDecision();
     // TODO: IMPLEMENT DECISIONS BASED ON THIS!!
+
     // NOTE: I PLAN TO DO THIS BY OVERRIDING THE PLAYEROPTIONS-RELATED
     // FUNCTIONS FROM BASEPLAYER HERE IN JARVIS TO CHECK PLAYER DECISIONS
     // FIRST, AND THEN IF NOT SET, JUST .SUPER() IT.
@@ -86,7 +90,7 @@ public class VDomPlayerJarvis extends BasePlayer  {
   @Override
   public Card doBuy(MoveContext context) {
     actionPhasePlayCount = 0;
-    return doBuyEvalSearch(context);
+    return doBuyHeuristic(context);
   }
 
   /*
@@ -105,10 +109,10 @@ public class VDomPlayerJarvis extends BasePlayer  {
 
       // Clone Game and Players
       Game clonedGame = context.game.cloneGame();
-      VDomPlayerPhil clonedSelf = null;
+      VDomPlayerJarvis clonedSelf = null;
       for (Player clonedPlayer : clonedGame.players) {
-        if (clonedPlayer.getPlayerName() == "Phil") {
-          clonedSelf = (VDomPlayerPhil) clonedPlayer;
+        if (clonedPlayer.getPlayerName() == "Jarvis") {
+          clonedSelf = (VDomPlayerJarvis) clonedPlayer;
         }
       }
       Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
@@ -143,5 +147,49 @@ public class VDomPlayerJarvis extends BasePlayer  {
 
   }
 
+
+  /*
+  ** doBuyHeuristic - Simple Big Money Strategy, with the option to buy cards if
+  ** the price is right.  This can be modified to use the Game State Evaluator.
+  */
+  public Card doBuyHeuristic(MoveContext context) {
+
+    Card returnCard = null;
+
+    // Buy Province or Gold, First
+    if (context.getCoinAvailableForBuy() == 0) {
+      returnCard = null;
+    } else if (context.canBuy(Cards.province)) {
+      returnCard = Cards.province;
+    } else if (context.canBuy(Cards.gold)) {
+      returnCard = Cards.gold;
+    } else {
+
+      // Get Highest Value Card Player can Buy
+      int  highestValue = 0;
+      Card highestValueCard = null;
+      for (String p : context.game.placeholderPiles.keySet()) {
+        CardPile pile = context.game.placeholderPiles.get(p);
+        Card supplyCard = pile.placeholderCard();
+        if (pile.topCard() != null) {
+          if (context.canBuy(supplyCard) && supplyCard.getCost(context) > highestValue) {
+            highestValue = supplyCard.getCost(context);
+            highestValueCard = supplyCard;
+          }
+        }
+      }
+      if (highestValueCard != null) {
+        returnCard = highestValueCard;
+      } else if (context.canBuy(Cards.silver)) {
+        returnCard = Cards.silver;
+      } else {
+        returnCard = null;
+      }
+    }
+
+    // Update Game Evaluator
+    return returnCard;
+
+  }
 
 }
