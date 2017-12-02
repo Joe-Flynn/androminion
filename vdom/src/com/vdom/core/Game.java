@@ -168,7 +168,7 @@ public class Game {
   public Game() {
 
     // Num Games and Players
-    numGames   = 1;
+    numGames   = 200;
     numPlayers = 2;
 
     // CARD SET to use for the game (See com.vdom.api.GameType)

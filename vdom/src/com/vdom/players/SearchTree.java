@@ -162,6 +162,10 @@ public class SearchTree {
 
       boolean nodeExpanded = false;
 
+      if (context.getActionsLeft() <= 0) {
+        return nodeExpanded;
+      }
+
       Player player = context.player;
       for (int i = 0; i < player.getHand().size(); i++) {
         Card playerCard = player.getHand().get(i);
@@ -180,7 +184,7 @@ public class SearchTree {
             child.actionCard = playerCard.clone();
             child.decision = decision;
 
-            System.out.println(">>>> SEARCH TREE: Adding Node, Action:" + child.actionCard + ", Decision:" + decision);
+            System.out.println(">>>> SEARCH TREE: Adding Node, Action:" + child.actionCard + ", Parent:" + actionCard);
 
             // Play the Action in the Cloned Game State
             if (child.context.game.isValidAction(child.context, child.context.player.getHand().get(i))) {
@@ -222,7 +226,7 @@ public class SearchTree {
     */
     public ArrayList<TreeNode> getPathToEvalValue(double value) {
 
-      System.out.println(">>>> SEARCH TREE: getPathToEvalValue for Node: " + actionCard);
+      System.out.println(">>>> SEARCH TREE: getPathToEvalValue for Node: " + actionCard + ", Node Eval: " + evaluation);
 
       ArrayList<TreeNode> path = new ArrayList<TreeNode>();
       if (evaluation >= value) {
@@ -230,7 +234,8 @@ public class SearchTree {
       } else {
         for (TreeNode child : children) {
           ArrayList<TreeNode> subPath = child.getPathToEvalValue(value);
-          if (subPath != null) {
+          if (subPath.size() > 0) {
+            path.add(this);
             path.addAll(subPath);
             break;
           }
@@ -275,6 +280,7 @@ public class SearchTree {
   */
   public ArrayList<TreeNode> getPathToMaxEval() {
     double maxEval = this.root.getMaxEval();
+    System.out.println(">>>> SEARCH TREE: Max Eval:" + maxEval);
     return this.root.getPathToEvalValue(maxEval);
   }
 
