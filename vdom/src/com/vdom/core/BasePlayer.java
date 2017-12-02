@@ -528,7 +528,7 @@ public abstract class BasePlayer extends Player implements GameEventListener {
     return discardAttackCardsToKeep(context, 3);
   }
 
-  private Card[] discardAttackCardsToKeep(MoveContext context, int numToKeep) {
+  protected Card[] discardAttackCardsToKeep(MoveContext context, int numToKeep) {
     ArrayList<Card> keepers = new ArrayList<Card>();
     ArrayList<Card> discards = new ArrayList<Card>();
 
