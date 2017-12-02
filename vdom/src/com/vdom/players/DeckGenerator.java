@@ -30,7 +30,7 @@ public class DeckGenerator {
 
 		for (ArrayList<Card> deck : decks) {
 			Game clone = game.cloneGame();
-			averageTurnEconomies.add(clone.playPlanningGame(10, deck));
+			averageTurnEconomies.add(clone.playPlanningGame(5, deck));
 		}
 
 
@@ -47,7 +47,8 @@ public class DeckGenerator {
 	private ArrayList<ArrayList<Card>> generateInitialDecks() {
 		ArrayList<Card> kingdomCards = new ArrayList<>();
 		for (CardPile cardPile : game.piles.values()) {
-			if (cardPile.topCard().is(Type.Action) && !cardPile.topCard().is(Type.Ruins) && !cardPile.topCard().is(Type.Treasure) && !cardPile.topCard().is(Type.Victory)) {
+			if (cardPile.topCard().is(Type.Action) && !cardPile.topCard().is(Type.Ruins) && !cardPile.topCard().is(Type.Treasure)
+					&& !cardPile.topCard().is(Type.Victory) && !cardPile.topCard().equals(Cards.cultist)) {
 				kingdomCards.add(cardPile.topCard());
 			}
 		}

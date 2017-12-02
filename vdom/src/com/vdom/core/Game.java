@@ -157,7 +157,7 @@ public class Game {
   public Game() {
 
     // Num Games and Players
-    numGames   = 20;
+    numGames   = 100;
     numPlayers = 2;
 
     // CARD SET to use for the game (See com.vdom.api.GameType)
@@ -308,7 +308,7 @@ public class Game {
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
-      DeckGenerator dg = buildDeckGenerator(this);
+      DeckGenerator dg = buildDeckGenerator(this.cloneGame());
       dg.findBestDeck();
 
       // Set up Player's Turn Information
@@ -417,25 +417,14 @@ public class Game {
 
   }
 
-
+  // only call from games cloned by DeckGenerator
   public double playPlanningGame(int numTurns, ArrayList<Card> deck) {
-
-    HashMap<String, Double> playerToWins = new HashMap<>();
-//    playerToWins.put("com.vdom.players.VDomPlayerPhil", 0.0);
-//    playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
-
-    // Variables for Overall Stats over all Games
-    long turnCountTotal = 0;
-    long vpTotal        = 0;
-    long numCardsTotal  = 0;
-
-    // Play <numGames> Game
 
     Util.debug("---------------------", false);
     Util.debug("New Planning Game: " + gameType);
 
-    // Initialize the Game (incl. GameEventListeners, Players, and Cards)
-    initGameBoardPlanning();
+    // Initialize Plannings Players
+    initPlayersPlanning(2);
 
     // Set joe's deck , draw, and shuffle deck
     Player joe = players[0];
@@ -446,6 +435,22 @@ public class Game {
 
     // Make joe's evaluator
     Evaluator evaluator = new Evaluator(joe);
+
+    //Set Dummies deck and hand with init starting cards to stop =errors with cards played by joe's that require dummy's
+    // hand/deck to exist
+    Player dummy = players[1];
+    ArrayList<Card> dummyDeck  = new ArrayList<>();
+    for (int i = 0; i < 7; i++) {
+      if (i < 3) {
+        dummyDeck.add(this.getGamePile(Cards.estate).topCard());
+      }
+      dummyDeck.add(this.getGamePile(Cards.copper).topCard());
+    }
+    ((VDomPlayerDummy) dummy).setDeck(dummyDeck);
+
+    dummy.shuffleDeck(new MoveContext(this, dummy), null);
+    while (dummy.hand.size() < 5)
+      drawToHand(new MoveContext(this, dummy), null, 5 - dummy.hand.size(), false);
 
 
     // Set up Player's Turn Information
@@ -530,42 +535,6 @@ public class Game {
 
 
     return turnEconomySummation / (double) turnsPlayed;
-
-//    // Update Overall Stats over all Games
-//    turnCountTotal += gameTurnCount;
-//    int vps[] = gameOver(playerToWins);
-//    for (int i = 0; i < vps.length; i++) {
-//      vpTotal += vps[i];
-//      numCardsTotal += players[i].getAllCards().size();
-//    }
-
-
-
-//    // Mark Game Winner and Print Results
-//    Util.log("");
-//    Util.log("THE RESULTS: -------------------");
-//    printStats(playerToWins, numGames, gameType.toString());
-//    Util.log("--------------------------------");
-//
-//    // Complete Overall Stats over all Games
-//    ArrayList<Card> gameCards = new ArrayList<Card>();
-//    for (CardPile pile : piles.values()) {
-//      Card card = pile.placeholderCard();
-//      if (!card.equals(Cards.copper) && !card.equals(Cards.silver) && !card.equals(Cards.gold) && !card.equals(Cards.platinum) &&
-//              !card.equals(Cards.estate) && !card.equals(Cards.duchy) && !card.equals(Cards.province) && !card.equals(Cards.colony) &&
-//              !card.equals(Cards.curse)) {
-//        gameCards.add(card);
-//      }
-//    }
-//    GameStats stats = new GameStats();
-//    stats.gameType         = gameType;
-//    stats.cards            = gameCards.toArray(new Card[0]);
-//    stats.aveTurns         = (int) (turnCountTotal / numGames);
-//    stats.aveNumCards      = (int) (numCardsTotal / (numGames * numPlayers));
-//    stats.aveVictoryPoints = (int) (vpTotal / (numGames * numPlayers));
-//
-//    gameTypeStats.add(stats);
-
   }
 
 
@@ -585,15 +554,6 @@ public class Game {
     initCards();
     initPlayers(numPlayers);
     initPlayerCards();
-  }
-
-  void initGameBoardPlanning() {
-    baneCard = null;
-    firstProvinceWasGained = false;
-    doMountainPassAfterThisTurn = false;
-    initGameListener();
-    initCards();
-    initPlayersPlanning(numPlayers);
   }
 
   /*
@@ -2266,7 +2226,7 @@ public class Game {
               durationEffectsAreCards.add(false);
             }
           } else if (thisCard.equals(Cards.archive)) {
-            if (player.archive.size() > 0) {
+            if (player.archive.size() > 0 && player.archive.size() != (archiveNum + 1)) {
               durationEffects.add(thisCard);
               durationEffects.add(player.archive.get(archiveNum++));
               durationEffectsAreCards.add(clone == cloneCount && !((CardImpl) card.behaveAsCard()).trashAfterPlay);
@@ -2835,6 +2795,8 @@ public class Game {
         return true;
       }
     }
+
+
     return false;
   }
 

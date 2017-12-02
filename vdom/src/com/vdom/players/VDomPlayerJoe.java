@@ -44,6 +44,10 @@ public class VDomPlayerJoe extends BasePlayer  {
 
     @Override
     public Card doAction(MoveContext context) {
+    	if (context.player.getPlayerName().equals("Dummy")) {
+    		return null;
+		}
+
         for (int i = 0; i < hand.size(); i++) {
             Card cardInHand = hand.get(i);
             if (cardInHand.is(Type.Action)) {

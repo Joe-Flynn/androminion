@@ -10,16 +10,7 @@ import com.vdom.api.Card;
 import com.vdom.api.GameEvent;
 import com.vdom.api.GameType;
 
-import com.vdom.core.BasePlayer;
-import com.vdom.core.CardPile;
-import com.vdom.core.Cards;
-import com.vdom.core.Game;
-import com.vdom.core.Expansion;
-import com.vdom.core.GetCardsInGameOptions;
-import com.vdom.core.MoveContext;
-import com.vdom.core.Player;
-import com.vdom.core.Type;
-import com.vdom.core.Util;
+import com.vdom.core.*;
 
 
 public class VDomPlayerDummy extends BasePlayer  {
@@ -55,5 +46,11 @@ public class VDomPlayerDummy extends BasePlayer  {
 
 	@Override
 	public Card doBuy(MoveContext context) { return null;}
+
+	public void setDeck(ArrayList<Card> deck) {
+		CardList playerDeck = new CardList(this, "Deck");
+		playerDeck.addAll(deck);
+		this.deck = playerDeck;
+	}
 
 }
