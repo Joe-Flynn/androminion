@@ -47,6 +47,8 @@ public class VDomPlayerJarvis extends BasePlayer  {
   @Override
   public Card doAction(MoveContext context) {
 
+    System.out.println(">>>> JARVIS: BEGINNING DO_ACTION, HAND = " + hand);
+
     // Build Tree and Find Path to Best Action Phase Evaluation
     if (actionPhasePlayCount == 0) {
       actionSearchTree = new SearchTree(context);
@@ -54,7 +56,10 @@ public class VDomPlayerJarvis extends BasePlayer  {
     }
 
     // Get Node Along Best Action Phase Evaluation's Path
+    System.out.println(">>>> JARVIS: actionPhasePlayCount: " + actionPhasePlayCount);
+    System.out.println(">>>> JARVIS: actionPath length: " + actionPath.size());
     SearchTree.TreeNode actionNode = actionPath.get(actionPhasePlayCount);
+    System.out.println(">>>> JARVIS: actionPath length: " + actionPath.size());
     Card actionCard = actionNode.getActionCard();
     if (actionCard == null) {
       return null;
@@ -90,7 +95,9 @@ public class VDomPlayerJarvis extends BasePlayer  {
   @Override
   public Card doBuy(MoveContext context) {
     actionPhasePlayCount = 0;
-    return doBuyHeuristic(context);
+    Card returnCard = doBuyHeuristic(context);
+    System.out.println(">>>> JARVIS: ACTUALLY BUYING CARD: " + returnCard);
+    return returnCard;
   }
 
   /*

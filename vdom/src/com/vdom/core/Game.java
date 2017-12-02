@@ -168,7 +168,7 @@ public class Game {
   public Game() {
 
     // Num Games and Players
-    numGames   = 20;
+    numGames   = 1;
     numPlayers = 2;
 
     // CARD SET to use for the game (See com.vdom.api.GameType)
@@ -1706,7 +1706,7 @@ public class Game {
         }
 
         if (event.getType() == GameEvent.EventType.BuyingCard) {
-          msg.append(" (with gold: " + event.getContext().getCoinAvailableForBuy() + ", buys remaining: " + event.getContext().getBuysLeft());
+          msg.append(" (gold remaining: " + event.getContext().getCoinAvailableForBuy() + ", buys remaining: " + event.getContext().getBuysLeft());
         }
         Util.debug(msg.toString(), true);
 

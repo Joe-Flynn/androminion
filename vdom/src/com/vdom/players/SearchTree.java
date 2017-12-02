@@ -97,7 +97,7 @@ public class SearchTree {
 
     // TODO: OTHER CRITICAL DECISIONS
     // TODO: Structure from AI Player's Choose Function
-    
+
     protected double evaluation;            // Player's Evaluation about the Current Game State
     protected ArrayList<TreeNode> children; // Contains Future Game States from the Current Game State
 
@@ -158,6 +158,8 @@ public class SearchTree {
     */
     public boolean expandNode() {
 
+      System.out.println(">>>> SEARCH TREE: Expanding Node: " + actionCard);
+
       boolean nodeExpanded = false;
 
       Player player = context.player;
@@ -178,11 +180,16 @@ public class SearchTree {
             child.actionCard = playerCard.clone();
             child.decision = decision;
 
-            // Play The Action in the Cloned Game State
+            System.out.println(">>>> SEARCH TREE: Adding Node, Action:" + child.actionCard + ", Decision:" + decision);
+
+            // Play the Action in the Cloned Game State
             if (child.context.game.isValidAction(child.context, child.context.player.getHand().get(i))) {
               child.context.game.broadcastEvent(new GameEvent(GameEvent.EventType.Status, child.context));
               child.context.player.getHand().get(i).play(child.context.game, child.context, true);
             }
+
+            // Update the Cloned Game State's Evaluation
+            child.evaluation = ((VDomPlayerJarvis)child.context.player).gameEvaluator.evaluateActionPhase(child.context);
 
             // Add New State to the Tree
             addChild(child);
@@ -214,16 +221,19 @@ public class SearchTree {
     ** while performing a Depth First Search (DFS) of the subtree.
     */
     public ArrayList<TreeNode> getPathToEvalValue(double value) {
-      ArrayList<TreeNode> path = null;
+
+      System.out.println(">>>> SEARCH TREE: getPathToEvalValue for Node: " + actionCard);
+
+      ArrayList<TreeNode> path = new ArrayList<TreeNode>();
       if (evaluation >= value) {
-        path = new ArrayList<TreeNode>();
         path.add(this);
       } else {
         for (TreeNode child : children) {
           ArrayList<TreeNode> subPath = child.getPathToEvalValue(value);
-          if (subPath != null)
-          path.addAll(subPath);
-          break;
+          if (subPath != null) {
+            path.addAll(subPath);
+            break;
+          }
         }
       }
       return path;
@@ -235,6 +245,8 @@ public class SearchTree {
   protected TreeNode root = null;
 
   public SearchTree(MoveContext inputContext) {
+
+    System.out.println(">>>> SEARCH TREE: Creating new search tree.");
 
     // Set Root
     this.root = new TreeNode(inputContext.cloneContext());
