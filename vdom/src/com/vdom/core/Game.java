@@ -437,13 +437,15 @@ public class Game {
     // Initialize the Game (incl. GameEventListeners, Players, and Cards)
     initGameBoardPlanning();
 
-    // Set Joe's deck , draw, and shuffle decl
+    // Set joe's deck , draw, and shuffle deck
     Player joe = players[0];
     ((VDomPlayerJoe) joe).setDeck(deck);
     joe.shuffleDeck(new MoveContext(this, joe), null);
     while (joe.hand.size() < 5)
       drawToHand(new MoveContext(this, joe), null, 5 - joe.hand.size(), false);
 
+    // Make joe's evaluator
+    Evaluator evaluator = new Evaluator(joe);
 
 
     // Set up Player's Turn Information
@@ -452,9 +454,11 @@ public class Game {
     Util.debug("Turn " + gameTurnCount + " --------------------");
     Queue<ExtraTurnInfo> extraTurnsInfo = new LinkedList<ExtraTurnInfo>();
 
+
     // Play Turns until Game Ends
     boolean gameOver = false;
     int turnsPlayed = 0;
+    double turnEconomySummation = 0;
     while (!gameOver && turnsPlayed < numTurns) {
 
       // Create text for New Turn
@@ -502,8 +506,10 @@ public class Game {
         }
       }
 
-      //TODO EVAL CALCULATION IF PLAYER IS JOE
-
+      if (player.getPlayerName().equals(joe.getPlayerName())) {
+        turnEconomySummation += evaluator.evaluateActionPhase(context);
+        turnsPlayed++;
+      }
 
 
       // Update Turn Information
@@ -520,10 +526,10 @@ public class Game {
       }
 
 
-
-      turnsPlayed++;
     }
-    return 0.0;
+
+
+    return turnEconomySummation / (double) turnsPlayed;
 
 //    // Update Overall Stats over all Games
 //    turnCountTotal += gameTurnCount;

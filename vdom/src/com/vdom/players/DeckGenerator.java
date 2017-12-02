@@ -26,12 +26,17 @@ public class DeckGenerator {
 
 	public ArrayList<Cards> findBestDeck() {
 		ArrayList<ArrayList<Card>> decks = generateInitialDecks();
-		ArrayList<Double> percentWins = new ArrayList<>();
+		ArrayList<Double> averageTurnEconomies = new ArrayList<>();
 
 		for (ArrayList<Card> deck : decks) {
 			Game clone = game.cloneGame();
-			percentWins.add(game.playPlanningGame(10, deck));
+			averageTurnEconomies.add(game.playPlanningGame(10, deck));
 		}
+
+		for (double d : averageTurnEconomies) {
+			System.out.println(d);
+		}
+
 
 		// TODO Find best X% , mutate and play more planning games
 

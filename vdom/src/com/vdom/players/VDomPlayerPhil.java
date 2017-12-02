@@ -63,7 +63,7 @@ public class VDomPlayerPhil extends BasePlayer  {
   */
   public Card doActionEvalSearch(MoveContext context) {
 
-    double currentEvaluation = gameEvaluator.evaluate(context, this.getAllCards());
+    double currentEvaluation = gameEvaluator.evaluateBuyPhase(context, this.getAllCards());
     int    indexActionToPlay = -1;
 
     for (int i = 0; i < hand.size(); i++) {
@@ -84,8 +84,8 @@ public class VDomPlayerPhil extends BasePlayer  {
         if (clonedGame.isValidAction(clonedContext, clonedSelf.hand.get(i))) {
           clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
           clonedSelf.hand.get(i).play(clonedGame, clonedContext, true);
-          if (clonedEvaluator.evaluate(clonedContext, clonedSelf.getAllCards()) > currentEvaluation) {
-            currentEvaluation = clonedEvaluator.evaluate(clonedContext, clonedSelf.getAllCards());
+          if (clonedEvaluator.evaluateBuyPhase(clonedContext, clonedSelf.getAllCards()) > currentEvaluation) {
+            currentEvaluation = clonedEvaluator.evaluateBuyPhase(clonedContext, clonedSelf.getAllCards());
             indexActionToPlay = i;
           }
         }
@@ -201,8 +201,8 @@ public class VDomPlayerPhil extends BasePlayer  {
           clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
           clonedGame.playBuy(clonedContext, buyCard);
           clonedGame.playerPayOffDebt(clonedSelf, clonedContext);
-          if (clonedEvaluator.evaluate(clonedContext, clonedSelf.getAllCards()) > currentEvaluation) {
-            currentEvaluation = clonedEvaluator.evaluate(clonedContext, clonedSelf.getAllCards());
+          if (clonedEvaluator.evaluateBuyPhase(clonedContext, clonedSelf.getAllCards()) > currentEvaluation) {
+            currentEvaluation = clonedEvaluator.evaluateBuyPhase(clonedContext, clonedSelf.getAllCards());
             cardToBuy = pileName;
           }
         }
