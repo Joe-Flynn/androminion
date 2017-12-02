@@ -59,5 +59,6 @@ public class VDomPlayerJoe extends BasePlayer  {
     public void setDeck(ArrayList<Card> deck) {
         CardList playerDeck = new CardList(this, "Deck");
         playerDeck.addAll(deck);
+        this.deck = playerDeck;
     }
 }

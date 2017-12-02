@@ -246,16 +246,9 @@ public class Game {
 
   }
 
-  public DeckGenerator initDeckGenerator(Game game) {
-  	ArrayList<Card> cards = new ArrayList<>();
-    for (CardPile cardPile : piles.values()) {
-    	if (cardPile.topCard().is(Type.Action) && !cardPile.topCard().is(Type.Ruins) && !cardPile.topCard().is(Type.Treasure) && !cardPile.topCard().is(Type.Victory)) {
-			cards.add(cardPile.topCard());
-		}
-    }
-
+  public DeckGenerator buildDeckGenerator(Game game) {
     try {
-		DeckGenerator dg = new DeckGenerator(cards, 100, 80);
+		DeckGenerator dg = new DeckGenerator(game, 100, 80);
 		return dg;
 	}
 	catch (Exception e) {
@@ -315,7 +308,8 @@ public class Game {
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
-      DeckGenerator dg = initDeckGenerator(this);
+      DeckGenerator dg = buildDeckGenerator(this);
+      dg.findBestDeck();
 
       // Set up Player's Turn Information
       playersTurn = 0;
@@ -424,7 +418,6 @@ public class Game {
   }
 
 
-
   public double playPlanningGame(int numTurns, ArrayList<Card> deck) {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
@@ -443,7 +436,15 @@ public class Game {
 
     // Initialize the Game (incl. GameEventListeners, Players, and Cards)
     initGameBoardPlanning();
-    ((VDomPlayerJoe) players[0]).setDeck(deck);
+
+    // Set Joe's deck , draw, and shuffle decl
+    Player joe = players[0];
+    ((VDomPlayerJoe) joe).setDeck(deck);
+    joe.shuffleDeck(new MoveContext(this, joe), null);
+    while (joe.hand.size() < 5)
+      drawToHand(new MoveContext(this, joe), null, 5 - joe.hand.size(), false);
+
+
 
     // Set up Player's Turn Information
     playersTurn = 0;
@@ -587,7 +588,6 @@ public class Game {
     initGameListener();
     initCards();
     initPlayersPlanning(numPlayers);
-    initPlayerCards();
   }
 
   /*

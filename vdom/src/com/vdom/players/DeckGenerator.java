@@ -1,9 +1,7 @@
 package com.vdom.players;
 
 import com.vdom.api.Card;
-import com.vdom.core.CardList;
-import com.vdom.core.Cards;
-import com.vdom.core.Game;
+import com.vdom.core.*;
 
 import java.util.ArrayList;
 
@@ -14,20 +12,19 @@ public class DeckGenerator {
 
 	private int deckSize;
 	private int percentAction;
-	private int percentTreasureVictory;
-	private ArrayList<Card> kingdomCards;
+	private Game game;
 	private class DeckException extends Exception {}
 
-	public DeckGenerator(ArrayList<Card> kingdomCards, int deckSize, int percentAction) throws DeckException {
+	public DeckGenerator(Game game, int deckSize, int percentAction) throws DeckException {
 		if (percentAction >= 100)
 			throw new DeckException();
 
-		this.kingdomCards = kingdomCards;
 		this.deckSize = deckSize;
 		this.percentAction = percentAction;
+		this.game = game;
 	}
 
-	public ArrayList<Cards> findBestDeck(Game game) {
+	public ArrayList<Cards> findBestDeck() {
 		ArrayList<ArrayList<Card>> decks = generateInitialDecks();
 		ArrayList<Double> percentWins = new ArrayList<>();
 
@@ -47,6 +44,13 @@ public class DeckGenerator {
 	// This could potentially exceed the deck size if the percentOther (non-action) is less than 10, but we shouldn't
 	// run into issues with the size deck we are using
 	private ArrayList<ArrayList<Card>> generateInitialDecks() {
+		ArrayList<Card> kingdomCards = new ArrayList<>();
+		for (CardPile cardPile : game.piles.values()) {
+			if (cardPile.topCard().is(Type.Action) && !cardPile.topCard().is(Type.Ruins) && !cardPile.topCard().is(Type.Treasure) && !cardPile.topCard().is(Type.Victory)) {
+				kingdomCards.add(cardPile.topCard());
+			}
+		}
+
 		ArrayList<Card[]> combos = getCombinations(2, kingdomCards);
 
 		// for actions percentages that split deck into fractional amounts of cards, give action cards the extra card
@@ -65,9 +69,9 @@ public class DeckGenerator {
 			// add init cards
 			for (int i = 0; i < 7; i++) {
 				if (i < 3) {
-					deck.add(Cards.estate);
+					deck.add(game.getGamePile(Cards.estate).topCard()); // need to get card in this manner so it is non-null, valid card
 				}
-				deck.add(Cards.copper);
+				deck.add(game.getGamePile(Cards.copper).topCard());
 			}
 
 			// add actions cards
@@ -84,11 +88,11 @@ public class DeckGenerator {
 			int j = 0;
 			for (int i = 0 ; i < numOther - 10; i++) {
 				if (j < 2) {
-					deck.add(Cards.silver);
-					j++;
+					deck.add(game.getGamePile(Cards.silver).topCard()); // need to get card in this manner so it is a
+					j++;                                                // non-null, valid card
 				}
 				else {
-					deck.add(Cards.gold);
+					deck.add(game.getGamePile(Cards.gold).topCard());
 					j = 0;
 				}
 			}
