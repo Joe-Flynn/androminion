@@ -92,14 +92,17 @@ public class SearchTree {
     protected Card actionCard;              // Action Card Played to get to Current Game State
 
     protected PlayerDecision decision;      // Player Decision Selected for the Action Card Played
-    protected Card bestCardInPlayDecision;
-    protected boolean blah;
 
     // TODO: OTHER CRITICAL DECISIONS
     // TODO: Structure from AI Player's Choose Function
+    protected Card bestCardInPlayDecision;  // <-- Example, only. Figure out what this is going to be
 
     protected double evaluation;            // Player's Evaluation about the Current Game State
     protected ArrayList<TreeNode> children; // Contains Future Game States from the Current Game State
+
+    protected int treeDepth;                     // Used to perform Depth-Limited Searches
+    protected static final int maxTreeDepth = 6; // Limit for Depth-Limited Searches
+
 
     public TreeNode(MoveContext inputContext) {
       context    = inputContext.cloneContext();
@@ -107,6 +110,7 @@ public class SearchTree {
       decision   = PlayerDecision.NoDecision;
       evaluation = ((VDomPlayerJarvis)context.player).gameEvaluator.evaluateActionPhase(context);
       children   = new ArrayList<TreeNode>();
+      treeDepth  = 0;
     }
 
     public MoveContext getContext() {
@@ -162,43 +166,57 @@ public class SearchTree {
 
       boolean nodeExpanded = false;
 
-      if (context.getActionsLeft() <= 0) {
+      // Do NOT Expand, if Limits are Reached
+      if (context.getActionsLeft() <= 0 || treeDepth >= maxTreeDepth) {
         return nodeExpanded;
       }
 
+      // Examine Possible Cards to Play from Hand
       Player player = context.player;
       for (int i = 0; i < player.getHand().size(); i++) {
         Card playerCard = player.getHand().get(i);
         if (playerCard.is(Type.Action)) {
 
-          // Select Player Decisions
-          ArrayList<PlayerDecision> decisions = new ArrayList<PlayerDecision>();
-          decisions.add(PlayerDecision.NoDecision); // TODO: IMPLEMENT OTHER DECISIONS!!!!!!!!!!!!!!!!!!!!!!!
-
-          for (PlayerDecision decision : decisions) {
-
-            // Clone Parent Node
-            TreeNode child = new TreeNode(context);
-
-            // Set Clone's Parameters
-            child.actionCard = playerCard.clone();
-            child.decision = decision;
-
-            System.out.println(">>>> SEARCH TREE: Adding Node, Action:" + child.actionCard + ", Parent:" + actionCard);
-
-            // Play the Action in the Cloned Game State
-            if (child.context.game.isValidAction(child.context, child.context.player.getHand().get(i))) {
-              child.context.game.broadcastEvent(new GameEvent(GameEvent.EventType.Status, child.context));
-              child.context.player.getHand().get(i).play(child.context.game, child.context, true);
+          // Check if Another of the Same Type of Action Card was ALREADY Expanded
+          boolean alreadyChecked = false;
+          for (int j = 0; j < i; j++) {
+            if (player.getHand().get(i).getKind() == player.getHand().get(j).getKind()) {
+              alreadyChecked = true;
             }
+          }
 
-            // Update the Cloned Game State's Evaluation
-            child.evaluation = ((VDomPlayerJarvis)child.context.player).gameEvaluator.evaluateActionPhase(child.context);
+          if (!alreadyChecked) { // NOTE: We can make this more elegant by just having a list of unique actions.
 
-            // Add New State to the Tree
-            addChild(child);
-            nodeExpanded = true;
+            // Select Player Decisions
+            ArrayList<PlayerDecision> decisions = new ArrayList<PlayerDecision>();
+            decisions.add(PlayerDecision.NoDecision); // TODO: IMPLEMENT OTHER DECISIONS!!!!!!!!!!!!!!!!!!!!!!!
 
+            for (PlayerDecision decision : decisions) {
+
+              // Clone Parent Node
+              TreeNode child = new TreeNode(context);
+
+              // Set Clone's Parameters
+              child.actionCard = playerCard.clone();
+              child.decision = decision;
+              child.treeDepth = treeDepth + 1;
+
+              System.out.println(">>>> SEARCH TREE: Adding Node, Action:" + child.actionCard + ", Parent:" + actionCard);
+
+              // Play the Action in the Cloned Game State
+              if (child.context.game.isValidAction(child.context, child.context.player.getHand().get(i))) {
+                child.context.game.broadcastEvent(new GameEvent(GameEvent.EventType.Status, child.context));
+                child.context.player.getHand().get(i).play(child.context.game, child.context, true);
+              }
+
+              // Update the Cloned Game State's Evaluation
+              child.evaluation = ((VDomPlayerJarvis)child.context.player).gameEvaluator.evaluateActionPhase(child.context);
+
+              // Add New State to the Tree
+              addChild(child);
+              nodeExpanded = true;
+
+            }
           }
         }
       }
