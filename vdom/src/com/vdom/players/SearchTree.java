@@ -79,6 +79,10 @@ public class SearchTree {
     Pawn_AddActionAndGold,
     Pawn_AddBuyAndGold,
 
+    Amulet_ChooseSilver,
+    Amulet_ChooseCoin,
+    Amulet_ChooseTrash,
+
     NoDecision // Default - i.e. for Tree Root
   }
 
@@ -86,7 +90,14 @@ public class SearchTree {
 
     protected MoveContext context;          // Current Game State (i.e. MoveContext, Game, and Player)
     protected Card actionCard;              // Action Card Played to get to Current Game State
+
     protected PlayerDecision decision;      // Player Decision Selected for the Action Card Played
+    protected Card bestCardInPlayDecision;
+    protected boolean blah;
+
+    // TODO: OTHER CRITICAL DECISIONS
+    // TODO: Structure from AI Player's Choose Function
+    
     protected double evaluation;            // Player's Evaluation about the Current Game State
     protected ArrayList<TreeNode> children; // Contains Future Game States from the Current Game State
 

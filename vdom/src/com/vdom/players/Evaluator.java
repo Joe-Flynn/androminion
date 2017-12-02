@@ -20,7 +20,10 @@ public class Evaluator {
     public double evaluateActionPhase(MoveContext context) {
 
       int usableCoin      = Math.min(context.getCoins(), context.getBuysLeft() * 8);
-      int usablePotion    = context.getPotions();
+      /// TODO: ^----- Get Available Coins???
+      /// TODO: ^----- Update 8 to most expensive buy
+
+      int potionGains     = Math.min(context.getPotions(), Math.min(context.getBuysLeft(), context.getCoins() / 3));
       int threeCostGains  = Math.min(context.getCoins() / 3, context.getBuysLeft());
       int fiveCostGains   = Math.min(context.getCoins() / 5, context.getBuysLeft());
 
@@ -29,15 +32,17 @@ public class Evaluator {
       int victTokenFactor = context.player.getVictoryTokens();
 
       // "Turn Economy" is a tunable weighted sum
-      double turnEconomy  = usableCoin + (0.25 * usablePotion) +
+      double turnEconomy  = usableCoin + (0.5 * potionGains) +
                             threeCostGains + (1.25 * fiveCostGains) +
-                            (1.5 * coinTokenFactor) - (0.25 * debtTokenFactor) +
+                            (1.5 * coinTokenFactor) - (1.0 * debtTokenFactor) +
                             (0.5 * victTokenFactor);
 
       // Scale by Inverse of Opponent's Hand Size
-      int enemyHandSize   = context.getOpponent().getHand().size();
+      double enemyHandSize = context.getOpponent().getHand().size();
 
-      return turnEconomy * (15 - enemyHandSize);
+      // TODO: Add something that evaluates how close your deck becomes to the Original Plan
+
+      return turnEconomy - enemyHandSize;
     }
 
 
