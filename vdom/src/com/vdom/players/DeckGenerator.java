@@ -30,11 +30,7 @@ public class DeckGenerator {
 
 		for (ArrayList<Card> deck : decks) {
 			Game clone = game.cloneGame();
-			averageTurnEconomies.add(game.playPlanningGame(10, deck));
-		}
-
-		for (double d : averageTurnEconomies) {
-			System.out.println(d);
+			averageTurnEconomies.add(clone.playPlanningGame(10, deck));
 		}
 
 
