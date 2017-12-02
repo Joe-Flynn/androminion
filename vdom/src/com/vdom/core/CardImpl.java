@@ -456,19 +456,18 @@ public class CardImpl implements Card, Comparable<Card>{
 		CardImpl clone = isTemplateCard() ? instantiate() : templateCard.instantiate();
 
 		clone.isPlaceholderCard = isPlaceholderCard;
-		clone.pileCreator = null; // OK?
+		clone.pileCreator = null; // TODO (PHIL): OK?
 
 		clone.movedToNextTurnPile = movedToNextTurnPile;
 		clone.trashAfterPlay = trashAfterPlay;
 		clone.numberTimesAlreadyPlayed = numberTimesAlreadyPlayed;
-		clone.cloneCount = cloneCount; // WHAT IS THIS?
+		clone.cloneCount = cloneCount; // TODO (PHIL): WHAT IS THIS?
 
 		clone.controlCard = clone;
 
-		// TODO (PHIL): IMPLEMENT A COPY OF THESE REFERENCED CARDS?
+		// TODO (PHIL): IMPLEMENT A COPY OF THESE REFERENCED CARDS???
 		clone.impersonatingCard = null;
 		clone.inheritingAbilitiesCard = null;
-
 
 		return clone;
 
@@ -709,15 +708,18 @@ public class CardImpl implements Card, Comparable<Card>{
 	@Override
 	public void play(Game game, MoveContext context, boolean fromHand, boolean treasurePlay) {
 
-		Player currentPlayer = context.getPlayer();
+		Player  currentPlayer = context.getPlayer();
 		boolean newCard = false;
-		Card actualCard = (this.getControlCard() != null ? this.getControlCard() : this);
+		Card    actualCard = (this.getControlCard() != null ? this.getControlCard() : this);
 		boolean isInheritedAbility = actualCard.equals(Cards.estate) && !this.equals(actualCard);
-		Card inheritedCard = this.equals(Cards.estate) ? context.player.getInheritance() : null;
-		Card playedCard = isInheritedAbility ? actualCard : this;
+		Card    inheritedCard = this.equals(Cards.estate) ? context.player.getInheritance() : null;
+		Card    playedCard = isInheritedAbility ? actualCard : this;
 		boolean isAction = playedCard.is(Type.Action, currentPlayer);
 		boolean enchantressEffect = isAction && !context.enchantressAlreadyAffected && game.enchantressAttacks(currentPlayer);
-		if (enchantressEffect) context.enchantressAlreadyAffected = true;
+
+		if (enchantressEffect) {
+			context.enchantressAlreadyAffected = true;
+		}
 
 		if (!isInheritedAbility && isAction) {
 			context.actions += game.countChampionsInPlay(currentPlayer);
@@ -729,8 +731,9 @@ public class CardImpl implements Card, Comparable<Card>{
 		if (this.numberTimesAlreadyPlayed == 0 && this == actualCard) {
 			newCard = true;
 			this.movedToNextTurnPile = false;
-			if (fromHand)
-			currentPlayer.hand.remove(this);
+			if (fromHand) {
+			  currentPlayer.hand.remove(this);
+			}
 			if (!enchantressEffect && trashOnUse) {
 				currentPlayer.trash(this, null, context);
 			} else if (!enchantressEffect && this.is(Type.Duration, currentPlayer)) {
@@ -779,7 +782,9 @@ public class CardImpl implements Card, Comparable<Card>{
 			//allow reaction to playing an attack card with Enchantress effect
 			if (is(Type.Attack, currentPlayer)) {
 				for (Player player : game.getPlayersInTurnOrder()) {
-					if (player != currentPlayer) Util.isDefendedFromAttack(game, player, this);
+					if (player != currentPlayer) {
+						Util.isDefendedFromAttack(game, player, this);
+					}
 				}
 			}
 			context.actions += 1;
@@ -1129,7 +1134,9 @@ public class CardImpl implements Card, Comparable<Card>{
 		// If an Urchin has been played, offer the player the option to trash it for a Mercenary
 		for (int i = currentPlayer.playedCards.size() - 1; i >= 0 ; --i) {
 			Card c = currentPlayer.playedCards.get(i);
-			if (!(c.behaveAsCard() == this) && c.behaveAsCard().getKind() == Cards.Kind.Urchin && currentPlayer.controlPlayer.urchin_shouldTrashForMercenary(context, c.getControlCard())) {
+			if (c.behaveAsCard() != this &&
+			    c.behaveAsCard().getKind() == Cards.Kind.Urchin &&
+			    currentPlayer.controlPlayer.urchin_shouldTrashForMercenary(context, c.getControlCard())) {
 				currentPlayer.trash(c.getControlCard(), this, context);
 				currentPlayer.gainNewCard(Cards.mercenary, this, context);
 				currentPlayer.playedCards.remove(i);

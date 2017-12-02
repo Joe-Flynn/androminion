@@ -168,7 +168,7 @@ public class Game {
   public Game() {
 
     // Num Games and Players
-    numGames   = 20;
+    numGames   = 200;
     numPlayers = 2;
 
     // CARD SET to use for the game (See com.vdom.api.GameType)
@@ -293,7 +293,7 @@ public class Game {
   void start() {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
-    playerToWins.put("com.vdom.players.VDomPlayerPhil", 0.0);
+    playerToWins.put("com.vdom.players.VDomPlayerJarvis", 0.0);
     playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
 
     // Variables for Overall Stats over all Games
@@ -459,7 +459,7 @@ public class Game {
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerPhil();
+        players[i] = new VDomPlayerJarvis();
       }
       else {
         players[i] = new VDomPlayerAndrew();
@@ -1706,7 +1706,7 @@ public class Game {
         }
 
         if (event.getType() == GameEvent.EventType.BuyingCard) {
-          msg.append(" (with gold: " + event.getContext().getCoinAvailableForBuy() + ", buys remaining: " + event.getContext().getBuysLeft());
+          msg.append(" (gold remaining: " + event.getContext().getCoinAvailableForBuy() + ", buys remaining: " + event.getContext().getBuysLeft());
         }
         Util.debug(msg.toString(), true);
 
