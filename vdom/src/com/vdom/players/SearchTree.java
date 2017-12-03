@@ -5,6 +5,7 @@ import com.vdom.api.GameEvent;
 
 import com.vdom.core.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SearchTree {
@@ -88,14 +89,16 @@ public class SearchTree {
 
   public class TreeNode {
 
+    protected SearchTree parentSearch = null;
+
     protected MoveContext context;          // Current Game State (i.e. MoveContext, Game, and Player)
     protected Card actionCard;              // Action Card Played to get to Current Game State
 
-    protected PlayerDecision decision;      // Player Decision Selected for the Action Card Played
+    //protected PlayerDecision decision;      // Player Decision Selected for the Action Card Played
 
     // TODO: OTHER CRITICAL DECISIONS
     // TODO: Structure from AI Player's Choose Function
-    protected Card bestCardInPlayDecision;  // <-- Example, only. Figure out what this is going to be
+    //protected Card bestCardInPlayDecision;  // <-- Example, only. Figure out what this is going to be
 
     protected double evaluation;            // Player's Evaluation about the Current Game State
     protected ArrayList<TreeNode> children; // Contains Future Game States from the Current Game State
@@ -103,15 +106,23 @@ public class SearchTree {
     protected int treeDepth;                     // Used to perform Depth-Limited Searches
     protected static final int maxTreeDepth = 6; // Limit for Depth-Limited Searches
 
+    protected Object choice = null;
 
     public TreeNode(MoveContext inputContext) {
       context    = inputContext.cloneContext();
       actionCard = null;
-      decision   = PlayerDecision.NoDecision;
+      //decision   = PlayerDecision.NoDecision;
       evaluation = ((VDomPlayerJarvis)context.player).gameEvaluator.evaluateActionPhase(context);
       children   = new ArrayList<TreeNode>();
       treeDepth  = 0;
     }
+
+    public TreeNode(MoveContext inputContext, SearchTree search)
+    {
+      this(inputContext);
+      this.parentSearch = search;
+    }
+
 
     public MoveContext getContext() {
       return context;
@@ -121,9 +132,10 @@ public class SearchTree {
       return actionCard;
     }
 
+    /*
     public PlayerDecision getPlayerDecision() {
       return decision;
-    }
+    }*/
 
     public double getPlayerEvaluation() {
       return evaluation;
@@ -136,6 +148,8 @@ public class SearchTree {
     public boolean isLeaf() {
       return (children.size() == 0);
     }
+
+    public boolean isInteraction() {return actionCard == null;}
 
     /*
     ** getLeaves - Returns all leaf TreeNodes which are down-lined from this
@@ -151,6 +165,24 @@ public class SearchTree {
         }
       }
       return leafNodes;
+    }
+
+    // This is used to search under the Action node for Interaction nodes.
+    public ArrayList<TreeNode> getInteractions()
+    {
+      ArrayList<TreeNode> leafNodes = new ArrayList<TreeNode>();
+      if (this.isLeaf() && this.isInteraction()) {
+        leafNodes.add(this);
+      } else {
+        for (TreeNode child : this.children) {
+          if(child.isInteraction())
+          {
+            leafNodes.addAll(child.getInteractions());
+          }
+        }
+      }
+      return leafNodes;
+
     }
 
 
@@ -187,6 +219,23 @@ public class SearchTree {
 
           if (!alreadyChecked) { // NOTE: We can make this more elegant by just having a list of unique actions.
 
+            TreeNode child = new TreeNode(context, parentSearch);
+
+            child.actionCard = playerCard.clone();
+            child.treeDepth = treeDepth + 1;
+
+            // Play the Action in the Cloned Game State
+            if (child.context.game.isValidAction(child.context, child.context.player.getHand().get(i))) {
+              child.context.game.broadcastEvent(new GameEvent(GameEvent.EventType.Status, child.context));
+
+              // Note: inside this play call, interactions will happen and new branches will be added.
+              child.context.player.getHand().get(i).play(child.context.game, child.context, true);
+            }
+
+
+
+
+            /*
             // Select Player Decisions
             ArrayList<PlayerDecision> decisions = new ArrayList<PlayerDecision>();
             decisions.add(PlayerDecision.NoDecision); // TODO: IMPLEMENT OTHER DECISIONS!!!!!!!!!!!!!!!!!!!!!!!
@@ -194,7 +243,7 @@ public class SearchTree {
             for (PlayerDecision decision : decisions) {
 
               // Clone Parent Node
-              TreeNode child = new TreeNode(context);
+              TreeNode child = new TreeNode(context, parentSearch);
 
               // Set Clone's Parameters
               child.actionCard = playerCard.clone();
@@ -215,13 +264,13 @@ public class SearchTree {
               // Add New State to the Tree
               addChild(child);
               nodeExpanded = true;
-
+              */
             }
           }
         }
+      return false;
       }
-      return nodeExpanded;
-    }
+
 
 
     /*
@@ -229,7 +278,7 @@ public class SearchTree {
     ** subtree including this Node and its down-line.
     */
     public double getMaxEval() {
-      double maxEval = getPlayerEvaluation();
+      double maxEval = -10000.0;
       for (TreeNode child : children) {
         maxEval = Math.max(maxEval, child.getMaxEval());
       }
@@ -266,23 +315,30 @@ public class SearchTree {
 
 
   protected TreeNode root = null;
+  protected TreeNode curNode = null;
 
   public SearchTree(MoveContext inputContext) {
 
-    System.out.println(">>>> SEARCH TREE: Creating new search tree.");
-
     // Set Root
-    this.root = new TreeNode(inputContext.cloneContext());
+    this.root = new TreeNode(inputContext.cloneContext(), this);
+  }
 
+  public void Expand()
+  {
+    if(root == null) {return;}
+
+    System.out.println(">>>> SEARCH TREE: Creating new search tree.");
     // Expand Tree
     boolean doneExpanding = false;
     while (!doneExpanding) {
       doneExpanding = true;
       ArrayList<TreeNode> leafNodes = this.root.getLeaves();
       for (TreeNode node : leafNodes) {
+        curNode = node;
         if (node.expandNode()) { doneExpanding = false; }
       }
     }
+
   }
 
   /*
@@ -301,6 +357,5 @@ public class SearchTree {
     System.out.println(">>>> SEARCH TREE: Max Eval:" + maxEval);
     return this.root.getPathToEvalValue(maxEval);
   }
-
 
 }

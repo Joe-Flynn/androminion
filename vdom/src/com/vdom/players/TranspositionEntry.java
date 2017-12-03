@@ -28,6 +28,15 @@ public class TranspositionEntry {
 
     }
 
+    TranspositionEntry(MoveContext context)
+    {
+        this(context, context.getPlayedCards().toArrayList(), -1000.0);
+    }
+
+    TranspositionEntry(MoveContext context, double eval)
+    {
+        this(context, context.getPlayedCards().toArrayList(), eval);
+    }
 
     TranspositionEntry(MoveContext context, ArrayList<Card> actionsPlayed)
     {

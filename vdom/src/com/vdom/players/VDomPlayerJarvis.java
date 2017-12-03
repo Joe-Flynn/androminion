@@ -14,13 +14,14 @@ import com.vdom.core.Player;
 import com.vdom.core.Type;
 
 
-public class VDomPlayerJarvis extends BasePlayer  {
+public class VDomPlayerJarvis extends BasePlayer {
 
   Evaluator gameEvaluator = new Evaluator(this);
 
-  int actionPhasePlayCount       = 0;
-  SearchTree actionSearchTree    = null;
-  ArrayList<SearchTree.TreeNode> actionPath = null;
+  int actionPhasePlayCount = 0;
+  DomTree searchTree = null;
+  Card bestPlay = null;
+  boolean searching = false;
 
 
   @Override
@@ -50,22 +51,23 @@ public class VDomPlayerJarvis extends BasePlayer  {
     System.out.println(">>>> JARVIS: BEGINNING DO_ACTION, HAND = " + hand);
 
     // Build Tree and Find Path to Best Action Phase Evaluation
-    if (actionPhasePlayCount == 0) {
-      actionSearchTree = new SearchTree(context);
-      actionPath = actionSearchTree.getPathToMaxEval();
-    }
+    //if (actionPhasePlayCount == 0) {
+      searchTree = new DomTree(context, gameEvaluator);
+      searchTree.expand();
+      bestPlay = searchTree.root.get_top_play();
+    //}
 
     // Get Node Along Best Action Phase Evaluation's Path
     System.out.println(">>>> JARVIS: actionPhasePlayCount: " + actionPhasePlayCount);
-    System.out.println(">>>> JARVIS: actionPath length: " + actionPath.size());
-    SearchTree.TreeNode actionNode = actionPath.get(actionPhasePlayCount);
-    System.out.println(">>>> JARVIS: actionPath length: " + actionPath.size());
-    Card actionCard = actionNode.getActionCard();
-    if (actionCard == null) {
+    // System.out.println(">>>> JARVIS: actionPath length: " + actionPath.size());
+    // SearchTree.TreeNode actionNode = actionPath.get(actionPhasePlayCount);
+    // System.out.println(">>>> JARVIS: actionPath length: " + actionPath.size());
+    // Card actionCard = actionNode.getActionCard();
+    if (bestPlay == null) {
       return null;
     }
 
-    SearchTree.PlayerDecision decision = actionNode.getPlayerDecision();
+    //SearchTree.PlayerDecision decision = actionNode.getPlayerDecision();
     // TODO: IMPLEMENT DECISIONS BASED ON THIS!!
 
     // NOTE: I PLAN TO DO THIS BY OVERRIDING THE PLAYEROPTIONS-RELATED
@@ -83,7 +85,7 @@ public class VDomPlayerJarvis extends BasePlayer  {
 
     // Find Original Card and Return
     for (Card card : hand) {
-      if (card.getKind() == actionCard.getKind()) {
+      if (card.getKind() == bestPlay.getKind()) {
         return card;
       }
     }
@@ -130,9 +132,9 @@ public class VDomPlayerJarvis extends BasePlayer  {
       Card buyCard = clonedGame.getPile(supplyCard).topCard();
 
       if (buyCard != null && clonedGame.isValidBuy(clonedContext, buyCard)) {
-          clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
-          clonedGame.playBuy(clonedContext, buyCard);
-          clonedGame.playerPayOffDebt(clonedSelf, clonedContext);
+        clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
+        clonedGame.playBuy(clonedContext, buyCard);
+        clonedGame.playerPayOffDebt(clonedSelf, clonedContext);
         if (clonedEvaluator.evaluate(clonedContext, clonedSelf.getAllCards()) > currentEvaluation) {
           currentEvaluation = clonedEvaluator.evaluate(clonedContext, clonedSelf.getAllCards());
           cardToBuy = pileName;
@@ -173,7 +175,7 @@ public class VDomPlayerJarvis extends BasePlayer  {
     } else {
 
       // Get Highest Value Card Player can Buy
-      int  highestValue = 0;
+      int highestValue = 0;
       Card highestValueCard = null;
       for (String p : context.game.placeholderPiles.keySet()) {
         CardPile pile = context.game.placeholderPiles.get(p);
@@ -198,5 +200,62 @@ public class VDomPlayerJarvis extends BasePlayer  {
     return returnCard;
 
   }
+
+
+  private <T> T choose(ArrayList<T> options) {
+
+    // TODO: interact with search tree
+    // Pseudocode:
+
+    // If in search:
+    // Check if current node has been expanded already.
+    if(this.searching)
+    {
+      // If expanded, Return option of first untried expanded node. (Should there be checks to make sure the option is still applicable?)
+      // Else, call for expansion of the tree, then return option of first untried node (or return option 1?)
+      return searchTree.get_next_option(options);
+    }
+    // Else:
+    // Initialize search, and return the result.
+    else
+    {
+      // lets assume this won't happen for now...
+      return null;
+    }
+
+    // Temporarily return a random option
+    // return options.get(rand.nextInt(options.size()));
+  }
+
+  private int choose_index(int number_of_options) {
+    ArrayList<Integer> options = new ArrayList<>();
+    for (Integer i = 0; i < number_of_options; i++) {
+      options.add(i);
+    }
+
+    return choose(options);
+
+  }
+
+  private boolean choose_bool() {
+    ArrayList<Boolean> options = new ArrayList<>();
+    options.add(Boolean.TRUE);
+    options.add(Boolean.FALSE);
+
+    return choose(options);
+  }
+
+  private <T> Card[] choose_combination(Card[] cards, int n) {
+    ArrayList<Card[]> options = new ArrayList<>();
+
+    // temporarily, simply return one possibility
+    Card[] option = new Card[n];
+    for (int i = 0; i < n; i++) {
+      option[i] = cards[i];
+    }
+    options.add(option);
+    return choose(options);
+  }
+
 
 }
