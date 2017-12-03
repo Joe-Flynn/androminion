@@ -6,23 +6,21 @@ import java.util.Random;
 
 import com.vdom.api.Card;
 import com.vdom.api.GameEvent;
-
-import com.vdom.core.BasePlayer;
-import com.vdom.core.CardPile;
-import com.vdom.core.Cards;
-import com.vdom.core.Game;
-import com.vdom.core.MoveContext;
-import com.vdom.core.Player;
-import com.vdom.core.Type;
+import com.vdom.core.*;
 
 
 public class VDomPlayerJarvis extends BasePlayer  {
 
-  Evaluator gameEvaluator = new Evaluator(this);
+  protected Evaluator gameEvaluator = new Evaluator(this);
 
-  int actionPhasePlayCount       = 0;
-  SearchTree actionSearchTree    = null;
-  ArrayList<SearchTree.TreeNode> actionPath = null;
+  // Search Tree Setup and Play
+  protected SearchTree actionSearchTree    = null;
+  protected ArrayList<SearchTree.TreeNode> actionPath = null;
+  protected int actionPhasePlayCount       = 0;
+
+  // Best Card(s) in Play
+  protected ArrayList<Card> bestCardsInPlay = null;
+  protected Card bestCardInPlaySelected     = null;
 
 
   @Override
@@ -145,7 +143,7 @@ public class VDomPlayerJarvis extends BasePlayer  {
           (exactCost && (cardCost != maxCost || cardDebt != maxDebtCost || maxPotionCost != cardPotion)) ||
           (cardCost > maxCost || cardDebt > maxDebtCost || cardPotion > maxPotionCost) ||
           (mustCostLessThanMax && (cardCost == maxCost && cardDebt == maxDebtCost && maxPotionCost == cardPotion)) ||
-          (isBuy && !context.canBuy(card)) {
+          (isBuy && !context.canBuy(card))) {
         /* card not allowed */
       } else if (card.equals(Cards.curse) ||
                  isTrashCard(card) ||
@@ -158,16 +156,18 @@ public class VDomPlayerJarvis extends BasePlayer  {
 
     // Return Best "Good" Card
     if (cardListGood.size() > 0) {
-      cardListGood.add(null);
-      return choose(cardListGood);
+      bestCardsInPlay = cardListGood;
+      return bestCardInPlaySelected;
     }
 
     // Otherwise, pick from the scraps (a.k.a. "Bad" Cards)
     if (mustPick && cardListBad.size() > 0) {
-      return choose(cardListBad);
-    } else {
-      return null;
+      bestCardsInPlay = cardListBad;
+      return bestCardInPlaySelected;
     }
+
+    return null;
+
   }
 
 
@@ -211,7 +211,7 @@ public class VDomPlayerJarvis extends BasePlayer  {
         }
       }
     }
-    
+
     //next trash cards
     Card[] trashCards = pickOutCards(cardArray, (num - ret.size()), getTrashCards());
     if (trashCards != null) {
@@ -323,12 +323,7 @@ public class VDomPlayerJarvis extends BasePlayer  {
     actionPhasePlayCount++;
 
     // Find Original Card and Return
-    for (Card card : hand) {
-      if (card.getKind() == actionCard.getKind()) {
-        return card;
-      }
-    }
-    return null;
+    return fromHand(actionCard);
 
   }
 

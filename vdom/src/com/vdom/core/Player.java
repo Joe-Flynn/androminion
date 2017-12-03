@@ -260,6 +260,26 @@ public abstract class Player {
     return null;
   }
 
+
+  public ArrayList<Card> uniqueHandActions() {
+    ArrayList<Card> handActions = new ArrayList<Card>();
+    for (Card card : getHand()) {
+      if (card.is(Type.Action)) {
+        boolean alreadyChecked = false;
+        for (Card actionCard : handActions) {
+          if (card.equals(actionCard)) {
+            alreadyChecked = true;
+          }
+        }
+        if (!alreadyChecked) {
+          handActions.add(card);
+        }
+      }
+    }
+    return handActions;
+  }
+
+
   public boolean inPlay(Card card) {
     return playedCards.contains(card) || nextTurnCards.contains(card);
   }

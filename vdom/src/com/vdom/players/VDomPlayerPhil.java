@@ -141,7 +141,7 @@ public class VDomPlayerPhil extends BasePlayer  {
           (exactCost && (cardCost != maxCost || cardDebt != maxDebtCost || maxPotionCost != cardPotion)) ||
           (cardCost > maxCost || cardDebt > maxDebtCost || cardPotion > maxPotionCost) ||
           (mustCostLessThanMax && (cardCost == maxCost && cardDebt == maxDebtCost && maxPotionCost == cardPotion)) ||
-          (isBuy && !context.canBuy(card)) {
+          (isBuy && !context.canBuy(card))) {
         /* card not allowed */
       } else if (card.equals(Cards.curse) ||
                  isTrashCard(card) ||
