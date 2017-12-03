@@ -19,13 +19,14 @@ public class Evaluator {
     */
     public double evaluateActionPhase(MoveContext context) {
 
-      int usableCoin      = Math.min(context.getCoins(), context.getBuysLeft() * 8);
+        int coin = getCoinEstimate(context);
+      int usableCoin      = Math.min(coin, context.getBuysLeft() * 8);
       /// TODO: ^----- Get Available Coins???
       /// TODO: ^----- Update 8 to most expensive buy
 
-      int potionGains     = Math.min(context.getPotions(), Math.min(context.getBuysLeft(), context.getCoins() / 3));
-      int threeCostGains  = Math.min(context.getCoins() / 3, context.getBuysLeft());
-      int fiveCostGains   = Math.min(context.getCoins() / 5, context.getBuysLeft());
+      int potionGains     = Math.min(context.getPotions(), Math.min(context.getBuysLeft(), coin / 3));
+      int threeCostGains  = Math.min(coin / 3, context.getBuysLeft());
+      int fiveCostGains   = Math.min(coin / 5, context.getBuysLeft());
 
       int coinTokenFactor = context.player.getGuildsCoinTokenCount();
       int debtTokenFactor = context.player.getDebtTokenCount();
@@ -123,4 +124,45 @@ public class Evaluator {
         return treasureDeltaImpact - actionDeltaImpact + (vpImpact / 6.0);
     }
 
+    protected int getCoinEstimate(MoveContext context) {
+        int coin = 0;
+        int treasurecards = 0;
+        int foolsgoldcount = 0;
+        int bankcount = 0;
+        int venturecount = 0;
+        for (Card card : context.player.getHand()) {
+            if (card.is(Type.Treasure, context.player)) {
+                coin += card.getAddGold();
+                if (card.getKind() != Cards.Kind.Spoils) {
+                    treasurecards++;
+                }
+                if (card.getKind() == Cards.Kind.FoolsGold) {
+                    foolsgoldcount++;
+                    if (foolsgoldcount > 1) {
+                        coin += 3;
+                    }
+                }
+                if (card.getKind() == Cards.Kind.PhilosophersStone) {
+                    coin += (context.player.getDeckSize() + context.player.getDiscardSize()) / 5;
+                }
+                if (card.getKind() == Cards.Kind.Bank) {
+                    bankcount++;
+                }
+                if (card.getKind() == Cards.Kind.Venture) {
+                    venturecount++;
+                    coin += 1; //estimate: could draw potion or hornOfPlenty but also platinum
+                    //Patrick estimates in getCurrencyTotal(list) coin += 1
+                }
+            }
+        }
+        coin += bankcount * (treasurecards + venturecount) - (bankcount*bankcount + bankcount) / 2;
+        coin += context.player.getGuildsCoinTokenCount();
+        if(context.player.getMinusOneCoinToken() && coin > 0)
+            coin--;
+        coin += context.getCoins();
+
+        //TODO: estimate coin to get from actions in hand
+
+        return coin;
+    }
 }

@@ -33,6 +33,7 @@ public class DomTree {
     public <T> T get_next_option()
     {
         // This is the big puzzle... what if something happens between plays and the options are different??
+        if(curNode == null) {return null;}
         curNode = curNode.get_next_expand_option();
         if(curNode == null) {return null;}
         return (T)(curNode.choice);
@@ -42,6 +43,7 @@ public class DomTree {
     public <T> T get_next_option(ArrayList<T> options)
     {
         // This is the big puzzle... what if something happens between plays and the options are different??
+        if(curNode == null) {return null;}
         curNode = curNode.get_next_expand_option(options);
         if(curNode == null) {return null;}
         return (T)(curNode.choice);
@@ -96,6 +98,8 @@ public class DomTree {
                     int optionCount = 0;
 
                     do {
+                        curNode = curPlay;
+
                         MoveContext contextClone = state.context.cloneContext();
 
                         // Play the Action in the Cloned Game State

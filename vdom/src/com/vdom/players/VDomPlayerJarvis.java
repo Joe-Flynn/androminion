@@ -5,13 +5,7 @@ import java.util.ArrayList;
 import com.vdom.api.Card;
 import com.vdom.api.GameEvent;
 
-import com.vdom.core.BasePlayer;
-import com.vdom.core.CardPile;
-import com.vdom.core.Cards;
-import com.vdom.core.Game;
-import com.vdom.core.MoveContext;
-import com.vdom.core.Player;
-import com.vdom.core.Type;
+import com.vdom.core.*;
 
 
 public class VDomPlayerJarvis extends BasePlayer {
@@ -23,6 +17,18 @@ public class VDomPlayerJarvis extends BasePlayer {
   Card bestPlay = null;
   boolean searching = false;
 
+
+  @Override
+  public BasePlayer clone(Game inputGame)
+  {
+    VDomPlayerJarvis player = (VDomPlayerJarvis) super.clone(inputGame);
+    player.gameEvaluator = gameEvaluator;
+    player.searching = searching;
+    player.searchTree = searchTree;
+    player.bestPlay = bestPlay;
+    player.actionPhasePlayCount = actionPhasePlayCount;
+    return player;
+  }
 
   @Override
   public String getPlayerName() {
@@ -53,7 +59,9 @@ public class VDomPlayerJarvis extends BasePlayer {
     // Build Tree and Find Path to Best Action Phase Evaluation
     //if (actionPhasePlayCount == 0) {
       searchTree = new DomTree(context, gameEvaluator);
+      searching = true;
       searchTree.expand();
+      searching = false;
       bestPlay = searchTree.root.get_top_play();
     //}
 
@@ -204,6 +212,12 @@ public class VDomPlayerJarvis extends BasePlayer {
 
   private <T> T choose(ArrayList<T> options) {
 
+    // Temporary hack to limit branching -- Band of Misfits and most gainers kill the tree...
+    while (options.size() > 3)
+    {
+      options.remove(3);
+    }
+
     // TODO: interact with search tree
     // Pseudocode:
 
@@ -213,6 +227,8 @@ public class VDomPlayerJarvis extends BasePlayer {
     {
       // If expanded, Return option of first untried expanded node. (Should there be checks to make sure the option is still applicable?)
       // Else, call for expansion of the tree, then return option of first untried node (or return option 1?)
+      T choice = searchTree.get_next_option(options);
+
       return searchTree.get_next_option(options);
     }
     // Else:
@@ -257,5 +273,69 @@ public class VDomPlayerJarvis extends BasePlayer {
     return choose(options);
   }
 
+
+
+  @Override
+  protected Card bestCardInPlay(final MoveContext context, int maxCost, boolean exactCost, int maxDebtCost, boolean potion, boolean actionOnly, boolean victoryCardAllowed, boolean mustCostLessThanMax, boolean mustPick, Card except) {
+    boolean isBuy = (maxCost == -1);
+    if (isBuy) {
+      maxCost = COST_MAX;
+      maxDebtCost = COST_MAX;
+    }
+
+    Card[] cards = context.getCardsInGame(GetCardsInGameOptions.TopOfPiles, true);
+    ArrayList<Card> cardListGood = new ArrayList<Card>();
+    ArrayList<Card> cardListBad = new ArrayList<Card>();
+    int maxPotionCost = potion ? 1 : 0;
+    for (int i = 0; i < cards.length; i++) {
+      Card card = cards[i];
+      int cardCost = card.getCost(context);
+      int cardDebt = card.getDebtCost(context);
+      int cardPotion = card.costPotion() ? 1 : 0;
+      if (card.is(Type.Landmark, context.player)
+              || card.is(Type.Shelter, context.player)
+              || card.equals(Cards.abandonedMine) /*choose only virtualRuins*/
+              || card.equals(Cards.ruinedLibrary)
+              || card.equals(Cards.ruinedMarket)
+              || card.equals(Cards.ruinedVillage)
+              || card.equals(Cards.survivors)
+              || (except != null && card.equals(except))
+              || (card.is(Type.Knight, null) && !card.equals(Cards.virtualKnight)) /*choose only virtualKnight*/ //TODO SPLITPILES what here?
+              || !Cards.isSupplyCard(card)
+              || !context.isCardOnTop(card)
+              || (actionOnly && !(card.is(Type.Action)))
+              || (!victoryCardAllowed && (card.is(Type.Victory)) && !card.equals(Cards.curse))
+              || (exactCost && (cardCost != maxCost || cardDebt != maxDebtCost || maxPotionCost != cardPotion))
+              || (cardCost > maxCost || cardDebt > maxDebtCost || cardPotion > maxPotionCost)
+              || (mustCostLessThanMax && (cardCost == maxCost && cardDebt == maxDebtCost && maxPotionCost == cardPotion))
+              || (isBuy && !context.canBuy(card))
+              ) {
+        /*card not allowed*/
+      } else if (   card.equals(Cards.curse)
+              || isTrashCard(card)
+              || (card.equals(Cards.potion) && !shouldBuyPotion())
+              ) {
+        /*card allowed, but not wanted*/
+        cardListBad.add(card);
+      } else {
+        cardListGood.add(card);
+      }
+    }
+
+
+    if (cardListGood.size() > 0) {
+      //cardListGood.add(null);
+      return choose(cardListGood);
+      //return cardListGood.get(0);
+    }
+
+    if (mustPick && cardListBad.size() > 0) {
+      // don't add null to this one, we have to choose something if possible
+      return choose(cardListBad);
+      //return cardListBad.get(0);
+    }
+
+    return null;
+  }
 
 }
