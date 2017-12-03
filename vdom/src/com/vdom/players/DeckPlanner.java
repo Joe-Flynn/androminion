@@ -77,14 +77,18 @@ public class DeckPlanner {
 			}
 		}
 
-		currentPool.clear();
-		currentPool.addAll(survivors);
-
-		for (Deck deck : survivors) {
-			currentPool.addAll(createMutantChildren(deck));
+		Deck maxDeck;
+		double max = (double) Collections.max(averageTurnEconomies);
+		for (int i = 0; i < averageTurnEconomies.size(); i++) {
+			if (averageTurnEconomies.get(i) == max) {
+				maxDeck = currentPool.get(i);
+			}
 		}
 
-		double d = (double) Collections.max(averageTurnEconomies);
+		currentPool.clear();
+		currentPool.addAll(survivors);
+		currentPool.addAll(createMutantChildren(survivors, initPercentFirstKingdom));
+
 		averageTurnEconomies.clear();
 		for (Deck deck : currentPool) {
 			Game clone = game.cloneGame();
@@ -98,31 +102,74 @@ public class DeckPlanner {
 			uniqScores.add(avg);
 		}
 
-		d = (double) Collections.max(averageTurnEconomies);
+		Deck maxDeck2 = null;
+		max = (double) Collections.max(averageTurnEconomies);
+		for (int i = 0; i < averageTurnEconomies.size(); i++) {
+			if (averageTurnEconomies.get(i) == max) {
+				maxDeck2 = currentPool.get(i);
+			}
+		}
 
-
-		int i = 0;
-
-
-
-		// TODO Find best X% , mutate and play more planning games
-
-		// TODO Choose highest score and return that deck
-
-		return null;
+		return maxDeck2;
 	}
 
-	//this one was fun to name lol
-	private ArrayList<Deck> createMutantChildren(Deck deck) {
+	// this one was fun to name lol
+	// This could potentially exceed the deck size if the amount of cards in the percent that are not kingdom cards are
+	// less than 10, but we shouldn't run into issues with the size deck we are using
+	private ArrayList<Deck> createMutantChildren(ArrayList<Deck> decks, int percentKingdom) {
 		ArrayList<Deck> mutantChildren = new ArrayList<>();
-		for (int i = 0; i <= 100; i += 25) {
-			if (i != initPercentKingdoms) {
-				for (int j = 0; j <= 100; j += 25) {
-					if (j != initPercentFirstKingdom) {
-						mutantChildren.addAll(generateDecks(deck.getKingdomCards(), i, j));
-					}
+
+//		for (int i = 0; i <= 100; i += 25) {
+//			if (i != initPercentKingdoms) {
+//				for (int j = 0; j <= 100; j += 25) {
+//					if (j != initPercentFirstKingdom) {
+//						mutantChildren.addAll(generateDecks(deck.getKingdomCards(), i, j));
+//					}
+//				}
+//			}
+//		}
+
+		ArrayList<Deck[]> combos = getCombinationsDecks(2, decks);
+
+		for (Deck[] combo : combos) {
+			ArrayList<Card> kingdomCards = new ArrayList<>();
+			kingdomCards.addAll(combo[0].getKingdomCards());
+			kingdomCards.addAll(combo[1].getKingdomCards());
+
+			int numOther  = (int) (deckSize *  ((100 - percentKingdom) / 100.0));
+			int numKingdoms = deckSize - numOther;
+			int numEachKingom = numKingdoms / 4;
+
+			// add init cards
+			ArrayList<Card> deck = new ArrayList<>();
+			for (int i = 0; i < 7; i++) {
+				if (i < 3) {
+					deck.add(game.getGamePile(Cards.estate).topCard()); // need to get card in this manner so it is non-null, valid card
+				}
+				deck.add(game.getGamePile(Cards.copper).topCard());
+			}
+
+			// add kingdom cards
+			for (Card card : kingdomCards) {
+				for (int i = 0; i < numEachKingom; i++) {
+					deck.add(card);
 				}
 			}
+
+			// add remaining other cards subtracting 10 for the initial cards
+			// 2 silver is added for ever 1 gold
+			int j = 0;
+			for (int i = 0 ; i < numOther - 10; i++) {
+				if (j < 2) {
+					deck.add(game.getGamePile(Cards.silver).topCard());
+					j++;
+				}
+				else {
+					deck.add(game.getGamePile(Cards.gold).topCard());
+					j = 0;
+				}
+			}
+			mutantChildren.add(new Deck(deck, kingdomCards, percentKingdom));
 		}
 
 		return mutantChildren;
@@ -137,14 +184,14 @@ public class DeckPlanner {
 			combos.add(new Card[]{ kingdomCards.get(0), kingdomCards.get(1) });
 		}
 		else {
-			combos = getCombinations(2, kingdomCards);
+			combos = getCombinationsCards(2, kingdomCards);
 		}
 
 		int numOther  = (int) (deckSize *  ((100 - percentKingdom) / 100.0));
-		int numActions = deckSize - numOther;
+		int numKingdoms = deckSize - numOther;
 
-		int numFirstAction = (int) (numActions * (percentFirstKingdomCard / 100.0));
-		int numSecondAction = numActions - numFirstAction;
+		int numFirstKingdom = (int) (numKingdoms * (percentFirstKingdomCard / 100.0));
+		int numSecondKingdom =  - numFirstKingdom;
 
 		ArrayList<Deck> decks = new ArrayList<>();
 
@@ -160,10 +207,10 @@ public class DeckPlanner {
 			}
 
 			// add actions cards
-			for (int i = 0; i < numFirstAction; i++) {
+			for (int i = 0; i < numFirstKingdom; i++) {
 				deck.add(combo[0]);
 			}
-			for (int i = 0; i < numSecondAction; i++) {
+			for (int i = 0; i < numSecondKingdom; i++) {
 				deck.add(combo[1]);
 			}
 
@@ -189,7 +236,7 @@ public class DeckPlanner {
 		return decks;
 	}
 
-	private ArrayList<Card[]> getCombinations(int n, ArrayList<Card> cards) {
+	private ArrayList<Card[]> getCombinationsCards(int n, ArrayList<Card> cards) {
 
 		ArrayList<Card[]> subsets = new ArrayList<>();
 
@@ -197,7 +244,7 @@ public class DeckPlanner {
 
 		if (n <= cards.size()) {
 			for (int i = 0; (s[i] = i) < n - 1; i++);
-			subsets.add(getSubset(cards, s));
+			subsets.add(getSubsetCards(cards, s));
 			for(;;) {
 				int i;
 				for (i = n - 1; i >= 0 && s[i] == cards.size() - n + i; i--);
@@ -208,14 +255,46 @@ public class DeckPlanner {
 				for (++i; i < n; i++) {
 					s[i] = s[i - 1] + 1;
 				}
-				subsets.add(getSubset(cards, s));
+				subsets.add(getSubsetCards(cards, s));
 			}
 		}
 		return subsets;
 	}
 
-	private Card[] getSubset(ArrayList<Card> input, int[] subset) {
+	private Card[] getSubsetCards(ArrayList<Card> input, int[] subset) {
 		Card[] result = new Card[subset.length];
+		for (int i = 0; i < subset.length; i++)
+			result[i] = input.get(subset[i]);
+		return result;
+	}
+
+	private ArrayList<Deck[]> getCombinationsDecks(int n, ArrayList<Deck> cards) {
+
+		ArrayList<Deck[]> subsets = new ArrayList<>();
+
+		int[] s = new int[n];
+
+		if (n <= cards.size()) {
+			for (int i = 0; (s[i] = i) < n - 1; i++);
+			subsets.add(getSubsetDecks(cards, s));
+			for(;;) {
+				int i;
+				for (i = n - 1; i >= 0 && s[i] == cards.size() - n + i; i--);
+				if (i < 0) {
+					break;
+				}
+				s[i]++;
+				for (++i; i < n; i++) {
+					s[i] = s[i - 1] + 1;
+				}
+				subsets.add(getSubsetDecks(cards, s));
+			}
+		}
+		return subsets;
+	}
+
+	private Deck[] getSubsetDecks(ArrayList<Deck> input, int[] subset) {
+		Deck[] result = new Deck[subset.length];
 		for (int i = 0; i < subset.length; i++)
 			result[i] = input.get(subset[i]);
 		return result;
