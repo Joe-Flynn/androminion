@@ -1,7 +1,5 @@
 package com.vdom.core;
 
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -246,18 +244,6 @@ public class Game {
 
   }
 
-  public DeckGenerator buildDeckGenerator(Game game) {
-    try {
-		DeckGenerator dg = new DeckGenerator(game, 100, 80);
-		return dg;
-	}
-	catch (Exception e) {
-		System.out.println("INVALID DECK GENERATOR");
-		System.exit(1);
-	}
-	return null;
-  }
-
   // NOTE: The remainder of this file is organized into 5 Secions, as such:
   //   - SECTION 1: MAIN FUNCTION (entry point to game engine)
   //   - SECTION 2: GAME SETUP & INITIALIZATION FUNCTIONS (Sets up game parameters)
@@ -308,7 +294,7 @@ public class Game {
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
-      DeckGenerator dg = buildDeckGenerator(this.cloneGame());
+      DeckPlanner dg = new DeckPlanner(this.cloneGame(), 100);
       dg.findBestDeck();
 
       // Set up Player's Turn Information
@@ -417,8 +403,8 @@ public class Game {
 
   }
 
-  // only call from games cloned by DeckGenerator
-  public double playPlanningGame(int numTurns, ArrayList<Card> deck) {
+  // only call from games cloned by DeckPlanner
+  public double playPlanningGame(int numTurns, Deck deck) {
 
     Util.debug("---------------------", false);
     Util.debug("New Planning Game: " + gameType);
@@ -428,9 +414,10 @@ public class Game {
 
     // Set joe's deck , draw, and shuffle deck
     Player joe = players[0];
-    ((VDomPlayerJoe) joe).setDeck(deck);
+    ((VDomPlayerJoe) joe).setDeck(deck.getCards());
     joe.shuffleDeck(new MoveContext(this, joe), null);
     while (joe.hand.size() < 5)
+      drawToHand(new MoveContext(this, joe), null, 5 - joe.hand.size(), false);
       drawToHand(new MoveContext(this, joe), null, 5 - joe.hand.size(), false);
 
     // Make joe's evaluator
