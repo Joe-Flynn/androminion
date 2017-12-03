@@ -174,6 +174,7 @@ public abstract class BasePlayer extends Player implements GameEventListener {
   }
 
   protected Card bestCardInPlay(final MoveContext context, int maxCost, boolean exactCost, int maxDebtCost, boolean potion, boolean actionOnly, boolean victoryCardAllowed, boolean mustCostLessThanMax, boolean mustPick, Card except) {
+
     boolean isBuy = (maxCost == -1);
     if (isBuy) {
       maxCost = COST_MAX;

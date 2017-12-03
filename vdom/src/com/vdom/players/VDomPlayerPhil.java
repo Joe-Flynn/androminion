@@ -44,7 +44,7 @@ public class VDomPlayerPhil extends BasePlayer  {
     return doBuyEvalSearch(context);
   }
 
-  
+
   /*
   ** Card Action Interactions - Overridden to enter search tree!
   */
@@ -101,67 +101,70 @@ public class VDomPlayerPhil extends BasePlayer  {
     return choose(options);
   }
 
+
+
   @Override
   protected Card bestCardInPlay(final MoveContext context, int maxCost, boolean exactCost, int maxDebtCost, boolean potion, boolean actionOnly, boolean victoryCardAllowed, boolean mustCostLessThanMax, boolean mustPick, Card except) {
+
+    // Set Max Cost Limit
     boolean isBuy = (maxCost == -1);
     if (isBuy) {
       maxCost = COST_MAX;
       maxDebtCost = COST_MAX;
     }
 
+    // Set up Card Lists
     Card[] cards = context.getCardsInGame(GetCardsInGameOptions.TopOfPiles, true);
     ArrayList<Card> cardListGood = new ArrayList<Card>();
     ArrayList<Card> cardListBad = new ArrayList<Card>();
     int maxPotionCost = potion ? 1 : 0;
+
+    // Sort Cards into "Good" and "Bad" Cards
     for (int i = 0; i < cards.length; i++) {
       Card card = cards[i];
       int cardCost = card.getCost(context);
       int cardDebt = card.getDebtCost(context);
       int cardPotion = card.costPotion() ? 1 : 0;
-      if (card.is(Type.Landmark, context.player)
-              || card.is(Type.Shelter, context.player)
-              || card.equals(Cards.abandonedMine) /*choose only virtualRuins*/
-              || card.equals(Cards.ruinedLibrary)
-              || card.equals(Cards.ruinedMarket)
-              || card.equals(Cards.ruinedVillage)
-              || card.equals(Cards.survivors)
-              || (except != null && card.equals(except))
-              || (card.is(Type.Knight, null) && !card.equals(Cards.virtualKnight)) /*choose only virtualKnight*/ //TODO SPLITPILES what here?
-              || !Cards.isSupplyCard(card)
-              || !context.isCardOnTop(card)
-              || (actionOnly && !(card.is(Type.Action)))
-              || (!victoryCardAllowed && (card.is(Type.Victory)) && !card.equals(Cards.curse))
-              || (exactCost && (cardCost != maxCost || cardDebt != maxDebtCost || maxPotionCost != cardPotion))
-              || (cardCost > maxCost || cardDebt > maxDebtCost || cardPotion > maxPotionCost)
-              || (mustCostLessThanMax && (cardCost == maxCost && cardDebt == maxDebtCost && maxPotionCost == cardPotion))
-              || (isBuy && !context.canBuy(card))
-              ) {
-        /*card not allowed*/
-      } else if (   card.equals(Cards.curse)
-              || isTrashCard(card)
-              || (card.equals(Cards.potion) && !shouldBuyPotion())
-              ) {
-        /*card allowed, but not wanted*/
-        cardListBad.add(card);
+      if (card.is(Type.Landmark, context.player) ||
+          card.is(Type.Shelter, context.player) ||
+          card.equals(Cards.abandonedMine) || /*choose only virtualRuins*/
+          card.equals(Cards.ruinedLibrary) ||
+          card.equals(Cards.ruinedMarket) ||
+          card.equals(Cards.ruinedVillage) ||
+          card.equals(Cards.survivors) ||
+          (except != null && card.equals(except)) ||
+          (card.is(Type.Knight, null) && !card.equals(Cards.virtualKnight)) || /*choose only virtualKnight*/ //TODO SPLITPILES what here?
+          !Cards.isSupplyCard(card) ||
+          !context.isCardOnTop(card) ||
+          (actionOnly && !(card.is(Type.Action))) ||
+          (!victoryCardAllowed && (card.is(Type.Victory)) && !card.equals(Cards.curse)) ||
+          (exactCost && (cardCost != maxCost || cardDebt != maxDebtCost || maxPotionCost != cardPotion)) ||
+          (cardCost > maxCost || cardDebt > maxDebtCost || cardPotion > maxPotionCost) ||
+          (mustCostLessThanMax && (cardCost == maxCost && cardDebt == maxDebtCost && maxPotionCost == cardPotion)) ||
+          (isBuy && !context.canBuy(card)) {
+        /* card not allowed */
+      } else if (card.equals(Cards.curse) ||
+                 isTrashCard(card) ||
+                 (card.equals(Cards.potion) && !shouldBuyPotion())) {
+        cardListBad.add(card);  /* card allowed, but NOT wanted */
       } else {
-        cardListGood.add(card);
+        cardListGood.add(card); /* card allowed, and IS wanted */
       }
     }
 
-
+    // Return Best "Good" Card
     if (cardListGood.size() > 0) {
       cardListGood.add(null);
       return choose(cardListGood);
-      //return cardListGood.get(0);
     }
 
+    // Otherwise, pick from the scraps (a.k.a. "Bad" Cards)
     if (mustPick && cardListBad.size() > 0) {
       // don't add null to this one, we have to choose something if possible
       return choose(cardListBad);
-      //return cardListBad.get(0);
+    } else {
+      return null;
     }
-
-    return null;
   }
 
   // turns out highestCard is only called twice, let it do its thing for now...
@@ -429,7 +432,7 @@ public class VDomPlayerPhil extends BasePlayer  {
 
     */
   }
-  
+
 
   /*
   ** doActionEvalSearch - Evaluate Best Action to Play Using a Cloned Game
@@ -540,56 +543,47 @@ public class VDomPlayerPhil extends BasePlayer  {
 
     Card returnCard = null;
 
-    // Buy Province or Gold, First
-//    if (context.getCoinAvailableForBuy() == 0) {
-//      returnCard = null;
-//    } else if (context.canBuy(Cards.province)) {
-//      returnCard = Cards.province;
-//    } else if (context.canBuy(Cards.gold)) {
-//      returnCard = Cards.gold;
-//    } else {
+    // Buy Card that Improves Player's Evaluation Most
+    //double currentEvaluation = gameEvaluator.evaluate(context, this.getAllCards());
+    double currentEvaluation = -1000.0;
+    String cardToBuy = "";
 
-      // Buy Card that Improves Player's Evaluation Most
-      //double currentEvaluation = gameEvaluator.evaluate(context, this.getAllCards());
-      double currentEvaluation = -1000.0;
-      String cardToBuy = "";
+    for (String pileName : context.game.piles.keySet()) {
 
-      for (String pileName : context.game.piles.keySet()) {
-
-        // Clone Game and Players
-        Game clonedGame = context.game.cloneGame();
-        VDomPlayerPhil clonedSelf = null;
-        for (Player clonedPlayer : clonedGame.players) {
-          if (clonedPlayer.getPlayerName() == "Phil") {
-            clonedSelf = (VDomPlayerPhil) clonedPlayer;
-          }
+      // Clone Game and Players
+      Game clonedGame = context.game.cloneGame();
+      VDomPlayerPhil clonedSelf = null;
+      for (Player clonedPlayer : clonedGame.players) {
+        if (clonedPlayer.getPlayerName() == "Phil") {
+          clonedSelf = (VDomPlayerPhil) clonedPlayer;
         }
-        Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
-        MoveContext clonedContext = new MoveContext(context, clonedGame, clonedSelf);
+      }
+      Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
+      MoveContext clonedContext = new MoveContext(context, clonedGame, clonedSelf);
 
-        // Try the Buy
-        Card supplyCard = clonedContext.game.piles.get(pileName).placeholderCard();
-        Card buyCard = clonedGame.getPile(supplyCard).topCard();
+      // Try the Buy
+      Card supplyCard = clonedContext.game.piles.get(pileName).placeholderCard();
+      Card buyCard = clonedGame.getPile(supplyCard).topCard();
 
-        if (buyCard != null && clonedGame.isValidBuy(clonedContext, buyCard)) {
+      if (buyCard != null && clonedGame.isValidBuy(clonedContext, buyCard)) {
           clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
           clonedGame.playBuy(clonedContext, buyCard);
           clonedGame.playerPayOffDebt(clonedSelf, clonedContext);
-          if (clonedEvaluator.evaluate(clonedContext, clonedSelf.getAllCards()) > currentEvaluation) {
-            currentEvaluation = clonedEvaluator.evaluate(clonedContext, clonedSelf.getAllCards());
-            cardToBuy = pileName;
-          }
+        if (clonedEvaluator.evaluate(clonedContext, clonedSelf.getAllCards()) > currentEvaluation) {
+          currentEvaluation = clonedEvaluator.evaluate(clonedContext, clonedSelf.getAllCards());
+          cardToBuy = pileName;
         }
       }
+    }
 
-      // Update Card to Buy
-      if (cardToBuy != "") {
-        returnCard = context.game.piles.get(cardToBuy).placeholderCard();
-      } else if (context.canBuy(Cards.silver)) {
-        returnCard = Cards.silver;
-      } else {
-        returnCard = null;
-      }
+    // Update Card to Buy
+    if (cardToBuy != "") {
+      returnCard = context.game.piles.get(cardToBuy).placeholderCard();
+    } else if (context.canBuy(Cards.silver)) {
+      returnCard = Cards.silver;
+    } else {
+      returnCard = null;
+    }
 
     // Update Game Evaluator
     return returnCard;
