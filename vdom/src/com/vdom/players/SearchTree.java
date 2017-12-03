@@ -92,7 +92,6 @@ public class SearchTree {
 
     protected Card actionCard;              // Action Card Played to get to Current Game State
     protected PlayerDecision decision;      // Player Decision Selected for the Action Card Played
-    protected Card bestCard;                // Player Decision on Best Card In PLay (Used by Several Action Cards)
 
     // TODO: IMPLEMENT OTHER CRITICAL DECISIONS (Review Structure from AI Player's Choose Function)
 
@@ -100,14 +99,12 @@ public class SearchTree {
     protected ArrayList<TreeNode> children; // Contains Future Game States from the Current Game State
 
     protected int treeDepth;                     // Used to perform Depth-Limited Searches
-    protected static final int maxTreeDepth = 6; // Limit for Depth-Limited Searches
-
+    protected static final int maxTreeDepth = 4; // Limit for Depth-Limited Searches
 
     public TreeNode(MoveContext inputContext) {
       context    = inputContext.cloneContext();
       actionCard = null;
       decision   = PlayerDecision.NoDecision;
-      bestCard   = null;
       evaluation = ((VDomPlayerJarvis)context.player).gameEvaluator.evaluateActionPhase(context);
       children   = new ArrayList<TreeNode>();
       treeDepth  = 0;
@@ -177,8 +174,7 @@ public class SearchTree {
       for (Card playerCard : handActions) {
 
         // Select Player Decisions
-        ArrayList<PlayerDecision> decisions = new ArrayList<PlayerDecision>();
-        decisions.add(PlayerDecision.NoDecision); // TODO: IMPLEMENT OTHER DECISIONS!!!!!!!!!!!!!!!!!!!!!!!
+        ArrayList<PlayerDecision> decisions = getPlayerDecisions(playerCard);
         for (PlayerDecision decision : decisions) {
 
           // Clone Parent Node
@@ -193,11 +189,17 @@ public class SearchTree {
 
           // Otherwise, Add Nodes for each "Best Card in Play" Decision Needed
           if (childPlayer.bestCardsInPlay != null) {
+
+            System.out.println(">>>> SEARCH TREE: bestCardsInPlay not null.");
+
             for (Card card : childPlayer.bestCardsInPlay) {
               TreeNode anotherChild = cloneAndPlay(playerCard, card);
               addChild(anotherChild);
               nodeExpanded = true;
             }
+
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
           }
 
           /// PROBABLY GOING TO HAVBE PROBLEMS WHEN BEST CARD IN PLAY CALLED MULIPLE TIMES...
@@ -278,16 +280,39 @@ public class SearchTree {
       return path;
     }
 
+
+    protected ArrayList<PlayerDecision> getPlayerDecisions(Card playerCard) {
+
+      ArrayList<PlayerDecision> decisions = new ArrayList<PlayerDecision>();
+
+      switch (playerCard.getKind()) {
+        case Amulet:
+          decisions.add(PlayerDecision.Amulet_ChooseSilver);
+          decisions.add(PlayerDecision.Amulet_ChooseCoin);
+          decisions.add(PlayerDecision.Amulet_ChooseTrash);
+          break;
+        case Pawn:
+          decisions.add(PlayerDecision.Pawn_AddCardAndAction);
+          decisions.add(PlayerDecision.Pawn_AddCardAndBuy);
+          decisions.add(PlayerDecision.Pawn_AddCardAndGold);
+          decisions.add(PlayerDecision.Pawn_AddActionAndBuy);
+          decisions.add(PlayerDecision.Pawn_AddActionAndGold);
+          decisions.add(PlayerDecision.Pawn_AddBuyAndGold);
+          break;
+        default:
+          break;
+      }
+      return decisions;
+    }
+
   }
 
-
+  // Search Tree Root
   protected TreeNode root = null;
 
+  // Search Tree Constructor
   public SearchTree(MoveContext inputContext) {
 
-    System.out.println(">>>> SEARCH TREE: Creating new search tree.");
-
-    // Set Root
     this.root = new TreeNode(inputContext.cloneContext());
 
     // Expand Tree
@@ -314,9 +339,7 @@ public class SearchTree {
   */
   public ArrayList<TreeNode> getPathToMaxEval() {
     double maxEval = this.root.getMaxEval();
-    System.out.println(">>>> SEARCH TREE: Max Eval:" + maxEval);
     return this.root.getPathToEvalValue(maxEval);
   }
-
 
 }

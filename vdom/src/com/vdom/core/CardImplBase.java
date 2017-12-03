@@ -397,6 +397,7 @@ public class CardImplBase extends CardImpl {
 
 	private void mine(MoveContext context, Player currentPlayer) {
 		Card cardToUpgrade = currentPlayer.controlPlayer.mine_treasureFromHandToUpgrade(context);
+		if (cardToUpgrade == null) { return; }
 		if ((Game.errataMineForced && cardToUpgrade == null) || !cardToUpgrade.is(Type.Treasure, currentPlayer)) {
 			Card[] cards = currentPlayer.getTreasuresInHand().toArray(new Card[] {});
 			if (cards.length != 0) {
