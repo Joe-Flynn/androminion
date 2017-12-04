@@ -1,11 +1,7 @@
 package com.vdom.players;
 
-
 import com.vdom.api.Card;
 import com.vdom.core.*;
-import sun.plugin.com.event.COMEventHandler;
-
-
 import java.util.*;
 
 
@@ -14,15 +10,14 @@ import java.util.*;
  */
 public class DeckPlanner {
 
-
 	private final static int initPercentKingdoms = 80;
 	private final static int initPercentFirstKingdom = 50;
+	private final static int mutantPercentFirstDeck = 80;
 	private final static int numTurns = 100;
 	private int deckSize;
 	private Game game;
 
 	public DeckPlanner(Game game, int deckSize) {
-
 		this.deckSize = deckSize;
 		this.game = game;
 	}
@@ -76,17 +71,6 @@ public class DeckPlanner {
 			}
 		}
 
-		currentPool.clear();
-		currentPool.addAll(survivors);
-		currentPool.addAll(createMutantChildren(survivors, initPercentFirstKingdom));
-
-		averageTurnEconomies.clear();
-		for (Deck deck : currentPool) {
-			Game clone = game.cloneGame();
-			averageTurnEconomies.add(playSimulations(numTurns, deck));
-		}
-
-
 		Deck maxDeck = null;
 		double max = (double) Collections.max(averageTurnEconomies);
 		for (int i = 0; i < averageTurnEconomies.size(); i++) {
@@ -94,8 +78,34 @@ public class DeckPlanner {
 				maxDeck = currentPool.get(i);
 			}
 		}
+		maxDeck.getKingdomCards();
 
-		return maxDeck;
+		currentPool.clear();
+		currentPool.addAll(survivors);
+		currentPool.addAll(createMutantChildren(survivors, initPercentFirstKingdom, mutantPercentFirstDeck));
+
+		for (Deck d : currentPool){
+			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			for (Card c : d.getCards()) {
+				System.out.println(c.getName());
+			}
+		}
+
+		averageTurnEconomies.clear();
+		for (Deck deck : currentPool) {
+			Game clone = game.cloneGame();
+			averageTurnEconomies.add(playSimulations(numTurns, deck));
+		}
+
+		Deck maxDeck2 = null;
+		max = (double) Collections.max(averageTurnEconomies);
+		for (int i = 0; i < averageTurnEconomies.size(); i++) {
+			if (averageTurnEconomies.get(i) == max) {
+				maxDeck2 = currentPool.get(i);
+			}
+		}
+
+		return maxDeck2;
 	}
 
 	//Plays x amount of turns in increments of 5 turns per each "game"
@@ -108,25 +118,13 @@ public class DeckPlanner {
 			turnEconomySummation += clone.playPlanningGame(5, deck);
 		}
 		return turnEconomySummation / (double) numGames;
-
 	}
 
 	// this one was fun to name lol
 	// This could potentially exceed the deck size if the amount of cards in the percent that are not kingdom cards are
 	// less than 10, but we shouldn't run into issues with the size deck we are using
-	private ArrayList<Deck> createMutantChildren(ArrayList<Deck> decks, int percentKingdom) {
+	private ArrayList<Deck> createMutantChildren(ArrayList<Deck> decks, int percentKingdom, int percentFirstDeck) {
 		ArrayList<Deck> mutantChildren = new ArrayList<>();
-
-//		for (int i = 0; i <= 100; i += 25) {
-//			if (i != initPercentKingdoms) {
-//				for (int j = 0; j <= 100; j += 25) {
-//					if (j != initPercentFirstKingdom) {
-//						mutantChildren.addAll(generateDecks(deck.getKingdomCards(), i, j));
-//					}
-//				}
-//			}
-//		}
-
 		ArrayList<Deck[]> combos = getCombinationsDecks(2, decks);
 
 		for (Deck[] combo : combos) {
@@ -136,38 +134,55 @@ public class DeckPlanner {
 
 			int numOther  = (int) (deckSize *  ((100 - percentKingdom) / 100.0));
 			int numKingdoms = deckSize - numOther;
-			int numEachKingdom = numKingdoms / 4;
+
+			int numEachKingdomFromFirstDeck = (int) (numKingdoms *  (percentFirstDeck / 100.0)) / 2;
+			int numEachKingdomFromSecondDeck = (int) (numKingdoms *  ((100 - percentFirstDeck) / 100.0)) / 2;
 
 			// add init cards
-			ArrayList<Card> deck = new ArrayList<>();
+			ArrayList<Card> deck1 = new ArrayList<>();
+			ArrayList<Card> deck2 = new ArrayList<>();
 			for (int i = 0; i < 7; i++) {
 				if (i < 3) {
-					deck.add(game.getGamePile(Cards.estate).topCard()); // need to get card in this manner so it is non-null, valid card
+					deck1.add(game.getGamePile(Cards.estate).topCard()); // need to get card in this manner so it is non-null, valid card
+					deck2.add(game.getGamePile(Cards.estate).topCard());
 				}
-				deck.add(game.getGamePile(Cards.copper).topCard());
+				deck1.add(game.getGamePile(Cards.copper).topCard());
+				deck2.add(game.getGamePile(Cards.estate).topCard());
 			}
 
 			// add kingdom cards
-			for (Card card : kingdomCards) {
-				for (int i = 0; i < numEachKingdom; i++) {
-					deck.add(card);
-				}
+			for (int i = 0; i < numEachKingdomFromFirstDeck; i++) {
+				deck1.add(kingdomCards.get(0));
+				deck1.add(kingdomCards.get(1));
+				deck2.add(kingdomCards.get(2));
+				deck2.add(kingdomCards.get(3));
 			}
+
+			for (int i = 0; i < numEachKingdomFromSecondDeck; i++) {
+				deck1.add(kingdomCards.get(3));
+				deck1.add(kingdomCards.get(2));
+				deck2.add(kingdomCards.get(1));
+				deck2.add(kingdomCards.get(0));
+			}
+
 
 			// add remaining other cards subtracting 10 for the initial cards
 			// 2 silver is added for ever 1 gold
 			int j = 0;
 			for (int i = 0 ; i < numOther - 10; i++) {
 				if (j < 2) {
-					deck.add(game.getGamePile(Cards.silver).topCard());
+					deck1.add(game.getGamePile(Cards.silver).topCard());
+					deck2.add(game.getGamePile(Cards.silver).topCard());
 					j++;
 				}
 				else {
-					deck.add(game.getGamePile(Cards.gold).topCard());
+					deck1.add(game.getGamePile(Cards.gold).topCard());
+					deck2.add(game.getGamePile(Cards.gold).topCard());
 					j = 0;
 				}
 			}
-			mutantChildren.add(new Deck(deck, kingdomCards, percentKingdom));
+			mutantChildren.add(new Deck(deck1, kingdomCards, percentKingdom));
+			mutantChildren.add(new Deck(deck2, kingdomCards, percentKingdom));
 		}
 
 		return mutantChildren;
@@ -189,7 +204,7 @@ public class DeckPlanner {
 		int numKingdoms = deckSize - numOther;
 
 		int numFirstKingdom = (int) (numKingdoms * (percentFirstKingdomCard / 100.0));
-		int numSecondKingdom =  - numFirstKingdom;
+		int numSecondKingdom =  numKingdoms - numFirstKingdom;
 
 		ArrayList<Deck> decks = new ArrayList<>();
 
@@ -225,7 +240,7 @@ public class DeckPlanner {
 					j = 0;
 				}
 			}
-			kingdomCards.clear();
+			kingdomCards = new ArrayList<Card>();
 			kingdomCards.add(combo[0]);
 			kingdomCards.add(combo[1]);
 			decks.add(new Deck(deck, kingdomCards, percentKingdom));
@@ -297,6 +312,5 @@ public class DeckPlanner {
 			result[i] = input.get(subset[i]);
 		return result;
 	}
-
 
 }

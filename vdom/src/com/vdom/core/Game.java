@@ -295,8 +295,8 @@ public class Game {
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
       DeckPlanner dg = new DeckPlanner(this.cloneGame(), 100);
-      dg.findBestDeck();
-
+      Deck d = dg.findBestDeck();
+      d.getKingdomCards();
       // Set up Player's Turn Information
       playersTurn = 0;
       gameTurnCount = 1;
