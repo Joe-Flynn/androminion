@@ -2,6 +2,7 @@ package com.vdom.players;
 
 import com.vdom.api.Card;
 import com.vdom.api.GameEvent;
+import com.vdom.core.Cards;
 import com.vdom.core.MoveContext;
 import com.vdom.core.Player;
 import com.vdom.core.Type;
@@ -49,19 +50,72 @@ public class DomTree {
         return (T)(curNode.choice);
     }
 
-    public void expand()
+    public Card chooseAction() {return chooseAction(10, 3, 10);}
+
+    public Card chooseAction(int depth, int width, int iterations)
+    {
+        for(int i = 0; i < iterations; i++)
+        {
+            searchAction(depth, width);
+        }
+
+        double maxEval = neg_infinity;
+        DomTreeNode maxAction = null;
+
+        for(DomTreeNode tn : root.children)
+        {
+            if(tn.evaluation > maxEval) {maxAction = tn;}
+        }
+
+        return maxAction.card;
+    }
+
+    public Card searchAction(){return searchAction(10, 3);}
+
+    public Card searchAction(int depth, int width)
+    {
+        // Currently assuming that any reshuffling has been done already.
+        // Belay that... but probably still a good idea.
+
+        // Keep only existing first level children (if any)
+        for(DomTreeNode tn : root.children)
+        {
+            tn.children = new ArrayList<>();
+        }
+
+        // Shuffle and Expand
+        //  on second thought... should it be the player's responsibility to reshuffle? The player can track known cards.
+        //  hacky, but I'm pretty sure responsible card should never matter..
+        root.context.player.shuffleDeck(root.context, Cards.copper);
+        expand(depth, width);
+
+        // Add the top evaluation in each main branch to the branch evaluation
+        for(DomTreeNode tn : root.children)
+        {
+            if (tn.evaluation < neg_infinity) {tn.evaluation = 0;}
+            tn.evaluation += tn.find_best_state_node().evaluation;
+        }
+
+        return null;
+    }
+
+    public void expand() {expand(10, 3);}
+
+    public void expand(int depth, int width)
     {
         ArrayList<DomTreeNode> states;
+        int i = 0;
 
         do {
-            states = root.get_leaf_states();
+            states = root.get_leaf_states(width);
 
             for(DomTreeNode state : states)
             {
                 expand_state(state);
             }
 
-        }while (states.size() > 0);
+            i++;
+        }while (states.size() > 0 && i < depth);
 
     }
 
@@ -198,6 +252,28 @@ public class DomTree {
                 {
                     leaves.addAll(tn.get_leaf_states());
                 }
+            }
+            return leaves;
+        }
+
+        public ArrayList<DomTreeNode> get_leaf_states(int width)
+        {
+            ArrayList<DomTreeNode> leaves = new ArrayList<>();
+            if(type == DomNodeType.state && children.size() == 0 && evaluation < neg_infinity)
+            {
+                leaves.add(this);
+            }
+            else
+            {
+                for(int i = 0; i < Math.min(width, children.size()); i++)
+                {
+                    leaves.addAll(children.get(i).get_leaf_states());
+                }
+                /*
+                for(DomTreeNode tn : children)
+                {
+                    leaves.addAll(tn.get_leaf_states());
+                }*/
             }
             return leaves;
         }
