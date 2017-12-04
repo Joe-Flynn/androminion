@@ -17,7 +17,7 @@ public class DeckPlanner {
 
 	private final static int initPercentKingdoms = 80;
 	private final static int initPercentFirstKingdom = 50;
-	private final static int numTurns = 350;
+	private final static int numTurns = 100;
 	private int deckSize;
 	private Game game;
 
@@ -45,8 +45,7 @@ public class DeckPlanner {
 
 		// Get set of decks with the highest 20% of averageTurnEconomies
 		for (Deck deck : currentPool) {
-			Game clone = game.cloneGame();
-			double averageTurnEconomy = clone.playPlanningGame(numTurns, deck);
+			double averageTurnEconomy = playSimulations(numTurns, deck);
 			averageTurnEconomies.add(averageTurnEconomy);
 
 			// If maxes isn't at capacity, add values and update minValOfMaxes. Otherwise, if averageTurnEconomy is less
@@ -77,14 +76,6 @@ public class DeckPlanner {
 			}
 		}
 
-		Deck maxDeck;
-		double max = (double) Collections.max(averageTurnEconomies);
-		for (int i = 0; i < averageTurnEconomies.size(); i++) {
-			if (averageTurnEconomies.get(i) == max) {
-				maxDeck = currentPool.get(i);
-			}
-		}
-
 		currentPool.clear();
 		currentPool.addAll(survivors);
 		currentPool.addAll(createMutantChildren(survivors, initPercentFirstKingdom));
@@ -92,25 +83,32 @@ public class DeckPlanner {
 		averageTurnEconomies.clear();
 		for (Deck deck : currentPool) {
 			Game clone = game.cloneGame();
-			double averageTurnEconomy = clone.playPlanningGame(numTurns, deck);
-			averageTurnEconomies.add(averageTurnEconomy);
+			averageTurnEconomies.add(playSimulations(numTurns, deck));
 		}
 
 
-		HashSet<Double> uniqScores =  new HashSet<>();
-		for (double avg : averageTurnEconomies) {
-			uniqScores.add(avg);
-		}
-
-		Deck maxDeck2 = null;
-		max = (double) Collections.max(averageTurnEconomies);
+		Deck maxDeck = null;
+		double max = (double) Collections.max(averageTurnEconomies);
 		for (int i = 0; i < averageTurnEconomies.size(); i++) {
 			if (averageTurnEconomies.get(i) == max) {
-				maxDeck2 = currentPool.get(i);
+				maxDeck = currentPool.get(i);
 			}
 		}
 
-		return maxDeck2;
+		return maxDeck;
+	}
+
+	//Plays x amount of turns in increments of 5 turns per each "game"
+	//returing the average turn economy among all games
+	private double playSimulations(int numTurns, Deck deck) {
+		int numGames = numTurns / 5;
+		int turnEconomySummation = 0;
+		for (int i = 0; i < numGames; i++) {
+			Game clone = game.cloneGame();
+			turnEconomySummation += clone.playPlanningGame(5, deck);
+		}
+		return turnEconomySummation / (double) numGames;
+
 	}
 
 	// this one was fun to name lol
@@ -138,7 +136,7 @@ public class DeckPlanner {
 
 			int numOther  = (int) (deckSize *  ((100 - percentKingdom) / 100.0));
 			int numKingdoms = deckSize - numOther;
-			int numEachKingom = numKingdoms / 4;
+			int numEachKingdom = numKingdoms / 4;
 
 			// add init cards
 			ArrayList<Card> deck = new ArrayList<>();
@@ -151,7 +149,7 @@ public class DeckPlanner {
 
 			// add kingdom cards
 			for (Card card : kingdomCards) {
-				for (int i = 0; i < numEachKingom; i++) {
+				for (int i = 0; i < numEachKingdom; i++) {
 					deck.add(card);
 				}
 			}
