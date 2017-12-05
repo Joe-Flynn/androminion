@@ -56,6 +56,8 @@ public class VDomPlayerJarvis extends BasePlayer {
 
     System.out.println(">>>> JARVIS: BEGINNING DO_ACTION, HAND = " + hand);
 
+
+    /*
     // Build Tree and Find Path to Best Action Phase Evaluation
     //if (actionPhasePlayCount == 0) {
       searchTree = new DomTree(context, gameEvaluator);
@@ -64,6 +66,14 @@ public class VDomPlayerJarvis extends BasePlayer {
       searching = false;
       bestPlay = searchTree.root.get_top_play();
     //}
+    */
+
+    if(getActionsInHand(this).size() > 0) {
+      searchTree = new DomTree(context.cloneContext(), gameEvaluator);
+      searching = true;
+      bestPlay = searchTree.chooseAction();
+      searching = false;
+    }
 
     // Get Node Along Best Action Phase Evaluation's Path
     System.out.println(">>>> JARVIS: actionPhasePlayCount: " + actionPhasePlayCount);
