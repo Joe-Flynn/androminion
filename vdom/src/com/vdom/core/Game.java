@@ -278,7 +278,7 @@ public class Game {
   */
   void start() {
     HashMap<String, Double> playerToWins = new HashMap<>();
-    playerToWins.put("com.vdom.players.VDomPlayerFlynn", 0.0);
+    playerToWins.put("com.vdom.players.VDomPlayerFlynn", 0.0);  // SAME THING. RESOLVE JARVIS-FLYNN Merge.
     playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
 
     // Variables for Overall Stats over all Games
@@ -568,7 +568,7 @@ public class Game {
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerFlynn();
+        players[i] = new VDomPlayerFlynn(); // NEED TO RESOLVED WITH VDomPlayerJarvis Merge.
       }
       else {
         players[i] = new VDomPlayerAndrew();
@@ -1885,7 +1885,7 @@ public class Game {
         }
 
         if (event.getType() == GameEvent.EventType.BuyingCard) {
-          msg.append(" (with gold: " + event.getContext().getCoinAvailableForBuy() + ", buys remaining: " + event.getContext().getBuysLeft());
+          msg.append(" (gold remaining: " + event.getContext().getCoinAvailableForBuy() + ", buys remaining: " + event.getContext().getBuysLeft());
         }
         Util.debug(msg.toString(), true);
 

@@ -124,7 +124,6 @@ public class VDomPlayerAndrew extends BasePlayer  {
   */
   @Override
   public Card doBuy(MoveContext context) {
-  	System.out.println("!!!!!!!!!!!!!! DREW eval: " + evaluator.evaluateBuyPhase(context, this.getAllCards()));
 
     // Select the Terminal Card
     int terminalIndex = 0;
@@ -134,13 +133,13 @@ public class VDomPlayerAndrew extends BasePlayer  {
         Card supplyCard = context.game.piles.get(p).placeholderCard();
         if (supplyCard.getKind() == terminal.getKind()) {
           terminalCard = terminal;
-          System.out.println("TERMINAL SELECTED: " + terminal);
+          System.out.println(">>>> ANDREW: TERMINAL SELECTED: " + terminal);
         }
       }
     }
     if (terminalCard == null) {
       terminalCard = Cards.province; // Default Terminal Card
-      System.out.println("TERMINAL SELECTED: " + Cards.province);
+      System.out.println(">>>> ANDREW: TERMINAL SELECTED: " + Cards.province);
     }
 
     // Buy Terminal Card if Possible
