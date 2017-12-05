@@ -22,7 +22,9 @@ public class DeckPlanner {
 		this.game = game;
 	}
 
-	public Deck findBestDeck() {
+	public Deck findBestDeck(Player player) {
+		Player pPlayer = ((BasePlayer)player).clone(game);
+
 		ArrayList<Card> kingdomCards = new ArrayList<>();
 		for (CardPile cardPile : game.piles.values()) {
 			if (cardPile.topCard().is(Type.Action) && !cardPile.topCard().is(Type.Ruins) && !cardPile.topCard().is(Type.Treasure)
@@ -40,7 +42,7 @@ public class DeckPlanner {
 
 		// Get set of decks with the highest 20% of averageTurnEconomies
 		for (Deck deck : currentPool) {
-			double averageTurnEconomy = playSimulations(numTurns, deck);
+			double averageTurnEconomy = playSimulations(numTurns, deck, pPlayer);
 			averageTurnEconomies.add(averageTurnEconomy);
 
 			// If maxes isn't at capacity, add values and update minValOfMaxes. Otherwise, if averageTurnEconomy is less
@@ -78,7 +80,7 @@ public class DeckPlanner {
 		averageTurnEconomies.clear();
 		for (Deck deck : currentPool) {
 			Game clone = game.cloneGame();
-			averageTurnEconomies.add(playSimulations(numTurns, deck));
+			averageTurnEconomies.add(playSimulations(numTurns, deck, pPlayer));
 		}
 
 		Deck maxDeck = null;
@@ -94,12 +96,12 @@ public class DeckPlanner {
 
 	//Plays x amount of turns in increments of 5 turns per each "game"
 	//returing the average turn economy among all games
-	private double playSimulations(int numTurns, Deck deck) {
+	private double playSimulations(int numTurns, Deck deck, Player player) {
 		int numGames = numTurns / 5;
 		int turnEconomySummation = 0;
 		for (int i = 0; i < numGames; i++) {
 			Game clone = game.cloneGame();
-			turnEconomySummation += clone.playPlanningGame(5, deck);
+			turnEconomySummation += clone.playPlanningGame(5, deck, player);
 		}
 		return turnEconomySummation / (double) numGames;
 	}

@@ -32,7 +32,7 @@ public class VDomPlayerFlynn extends BasePlayer  {
 
 	@Override
 	public String getPlayerName(boolean maskName) {
-		return maskName ? "Player " + (playerNumber + 1) : "Joe";
+		return maskName ? "Player " + (playerNumber + 1) : "Flynn";
 	}
 
 	@Override
@@ -60,8 +60,7 @@ public class VDomPlayerFlynn extends BasePlayer  {
 	public Card doBuy(MoveContext context) {
 		HashMap<Card, Double> idealPercentages = idealDeck.getCardPercentages();
 
-		ArrayList<Card> cards = deck.toArrayList();
-		cards.addAll(hand.toArrayList());
+		ArrayList<Card> cards = this.getAllCards();
 
 		// Card -> [currentPercent, percentAwayFromIdeal]
 		HashMap<Card, Double> currentPercentages = new HashMap<>();

@@ -64,7 +64,7 @@ public class VDomPlayerJarvis extends BasePlayer {
       if(getActionsInHand(this).size() > 0) {
       searchTree = new DomTree(context.cloneContext(), gameEvaluator);
       searching = true;
-      bestPlay = searchTree.chooseAction();
+      bestPlay = searchTree.chooseAction(6,3,10);
       searching = false;
     }
 
@@ -78,9 +78,10 @@ public class VDomPlayerJarvis extends BasePlayer {
 
   @Override
   public Card doBuy(MoveContext context) {
-    Card returnCard = doBuyHeuristic(context);
-    System.out.println(">>>> JARVIS: ACTUALLY BUYING CARD: " + returnCard);
-    return returnCard;
+//    Card returnCard = doBuyHeuristic(context);
+//    System.out.println(">>>> JARVIS: ACTUALLY BUYING CARD: " + returnCard);
+//    return returnCard;
+    return null;
   }
 
 

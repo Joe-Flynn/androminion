@@ -14,6 +14,7 @@ import java.util.TreeMap;
 
 import com.vdom.api.Card;
 import com.vdom.api.GameEvent;
+import com.vdom.players.Deck;
 
 public abstract class Player {
 
@@ -77,6 +78,12 @@ public abstract class Player {
   // ////////////////////////////////////////////
   // Player Functions
   // ////////////////////////////////////////////
+
+  public void setDeck(Deck deck) {
+    CardList playerDeck = new CardList(this, "Deck");
+    playerDeck.addAll(deck.getCards());
+    this.deck = playerDeck;
+  }
 
   public boolean isAi() {
     return true;
