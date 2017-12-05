@@ -278,7 +278,7 @@ public class Game {
   */
   void start() {
     HashMap<String, Double> playerToWins = new HashMap<>();
-    playerToWins.put("com.vdom.players.VDomPlayerPhil", 0.0);
+    playerToWins.put("com.vdom.players.VDomPlayerFlynn", 0.0);
     playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
 
     // Variables for Overall Stats over all Games
@@ -294,9 +294,10 @@ public class Game {
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
-      DeckPlanner dg = new DeckPlanner(this.cloneGame(), 100);
-      Deck d = dg.findBestDeck();
-      d.getKingdomCards();
+      DeckPlanner planner = new DeckPlanner(this.cloneGame(), 100);
+      ((VDomPlayerFlynn) players[0]).setIdealDeck(planner.findBestDeck());
+
+
       // Set up Player's Turn Information
       playersTurn = 0;
       gameTurnCount = 1;
@@ -414,7 +415,7 @@ public class Game {
 
     // Set joe's deck , draw, and shuffle deck
     Player joe = players[0];
-    ((VDomPlayerJoe) joe).setDeck(deck.getCards());
+    ((VDomPlayerJoe) joe).setDeck(deck);
     joe.shuffleDeck(new MoveContext(this, joe), null);
     while (joe.hand.size() < 5)
       drawToHand(new MoveContext(this, joe), null, 5 - joe.hand.size(), false);
@@ -567,7 +568,7 @@ public class Game {
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerPhil();
+        players[i] = new VDomPlayerFlynn();
       }
       else {
         players[i] = new VDomPlayerAndrew();

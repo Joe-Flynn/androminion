@@ -60,9 +60,9 @@ public class VDomPlayerJoe extends BasePlayer  {
     @Override
     public Card doBuy(MoveContext context) { return null; }
 
-    public void setDeck(ArrayList<Card> deck) {
+    public void setDeck(Deck deck) {
         CardList playerDeck = new CardList(this, "Deck");
-        playerDeck.addAll(deck);
+        playerDeck.addAll(deck.getCards());
         this.deck = playerDeck;
     }
 }

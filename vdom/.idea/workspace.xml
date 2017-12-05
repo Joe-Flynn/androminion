@@ -19,8 +19,8 @@
       <file leaf-file-name="Game.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="298" column="6" lean-forward="false" selection-start-line="298" selection-start-column="6" selection-end-line="298" selection-end-column="6" />
+            <state relative-caret-position="136">
+              <caret line="279" column="0" lean-forward="false" selection-start-line="279" selection-start-column="0" selection-end-line="279" selection-end-column="0" />
               <folding>
                 <element signature="class#BlackMarketSplitPileOptions#0;class#Game#0" expanded="false" />
                 <element signature="class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
@@ -29,28 +29,28 @@
                 <element signature="e#11212#11285#0" expanded="false" />
                 <element signature="docComment;method#main#0;class#Game#0" expanded="false" />
                 <element signature="docComment;method#initGameBoard#0;class#Game#0" expanded="false" />
-                <element signature="method#initGameBoard#0;class#Game#0" expanded="false" />
-                <element signature="method#initPlayers#1;class#Game#0" expanded="false" />
+                <element signature="e#21384#21385#0" expanded="true" />
+                <element signature="e#21423#21424#0" expanded="true" />
                 <element signature="method#initPlayersPlanning#0;class#Game#0" expanded="false" />
                 <element signature="method#initPlayerCards#0;class#Game#0" expanded="false" />
-                <element signature="e#27066#27135#0" expanded="false" />
+                <element signature="e#27078#27147#0" expanded="false" />
                 <element signature="method#initCards#0;class#Game#0" expanded="false" />
-                <element signature="e#52313#52390#0" expanded="false" />
-                <element signature="e#56497#56619#0" expanded="false" />
-                <element signature="e#59968#60005#0" expanded="false" />
-                <element signature="e#61657#61734#0" expanded="false" />
-                <element signature="e#74149#74226#0" expanded="false" />
+                <element signature="e#52325#52402#0" expanded="false" />
+                <element signature="e#56509#56631#0" expanded="false" />
+                <element signature="e#59980#60017#0" expanded="false" />
+                <element signature="e#61669#61746#0" expanded="false" />
+                <element signature="e#74161#74238#0" expanded="false" />
                 <element signature="docComment;method#setPlayersTurn#0;class#Game#0" expanded="false" />
                 <element signature="method#setPlayersTurn#0;class#Game#0" expanded="false" />
                 <element signature="method#printPlayerTurn#0;class#Game#0" expanded="false" />
-                <element signature="class#77341:77634" expanded="false" />
-                <element signature="method#compare#0;class#77341:77634" expanded="false" />
+                <element signature="class#77353:77646" expanded="false" />
+                <element signature="method#compare#0;class#77353:77646" expanded="false" />
                 <element signature="method#playerEndTurn#0;class#Game#0" expanded="false" />
-                <element signature="e#78922#78958#0" expanded="false" />
-                <element signature="e#79284#79320#0" expanded="false" />
-                <element signature="e#80515#80619#0" expanded="false" />
+                <element signature="e#78934#78970#0" expanded="false" />
+                <element signature="e#79296#79332#0" expanded="false" />
+                <element signature="e#80527#80631#0" expanded="false" />
                 <element signature="method#playerAfterTurn#0;class#Game#0" expanded="false" />
-                <element signature="e#96673#96755#0" expanded="false" />
+                <element signature="e#96685#96767#0" expanded="false" />
                 <element signature="method#getNextPlayer#0;class#Game#0" expanded="false" />
                 <element signature="method#getPlayersInTurnOrder#1;class#Game#0" expanded="false" />
                 <element signature="method#getPlayersInTurnOrder#2;class#Game#0" expanded="false" />
@@ -61,7 +61,7 @@
                 <element signature="method#playerBuy#0;class#Game#0" expanded="false" />
                 <element signature="method#isValidBuy#0;class#Game#0" expanded="false" />
                 <element signature="method#isValidBuy#1;class#Game#0" expanded="false" />
-                <element signature="e#107500#107611#0" expanded="false" />
+                <element signature="e#107512#107623#0" expanded="false" />
                 <element signature="method#playBuy#0;class#Game#0" expanded="false" />
                 <element signature="method#drawToHand#0;class#Game#0" expanded="false" />
                 <element signature="method#drawToHand#1;class#Game#0" expanded="false" />
@@ -89,7 +89,7 @@
                 <element signature="method#getCardsLeftInPile#0;class#Game#0" expanded="false" />
                 <element signature="method#addPile#0;class#Game#0" expanded="false" />
                 <element signature="method#addPile#3;class#Game#0" expanded="false" />
-                <element signature="e#128019#128098#0" expanded="false" />
+                <element signature="e#128031#128110#0" expanded="false" />
                 <element signature="method#getCardsObtainedByLastPlayer#0;class#Game#0" expanded="false" />
                 <element signature="method#getHandString#0;class#Game#0" expanded="false" />
                 <element signature="method#playerShouldSelectCoinsToPlay#0;class#Game#0" expanded="false" />
@@ -130,85 +130,84 @@
       <file leaf-file-name="CardList.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardList.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="180" column="0" lean-forward="false" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
+            <state relative-caret-position="440">
+              <caret line="212" column="1" lean-forward="false" selection-start-line="212" selection-start-column="1" selection-end-line="212" selection-end-column="1" />
               <folding>
                 <element signature="method#CardList#0;class#CardList#0" expanded="false" />
                 <element signature="method#get#1;class#CardList#0" expanded="false" />
                 <element signature="method#indexOf#0;class#CardList#0" expanded="false" />
                 <element signature="method#removeCard#0;class#CardList#0" expanded="false" />
                 <element signature="method#remove#2;class#CardList#0" expanded="false" />
-                <element signature="e#3892#3893#0" expanded="true" />
                 <element signature="method#sort#0;class#CardList#0" expanded="false" />
-                <element signature="method#clone#0;class#CardList#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PlayerSupplyToken.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/vdom/core/PlayerSupplyToken.java">
+      <file leaf-file-name="CardPile.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardPile.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="2" column="12" lean-forward="false" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Evaluator.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/vdom/players/Evaluator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="87" column="9" lean-forward="false" selection-start-line="80" selection-start-column="6" selection-end-line="87" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="VDomPlayerDrew.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/vdom/orig_players/VDomPlayerDrew.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+            <state relative-caret-position="348">
+              <caret line="152" column="13" lean-forward="true" selection-start-line="152" selection-start-column="13" selection-end-line="152" selection-end-column="13" />
               <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#220#221#0" expanded="false" />
-                <element signature="e#247#248#0" expanded="false" />
-                <element signature="e#12237#12238#0" expanded="false" />
-                <element signature="e#12295#12296#0" expanded="false" />
-                <element signature="e#12362#12363#0" expanded="false" />
-                <element signature="e#12435#12436#0" expanded="false" />
+                <element signature="method#CardPile#0;class#CardPile#0" expanded="false" />
+                <element signature="e#3384#3385#0" expanded="true" />
+                <element signature="e#3403#3404#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CardImplDarkAges.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardImplDarkAges.java">
+      <file leaf-file-name="VDomPlayerFlynn.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerFlynn.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="489" column="0" lean-forward="false" selection-start-line="489" selection-start-column="0" selection-end-line="489" selection-end-column="0" />
+            <state relative-caret-position="471">
+              <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+              <folding>
+                <element signature="method#doAction#0;class#VDomPlayerFlynn#0" expanded="false" />
+                <element signature="method#doBuy#0;class#VDomPlayerFlynn#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BasePlayer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/vdom/core/BasePlayer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="9877">
+              <caret line="616" column="14" lean-forward="false" selection-start-line="616" selection-start-column="14" selection-end-line="616" selection-end-column="14" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CardImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardImpl.java">
+      <file leaf-file-name="VDomPlayerJoe.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJoe.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="810" column="12" lean-forward="false" selection-start-line="810" selection-start-column="12" selection-end-line="810" selection-end-column="12" />
+            <state relative-caret-position="400">
+              <caret line="56" column="20" lean-forward="true" selection-start-line="50" selection-start-column="7" selection-end-line="56" selection-end-column="20" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DeckPlanner.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="VDomPlayerAndrew.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerAndrew.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-91">
+              <caret line="126" column="80" lean-forward="false" selection-start-line="126" selection-start-column="64" selection-end-line="126" selection-end-column="80" />
+              <folding>
+                <element signature="method#newGame#0;class#VDomPlayerAndrew#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DeckPlanner.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/players/DeckPlanner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="94" column="23" lean-forward="true" selection-start-line="94" selection-start-column="23" selection-end-line="94" selection-end-column="23" />
+            <state relative-caret-position="145">
+              <caret line="98" column="0" lean-forward="false" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="docComment;class#DeckPlanner#0" expanded="false" />
@@ -224,8 +223,8 @@
       <file leaf-file-name="Deck.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/players/Deck.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="27" column="13" lean-forward="true" selection-start-line="27" selection-start-column="13" selection-end-line="28" selection-end-column="18" />
+            <state relative-caret-position="289">
+              <caret line="35" column="9" lean-forward="true" selection-start-line="24" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -239,108 +238,7 @@
             <state relative-caret-position="11951">
               <caret line="817" column="0" lean-forward="false" selection-start-line="817" selection-start-column="0" selection-end-line="817" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#2506#2507#0" expanded="false" />
-                <element signature="e#2527#2528#0" expanded="false" />
-                <element signature="e#2565#2566#0" expanded="false" />
-                <element signature="e#2609#2610#0" expanded="false" />
                 <element signature="method#initCards#0;class#Player#0" expanded="false" />
-                <element signature="e#3709#3710#0" expanded="false" />
-                <element signature="e#3730#3731#0" expanded="false" />
-                <element signature="e#3761#3762#0" expanded="false" />
-                <element signature="e#3787#3788#0" expanded="false" />
-                <element signature="e#3852#3853#0" expanded="false" />
-                <element signature="e#3906#3907#0" expanded="false" />
-                <element signature="e#3972#3973#0" expanded="false" />
-                <element signature="e#4027#4028#0" expanded="false" />
-                <element signature="e#4058#4059#0" expanded="false" />
-                <element signature="e#4079#4080#0" expanded="false" />
-                <element signature="e#5348#5349#0" expanded="false" />
-                <element signature="e#5376#5377#0" expanded="false" />
-                <element signature="e#5538#5539#0" expanded="false" />
-                <element signature="e#5562#5563#0" expanded="false" />
-                <element signature="e#5595#5596#0" expanded="false" />
-                <element signature="e#5626#5627#0" expanded="false" />
-                <element signature="e#5666#5667#0" expanded="false" />
-                <element signature="e#5696#5697#0" expanded="false" />
-                <element signature="e#5729#5730#0" expanded="false" />
-                <element signature="e#5752#5753#0" expanded="false" />
-                <element signature="e#5785#5786#0" expanded="false" />
-                <element signature="e#5808#5809#0" expanded="false" />
-                <element signature="e#5841#5842#0" expanded="false" />
-                <element signature="e#5864#5865#0" expanded="false" />
-                <element signature="e#5897#5898#0" expanded="false" />
-                <element signature="e#5920#5921#0" expanded="false" />
-                <element signature="e#5954#5955#0" expanded="false" />
-                <element signature="e#5982#5983#0" expanded="false" />
-                <element signature="e#6023#6024#0" expanded="false" />
-                <element signature="e#6054#6055#0" expanded="false" />
-                <element signature="e#6094#6095#0" expanded="false" />
-                <element signature="e#6129#6130#0" expanded="false" />
-                <element signature="e#6164#6165#0" expanded="false" />
-                <element signature="e#6226#6227#0" expanded="false" />
-                <element signature="e#6495#6496#0" expanded="false" />
-                <element signature="e#6546#6547#0" expanded="false" />
-                <element signature="e#6754#6755#0" expanded="false" />
-                <element signature="e#6829#6830#0" expanded="false" />
-                <element signature="e#8491#8492#0" expanded="false" />
-                <element signature="e#8528#8529#0" expanded="false" />
-                <element signature="e#8580#8581#0" expanded="false" />
-                <element signature="e#8618#8619#0" expanded="false" />
-                <element signature="e#8654#8655#0" expanded="false" />
-                <element signature="e#8685#8686#0" expanded="false" />
-                <element signature="e#8731#8732#0" expanded="false" />
-                <element signature="e#8763#8764#0" expanded="false" />
-                <element signature="e#8806#8807#0" expanded="false" />
-                <element signature="e#8842#8843#0" expanded="false" />
-                <element signature="e#9267#9268#0" expanded="false" />
-                <element signature="e#9303#9304#0" expanded="false" />
-                <element signature="e#9723#9724#0" expanded="false" />
-                <element signature="e#9758#9759#0" expanded="false" />
-                <element signature="e#9807#9808#0" expanded="false" />
-                <element signature="e#9844#9845#0" expanded="false" />
-                <element signature="e#10821#10822#0" expanded="false" />
-                <element signature="e#10873#10874#0" expanded="false" />
-                <element signature="e#12378#12379#0" expanded="false" />
-                <element signature="e#12408#12409#0" expanded="false" />
-                <element signature="e#12537#12538#0" expanded="false" />
-                <element signature="e#12572#12573#0" expanded="false" />
-                <element signature="e#12720#12721#0" expanded="false" />
-                <element signature="e#12756#12757#0" expanded="false" />
-                <element signature="e#14201#14202#0" expanded="false" />
-                <element signature="e#14250#14251#0" expanded="false" />
-                <element signature="e#17412#17413#0" expanded="false" />
-                <element signature="e#17471#17472#0" expanded="false" />
-                <element signature="e#17747#17748#0" expanded="false" />
-                <element signature="e#17805#17806#0" expanded="false" />
-                <element signature="e#18066#18067#0" expanded="false" />
-                <element signature="e#18114#18115#0" expanded="false" />
-                <element signature="e#18164#18165#0" expanded="false" />
-                <element signature="e#18222#18223#0" expanded="false" />
-                <element signature="e#18596#18597#0" expanded="false" />
-                <element signature="e#18638#18639#0" expanded="false" />
-                <element signature="e#18678#18679#0" expanded="false" />
-                <element signature="e#18716#18717#0" expanded="false" />
-                <element signature="e#19066#19067#0" expanded="false" />
-                <element signature="e#19093#19094#0" expanded="false" />
-                <element signature="e#29595#29596#0" expanded="false" />
-                <element signature="e#29635#29636#0" expanded="false" />
-                <element signature="e#40938#40939#0" expanded="false" />
-                <element signature="e#40997#40998#0" expanded="false" />
-                <element signature="e#41032#41033#0" expanded="false" />
-                <element signature="e#41059#41060#0" expanded="false" />
-                <element signature="e#41314#41315#0" expanded="false" />
-                <element signature="e#41361#41362#0" expanded="false" />
-                <element signature="e#42484#42485#0" expanded="false" />
-                <element signature="e#42513#42514#0" expanded="false" />
-                <element signature="e#46922#46923#0" expanded="false" />
-                <element signature="e#46966#46967#0" expanded="false" />
-                <element signature="e#51808#51809#0" expanded="false" />
-                <element signature="e#51828#51829#0" expanded="false" />
-                <element signature="e#51947#51948#0" expanded="false" />
-                <element signature="e#51983#51984#0" expanded="false" />
-                <element signature="e#52079#52080#0" expanded="false" />
-                <element signature="e#52117#52118#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -407,29 +305,31 @@
         <option value="$PROJECT_DIR$/src/com/vdom/core/CardImplPromo.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/core/Player.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerPlanner.java" />
-        <option value="$PROJECT_DIR$/src/com/vdom/core/CardList.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/core/CardImplDarkAges.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/core/MoveContext.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/players/Evaluator.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerAndrew.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerPhil.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerDummy.java" />
-        <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJoe.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/core/Util.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/core/CardImplBase.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/orig_players/VDomPlayerDrew.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/players/DeckGenerator.java" />
-        <option value="$PROJECT_DIR$/src/com/vdom/core/Game.java" />
-        <option value="$PROJECT_DIR$/src/com/vdom/players/Deck.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/players/DeckPlanner.java" />
+        <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJoey.java" />
+        <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJoe.java" />
+        <option value="$PROJECT_DIR$/src/com/vdom/core/CardList.java" />
+        <option value="$PROJECT_DIR$/src/com/vdom/core/CardPile.java" />
+        <option value="$PROJECT_DIR$/src/com/vdom/players/Deck.java" />
+        <option value="$PROJECT_DIR$/src/com/vdom/core/Game.java" />
+        <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerFlynn.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1616" />
-    <option name="height" value="876" />
+    <option name="x" value="555" />
+    <option name="width" value="1052" />
+    <option name="height" value="867" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -498,6 +398,54 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="vdom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="orig_players" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VDom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vdom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vdom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VDom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vdom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vdom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -764,7 +712,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <frame x="555" y="0" width="1052" height="867" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -783,14 +731,14 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.175625" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16318537" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29971725" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16248348" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35117492" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35535008" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -798,6 +746,38 @@
       <window_info id="Code Iris" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35535008" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Code Iris" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32496697" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32760897" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291866" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29971725" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16248348" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -830,25 +810,19 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/vdom/core/Game.java</url>
-          <line>2646</line>
+          <line>2647</line>
           <properties />
           <option name="timeStamp" value="58" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/vdom/players/DeckPlanner.java</url>
-          <line>98</line>
+          <url>file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerFlynn.java</url>
+          <line>60</line>
           <properties />
-          <option name="timeStamp" value="94" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/vdom/players/DeckPlanner.java</url>
-          <line>75</line>
-          <properties />
-          <option name="timeStamp" value="115" />
+          <option name="timeStamp" value="119" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/com/vdom/core/Game.java</url>
-          <line>1435</line>
+          <line>1436</line>
           <properties>
             <option name="EMULATED" value="true" />
           </properties>
@@ -871,7 +845,7 @@
           <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="118" />
+      <option name="time" value="120" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -885,7 +859,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/api/FrameworkEvent.java" />
     <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerEarl.java" />
     <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerPatrick.java" />
     <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerChuck.java" />
@@ -902,108 +875,7 @@
         <state relative-caret-position="6447">
           <caret line="307" column="0" lean-forward="false" selection-start-line="307" selection-start-column="0" selection-end-line="307" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2506#2507#0" expanded="false" />
-            <element signature="e#2527#2528#0" expanded="false" />
-            <element signature="e#2565#2566#0" expanded="false" />
-            <element signature="e#2609#2610#0" expanded="false" />
             <element signature="method#initCards#0;class#Player#0" expanded="false" />
-            <element signature="e#3709#3710#0" expanded="false" />
-            <element signature="e#3730#3731#0" expanded="false" />
-            <element signature="e#3761#3762#0" expanded="false" />
-            <element signature="e#3787#3788#0" expanded="false" />
-            <element signature="e#3852#3853#0" expanded="false" />
-            <element signature="e#3906#3907#0" expanded="false" />
-            <element signature="e#3972#3973#0" expanded="false" />
-            <element signature="e#4027#4028#0" expanded="false" />
-            <element signature="e#4058#4059#0" expanded="false" />
-            <element signature="e#4079#4080#0" expanded="false" />
-            <element signature="e#5348#5349#0" expanded="false" />
-            <element signature="e#5376#5377#0" expanded="false" />
-            <element signature="e#5538#5539#0" expanded="false" />
-            <element signature="e#5562#5563#0" expanded="false" />
-            <element signature="e#5595#5596#0" expanded="false" />
-            <element signature="e#5626#5627#0" expanded="false" />
-            <element signature="e#5666#5667#0" expanded="false" />
-            <element signature="e#5696#5697#0" expanded="false" />
-            <element signature="e#5729#5730#0" expanded="false" />
-            <element signature="e#5752#5753#0" expanded="false" />
-            <element signature="e#5785#5786#0" expanded="false" />
-            <element signature="e#5808#5809#0" expanded="false" />
-            <element signature="e#5841#5842#0" expanded="false" />
-            <element signature="e#5864#5865#0" expanded="false" />
-            <element signature="e#5897#5898#0" expanded="false" />
-            <element signature="e#5920#5921#0" expanded="false" />
-            <element signature="e#5954#5955#0" expanded="false" />
-            <element signature="e#5982#5983#0" expanded="false" />
-            <element signature="e#6023#6024#0" expanded="false" />
-            <element signature="e#6054#6055#0" expanded="false" />
-            <element signature="e#6094#6095#0" expanded="false" />
-            <element signature="e#6129#6130#0" expanded="false" />
-            <element signature="e#6164#6165#0" expanded="false" />
-            <element signature="e#6226#6227#0" expanded="false" />
-            <element signature="e#6495#6496#0" expanded="false" />
-            <element signature="e#6546#6547#0" expanded="false" />
-            <element signature="e#6754#6755#0" expanded="false" />
-            <element signature="e#6829#6830#0" expanded="false" />
-            <element signature="e#8491#8492#0" expanded="false" />
-            <element signature="e#8528#8529#0" expanded="false" />
-            <element signature="e#8580#8581#0" expanded="false" />
-            <element signature="e#8618#8619#0" expanded="false" />
-            <element signature="e#8654#8655#0" expanded="false" />
-            <element signature="e#8685#8686#0" expanded="false" />
-            <element signature="e#8731#8732#0" expanded="false" />
-            <element signature="e#8763#8764#0" expanded="false" />
-            <element signature="e#8806#8807#0" expanded="false" />
-            <element signature="e#8842#8843#0" expanded="false" />
-            <element signature="e#9267#9268#0" expanded="false" />
-            <element signature="e#9303#9304#0" expanded="false" />
-            <element signature="e#9723#9724#0" expanded="false" />
-            <element signature="e#9758#9759#0" expanded="false" />
-            <element signature="e#9807#9808#0" expanded="false" />
-            <element signature="e#9844#9845#0" expanded="false" />
-            <element signature="e#10821#10822#0" expanded="false" />
-            <element signature="e#10873#10874#0" expanded="false" />
-            <element signature="e#12378#12379#0" expanded="false" />
-            <element signature="e#12408#12409#0" expanded="false" />
-            <element signature="e#12537#12538#0" expanded="false" />
-            <element signature="e#12572#12573#0" expanded="false" />
-            <element signature="e#12720#12721#0" expanded="false" />
-            <element signature="e#12756#12757#0" expanded="false" />
-            <element signature="e#14201#14202#0" expanded="false" />
-            <element signature="e#14250#14251#0" expanded="false" />
-            <element signature="e#17412#17413#0" expanded="false" />
-            <element signature="e#17471#17472#0" expanded="false" />
-            <element signature="e#17747#17748#0" expanded="false" />
-            <element signature="e#17805#17806#0" expanded="false" />
-            <element signature="e#18066#18067#0" expanded="false" />
-            <element signature="e#18114#18115#0" expanded="false" />
-            <element signature="e#18164#18165#0" expanded="false" />
-            <element signature="e#18222#18223#0" expanded="false" />
-            <element signature="e#18596#18597#0" expanded="false" />
-            <element signature="e#18638#18639#0" expanded="false" />
-            <element signature="e#18678#18679#0" expanded="false" />
-            <element signature="e#18716#18717#0" expanded="false" />
-            <element signature="e#19066#19067#0" expanded="false" />
-            <element signature="e#19093#19094#0" expanded="false" />
-            <element signature="e#29595#29596#0" expanded="false" />
-            <element signature="e#29635#29636#0" expanded="false" />
-            <element signature="e#40938#40939#0" expanded="false" />
-            <element signature="e#40997#40998#0" expanded="false" />
-            <element signature="e#41032#41033#0" expanded="false" />
-            <element signature="e#41059#41060#0" expanded="false" />
-            <element signature="e#41314#41315#0" expanded="false" />
-            <element signature="e#41361#41362#0" expanded="false" />
-            <element signature="e#42484#42485#0" expanded="false" />
-            <element signature="e#42513#42514#0" expanded="false" />
-            <element signature="e#46922#46923#0" expanded="false" />
-            <element signature="e#46966#46967#0" expanded="false" />
-            <element signature="e#51808#51809#0" expanded="false" />
-            <element signature="e#51828#51829#0" expanded="false" />
-            <element signature="e#51947#51948#0" expanded="false" />
-            <element signature="e#51983#51984#0" expanded="false" />
-            <element signature="e#52079#52080#0" expanded="false" />
-            <element signature="e#52117#52118#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1027,28 +899,28 @@
             <element signature="e#11212#11285#0" expanded="false" />
             <element signature="docComment;method#main#0;class#Game#0" expanded="false" />
             <element signature="docComment;method#initGameBoard#0;class#Game#0" expanded="false" />
-            <element signature="method#initGameBoard#0;class#Game#0" expanded="false" />
-            <element signature="method#initPlayers#1;class#Game#0" expanded="false" />
+            <element signature="e#21384#21385#0" expanded="true" />
+            <element signature="e#21423#21424#0" expanded="true" />
             <element signature="method#initPlayersPlanning#0;class#Game#0" expanded="false" />
             <element signature="method#initPlayerCards#0;class#Game#0" expanded="false" />
-            <element signature="e#27066#27135#0" expanded="false" />
+            <element signature="e#27078#27147#0" expanded="false" />
             <element signature="method#initCards#0;class#Game#0" expanded="false" />
-            <element signature="e#52313#52390#0" expanded="false" />
-            <element signature="e#56497#56619#0" expanded="false" />
-            <element signature="e#59968#60005#0" expanded="false" />
-            <element signature="e#61657#61734#0" expanded="false" />
-            <element signature="e#74149#74226#0" expanded="false" />
+            <element signature="e#52325#52402#0" expanded="false" />
+            <element signature="e#56509#56631#0" expanded="false" />
+            <element signature="e#59980#60017#0" expanded="false" />
+            <element signature="e#61669#61746#0" expanded="false" />
+            <element signature="e#74161#74238#0" expanded="false" />
             <element signature="docComment;method#setPlayersTurn#0;class#Game#0" expanded="false" />
             <element signature="method#setPlayersTurn#0;class#Game#0" expanded="false" />
             <element signature="method#printPlayerTurn#0;class#Game#0" expanded="false" />
-            <element signature="class#77341:77634" expanded="false" />
-            <element signature="method#compare#0;class#77341:77634" expanded="false" />
+            <element signature="class#77353:77646" expanded="false" />
+            <element signature="method#compare#0;class#77353:77646" expanded="false" />
             <element signature="method#playerEndTurn#0;class#Game#0" expanded="false" />
-            <element signature="e#78922#78958#0" expanded="false" />
-            <element signature="e#79284#79320#0" expanded="false" />
-            <element signature="e#80515#80619#0" expanded="false" />
+            <element signature="e#78934#78970#0" expanded="false" />
+            <element signature="e#79296#79332#0" expanded="false" />
+            <element signature="e#80527#80631#0" expanded="false" />
             <element signature="method#playerAfterTurn#0;class#Game#0" expanded="false" />
-            <element signature="e#96673#96755#0" expanded="false" />
+            <element signature="e#96685#96767#0" expanded="false" />
             <element signature="method#getNextPlayer#0;class#Game#0" expanded="false" />
             <element signature="method#getPlayersInTurnOrder#1;class#Game#0" expanded="false" />
             <element signature="method#getPlayersInTurnOrder#2;class#Game#0" expanded="false" />
@@ -1059,7 +931,7 @@
             <element signature="method#playerBuy#0;class#Game#0" expanded="false" />
             <element signature="method#isValidBuy#0;class#Game#0" expanded="false" />
             <element signature="method#isValidBuy#1;class#Game#0" expanded="false" />
-            <element signature="e#107500#107611#0" expanded="false" />
+            <element signature="e#107512#107623#0" expanded="false" />
             <element signature="method#playBuy#0;class#Game#0" expanded="false" />
             <element signature="method#drawToHand#0;class#Game#0" expanded="false" />
             <element signature="method#drawToHand#1;class#Game#0" expanded="false" />
@@ -1087,7 +959,7 @@
             <element signature="method#getCardsLeftInPile#0;class#Game#0" expanded="false" />
             <element signature="method#addPile#0;class#Game#0" expanded="false" />
             <element signature="method#addPile#3;class#Game#0" expanded="false" />
-            <element signature="e#128019#128098#0" expanded="false" />
+            <element signature="e#128031#128110#0" expanded="false" />
             <element signature="method#getCardsObtainedByLastPlayer#0;class#Game#0" expanded="false" />
             <element signature="method#getHandString#0;class#Game#0" expanded="false" />
             <element signature="method#playerShouldSelectCoinsToPlay#0;class#Game#0" expanded="false" />
@@ -1168,20 +1040,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardPile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-20">
-          <caret line="24" column="15" lean-forward="false" selection-start-line="24" selection-start-column="15" selection-end-line="24" selection-end-column="15" />
-          <folding>
-            <element signature="method#CardPile#0;class#CardPile#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/PileCreator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="175">
           <caret line="19" column="36" lean-forward="true" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1192,16 +1055,6 @@
           <folding>
             <element signature="e#5748#5749#0" expanded="false" />
             <element signature="e#5784#5785#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerAndrew.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="126" column="80" lean-forward="false" selection-start-line="126" selection-start-column="64" selection-end-line="126" selection-end-column="80" />
-          <folding>
-            <element signature="method#newGame#0;class#VDomPlayerAndrew#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1268,14 +1121,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJoe.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="49" column="0" lean-forward="false" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerDummy.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
@@ -1288,14 +1133,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="141">
           <caret line="428" column="0" lean-forward="false" selection-start-line="428" selection-start-column="0" selection-end-line="428" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/BasePlayer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="39">
-          <caret line="616" column="14" lean-forward="false" selection-start-line="616" selection-start-column="14" selection-end-line="616" selection-end-column="14" />
           <folding />
         </state>
       </provider>
@@ -1338,117 +1175,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Player.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11951">
-          <caret line="817" column="0" lean-forward="false" selection-start-line="817" selection-start-column="0" selection-end-line="817" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2506#2507#0" expanded="false" />
-            <element signature="e#2527#2528#0" expanded="false" />
-            <element signature="e#2565#2566#0" expanded="false" />
-            <element signature="e#2609#2610#0" expanded="false" />
-            <element signature="method#initCards#0;class#Player#0" expanded="false" />
-            <element signature="e#3709#3710#0" expanded="false" />
-            <element signature="e#3730#3731#0" expanded="false" />
-            <element signature="e#3761#3762#0" expanded="false" />
-            <element signature="e#3787#3788#0" expanded="false" />
-            <element signature="e#3852#3853#0" expanded="false" />
-            <element signature="e#3906#3907#0" expanded="false" />
-            <element signature="e#3972#3973#0" expanded="false" />
-            <element signature="e#4027#4028#0" expanded="false" />
-            <element signature="e#4058#4059#0" expanded="false" />
-            <element signature="e#4079#4080#0" expanded="false" />
-            <element signature="e#5348#5349#0" expanded="false" />
-            <element signature="e#5376#5377#0" expanded="false" />
-            <element signature="e#5538#5539#0" expanded="false" />
-            <element signature="e#5562#5563#0" expanded="false" />
-            <element signature="e#5595#5596#0" expanded="false" />
-            <element signature="e#5626#5627#0" expanded="false" />
-            <element signature="e#5666#5667#0" expanded="false" />
-            <element signature="e#5696#5697#0" expanded="false" />
-            <element signature="e#5729#5730#0" expanded="false" />
-            <element signature="e#5752#5753#0" expanded="false" />
-            <element signature="e#5785#5786#0" expanded="false" />
-            <element signature="e#5808#5809#0" expanded="false" />
-            <element signature="e#5841#5842#0" expanded="false" />
-            <element signature="e#5864#5865#0" expanded="false" />
-            <element signature="e#5897#5898#0" expanded="false" />
-            <element signature="e#5920#5921#0" expanded="false" />
-            <element signature="e#5954#5955#0" expanded="false" />
-            <element signature="e#5982#5983#0" expanded="false" />
-            <element signature="e#6023#6024#0" expanded="false" />
-            <element signature="e#6054#6055#0" expanded="false" />
-            <element signature="e#6094#6095#0" expanded="false" />
-            <element signature="e#6129#6130#0" expanded="false" />
-            <element signature="e#6164#6165#0" expanded="false" />
-            <element signature="e#6226#6227#0" expanded="false" />
-            <element signature="e#6495#6496#0" expanded="false" />
-            <element signature="e#6546#6547#0" expanded="false" />
-            <element signature="e#6754#6755#0" expanded="false" />
-            <element signature="e#6829#6830#0" expanded="false" />
-            <element signature="e#8491#8492#0" expanded="false" />
-            <element signature="e#8528#8529#0" expanded="false" />
-            <element signature="e#8580#8581#0" expanded="false" />
-            <element signature="e#8618#8619#0" expanded="false" />
-            <element signature="e#8654#8655#0" expanded="false" />
-            <element signature="e#8685#8686#0" expanded="false" />
-            <element signature="e#8731#8732#0" expanded="false" />
-            <element signature="e#8763#8764#0" expanded="false" />
-            <element signature="e#8806#8807#0" expanded="false" />
-            <element signature="e#8842#8843#0" expanded="false" />
-            <element signature="e#9267#9268#0" expanded="false" />
-            <element signature="e#9303#9304#0" expanded="false" />
-            <element signature="e#9723#9724#0" expanded="false" />
-            <element signature="e#9758#9759#0" expanded="false" />
-            <element signature="e#9807#9808#0" expanded="false" />
-            <element signature="e#9844#9845#0" expanded="false" />
-            <element signature="e#10821#10822#0" expanded="false" />
-            <element signature="e#10873#10874#0" expanded="false" />
-            <element signature="e#12378#12379#0" expanded="false" />
-            <element signature="e#12408#12409#0" expanded="false" />
-            <element signature="e#12537#12538#0" expanded="false" />
-            <element signature="e#12572#12573#0" expanded="false" />
-            <element signature="e#12720#12721#0" expanded="false" />
-            <element signature="e#12756#12757#0" expanded="false" />
-            <element signature="e#14201#14202#0" expanded="false" />
-            <element signature="e#14250#14251#0" expanded="false" />
-            <element signature="e#17412#17413#0" expanded="false" />
-            <element signature="e#17471#17472#0" expanded="false" />
-            <element signature="e#17747#17748#0" expanded="false" />
-            <element signature="e#17805#17806#0" expanded="false" />
-            <element signature="e#18066#18067#0" expanded="false" />
-            <element signature="e#18114#18115#0" expanded="false" />
-            <element signature="e#18164#18165#0" expanded="false" />
-            <element signature="e#18222#18223#0" expanded="false" />
-            <element signature="e#18596#18597#0" expanded="false" />
-            <element signature="e#18638#18639#0" expanded="false" />
-            <element signature="e#18678#18679#0" expanded="false" />
-            <element signature="e#18716#18717#0" expanded="false" />
-            <element signature="e#19066#19067#0" expanded="false" />
-            <element signature="e#19093#19094#0" expanded="false" />
-            <element signature="e#29595#29596#0" expanded="false" />
-            <element signature="e#29635#29636#0" expanded="false" />
-            <element signature="e#40938#40939#0" expanded="false" />
-            <element signature="e#40997#40998#0" expanded="false" />
-            <element signature="e#41032#41033#0" expanded="false" />
-            <element signature="e#41059#41060#0" expanded="false" />
-            <element signature="e#41314#41315#0" expanded="false" />
-            <element signature="e#41361#41362#0" expanded="false" />
-            <element signature="e#42484#42485#0" expanded="false" />
-            <element signature="e#42513#42514#0" expanded="false" />
-            <element signature="e#46922#46923#0" expanded="false" />
-            <element signature="e#46966#46967#0" expanded="false" />
-            <element signature="e#51808#51809#0" expanded="false" />
-            <element signature="e#51828#51829#0" expanded="false" />
-            <element signature="e#51947#51948#0" expanded="false" />
-            <element signature="e#51983#51984#0" expanded="false" />
-            <element signature="e#52079#52080#0" expanded="false" />
-            <element signature="e#52117#52118#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/orig_players/VDomPlayerDrew.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -1465,35 +1191,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="180" column="0" lean-forward="false" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
-          <folding>
-            <element signature="method#CardList#0;class#CardList#0" expanded="false" />
-            <element signature="method#get#1;class#CardList#0" expanded="false" />
-            <element signature="method#indexOf#0;class#CardList#0" expanded="false" />
-            <element signature="method#removeCard#0;class#CardList#0" expanded="false" />
-            <element signature="method#remove#2;class#CardList#0" expanded="false" />
-            <element signature="e#3892#3893#0" expanded="true" />
-            <element signature="method#sort#0;class#CardList#0" expanded="false" />
-            <element signature="method#clone#0;class#CardList#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="810" column="12" lean-forward="false" selection-start-line="810" selection-start-column="12" selection-end-line="810" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardImplDarkAges.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="489" column="0" lean-forward="false" selection-start-line="489" selection-start-column="0" selection-end-line="489" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1508,16 +1209,97 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/players/Evaluator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
+        <state relative-caret-position="1394">
           <caret line="87" column="9" lean-forward="false" selection-start-line="80" selection-start-column="6" selection-end-line="87" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardImplDarkAges.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="489" column="0" lean-forward="false" selection-start-line="489" selection-start-column="0" selection-end-line="489" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="212" column="1" lean-forward="false" selection-start-line="212" selection-start-column="1" selection-end-line="212" selection-end-column="1" />
+          <folding>
+            <element signature="method#CardList#0;class#CardList#0" expanded="false" />
+            <element signature="method#get#1;class#CardList#0" expanded="false" />
+            <element signature="method#indexOf#0;class#CardList#0" expanded="false" />
+            <element signature="method#removeCard#0;class#CardList#0" expanded="false" />
+            <element signature="method#remove#2;class#CardList#0" expanded="false" />
+            <element signature="method#sort#0;class#CardList#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/CardPile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="152" column="13" lean-forward="true" selection-start-line="152" selection-start-column="13" selection-end-line="152" selection-end-column="13" />
+          <folding>
+            <element signature="method#CardPile#0;class#CardPile#0" expanded="false" />
+            <element signature="e#3384#3385#0" expanded="true" />
+            <element signature="e#3403#3404#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/BasePlayer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9877">
+          <caret line="616" column="14" lean-forward="false" selection-start-line="616" selection-start-column="14" selection-end-line="616" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11951">
+          <caret line="817" column="0" lean-forward="false" selection-start-line="817" selection-start-column="0" selection-end-line="817" selection-end-column="0" />
+          <folding>
+            <element signature="method#initCards#0;class#Player#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/Deck.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="35" column="9" lean-forward="true" selection-start-line="24" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerAndrew.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-91">
+          <caret line="126" column="80" lean-forward="false" selection-start-line="126" selection-start-column="64" selection-end-line="126" selection-end-column="80" />
+          <folding>
+            <element signature="method#newGame#0;class#VDomPlayerAndrew#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJoe.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="56" column="20" lean-forward="true" selection-start-line="50" selection-start-column="7" selection-end-line="56" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="298" column="6" lean-forward="false" selection-start-line="298" selection-start-column="6" selection-end-line="298" selection-end-column="6" />
+        <state relative-caret-position="136">
+          <caret line="279" column="0" lean-forward="false" selection-start-line="279" selection-start-column="0" selection-end-line="279" selection-end-column="0" />
           <folding>
             <element signature="class#BlackMarketSplitPileOptions#0;class#Game#0" expanded="false" />
             <element signature="class#ExtraTurnInfo#0;class#Game#0" expanded="false" />
@@ -1526,28 +1308,28 @@
             <element signature="e#11212#11285#0" expanded="false" />
             <element signature="docComment;method#main#0;class#Game#0" expanded="false" />
             <element signature="docComment;method#initGameBoard#0;class#Game#0" expanded="false" />
-            <element signature="method#initGameBoard#0;class#Game#0" expanded="false" />
-            <element signature="method#initPlayers#1;class#Game#0" expanded="false" />
+            <element signature="e#21384#21385#0" expanded="true" />
+            <element signature="e#21423#21424#0" expanded="true" />
             <element signature="method#initPlayersPlanning#0;class#Game#0" expanded="false" />
             <element signature="method#initPlayerCards#0;class#Game#0" expanded="false" />
-            <element signature="e#27066#27135#0" expanded="false" />
+            <element signature="e#27078#27147#0" expanded="false" />
             <element signature="method#initCards#0;class#Game#0" expanded="false" />
-            <element signature="e#52313#52390#0" expanded="false" />
-            <element signature="e#56497#56619#0" expanded="false" />
-            <element signature="e#59968#60005#0" expanded="false" />
-            <element signature="e#61657#61734#0" expanded="false" />
-            <element signature="e#74149#74226#0" expanded="false" />
+            <element signature="e#52325#52402#0" expanded="false" />
+            <element signature="e#56509#56631#0" expanded="false" />
+            <element signature="e#59980#60017#0" expanded="false" />
+            <element signature="e#61669#61746#0" expanded="false" />
+            <element signature="e#74161#74238#0" expanded="false" />
             <element signature="docComment;method#setPlayersTurn#0;class#Game#0" expanded="false" />
             <element signature="method#setPlayersTurn#0;class#Game#0" expanded="false" />
             <element signature="method#printPlayerTurn#0;class#Game#0" expanded="false" />
-            <element signature="class#77341:77634" expanded="false" />
-            <element signature="method#compare#0;class#77341:77634" expanded="false" />
+            <element signature="class#77353:77646" expanded="false" />
+            <element signature="method#compare#0;class#77353:77646" expanded="false" />
             <element signature="method#playerEndTurn#0;class#Game#0" expanded="false" />
-            <element signature="e#78922#78958#0" expanded="false" />
-            <element signature="e#79284#79320#0" expanded="false" />
-            <element signature="e#80515#80619#0" expanded="false" />
+            <element signature="e#78934#78970#0" expanded="false" />
+            <element signature="e#79296#79332#0" expanded="false" />
+            <element signature="e#80527#80631#0" expanded="false" />
             <element signature="method#playerAfterTurn#0;class#Game#0" expanded="false" />
-            <element signature="e#96673#96755#0" expanded="false" />
+            <element signature="e#96685#96767#0" expanded="false" />
             <element signature="method#getNextPlayer#0;class#Game#0" expanded="false" />
             <element signature="method#getPlayersInTurnOrder#1;class#Game#0" expanded="false" />
             <element signature="method#getPlayersInTurnOrder#2;class#Game#0" expanded="false" />
@@ -1558,7 +1340,7 @@
             <element signature="method#playerBuy#0;class#Game#0" expanded="false" />
             <element signature="method#isValidBuy#0;class#Game#0" expanded="false" />
             <element signature="method#isValidBuy#1;class#Game#0" expanded="false" />
-            <element signature="e#107500#107611#0" expanded="false" />
+            <element signature="e#107512#107623#0" expanded="false" />
             <element signature="method#playBuy#0;class#Game#0" expanded="false" />
             <element signature="method#drawToHand#0;class#Game#0" expanded="false" />
             <element signature="method#drawToHand#1;class#Game#0" expanded="false" />
@@ -1586,7 +1368,7 @@
             <element signature="method#getCardsLeftInPile#0;class#Game#0" expanded="false" />
             <element signature="method#addPile#0;class#Game#0" expanded="false" />
             <element signature="method#addPile#3;class#Game#0" expanded="false" />
-            <element signature="e#128019#128098#0" expanded="false" />
+            <element signature="e#128031#128110#0" expanded="false" />
             <element signature="method#getCardsObtainedByLastPlayer#0;class#Game#0" expanded="false" />
             <element signature="method#getHandString#0;class#Game#0" expanded="false" />
             <element signature="method#playerShouldSelectCoinsToPlay#0;class#Game#0" expanded="false" />
@@ -1623,20 +1405,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/Deck.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="27" column="13" lean-forward="true" selection-start-line="27" selection-start-column="13" selection-end-line="28" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/players/DeckPlanner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="94" column="23" lean-forward="true" selection-start-line="94" selection-start-column="23" selection-end-line="94" selection-end-column="23" />
+        <state relative-caret-position="145">
+          <caret line="98" column="0" lean-forward="false" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="docComment;class#DeckPlanner#0" expanded="false" />
@@ -1644,6 +1416,17 @@
             <element signature="method#playSimulations#0;class#DeckPlanner#0" expanded="false" />
             <element signature="method#getCombinationsCards#0;class#DeckPlanner#0" expanded="false" />
             <element signature="method#getSubsetCards#0;class#DeckPlanner#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerFlynn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="471">
+          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+          <folding>
+            <element signature="method#doAction#0;class#VDomPlayerFlynn#0" expanded="false" />
+            <element signature="method#doBuy#0;class#VDomPlayerFlynn#0" expanded="false" />
           </folding>
         </state>
       </provider>
