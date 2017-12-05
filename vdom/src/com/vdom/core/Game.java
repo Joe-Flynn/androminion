@@ -279,8 +279,8 @@ public class Game {
   void start() {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
+    playerToWins.put("com.vdom.players.VDomPlayerJarvis", 0.0);
     playerToWins.put("com.vdom.players.VDomPlayerJarvisJr", 0.0);
-    playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
 
     // Variables for Overall Stats over all Games
     long turnCountTotal = 0;
