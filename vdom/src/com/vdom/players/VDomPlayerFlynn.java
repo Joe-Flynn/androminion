@@ -32,7 +32,7 @@ public class VDomPlayerFlynn extends BasePlayer  {
 
 	@Override
 	public String getPlayerName(boolean maskName) {
-		return maskName ? "Player " + (playerNumber + 1) : "Joe";
+		return maskName ? "Player " + (playerNumber + 1) : "Flynn";
 	}
 
 	@Override
