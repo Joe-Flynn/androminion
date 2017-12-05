@@ -3,6 +3,10 @@ package com.vdom.core;
 import java.util.*;
 import java.util.Map.Entry;
 
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
+
 import com.vdom.api.Card;
 import com.vdom.api.CardCostComparator;
 import com.vdom.api.GameEvent;
@@ -140,6 +144,12 @@ public class Game {
   // Overall Stat Tracker per GameType
   protected ArrayList<GameStats> gameTypeStats;
 
+  // Extra Turn Info Class
+  protected static class ExtraTurnInfo {
+    public ExtraTurnInfo() { ; }
+    public ExtraTurnInfo(boolean canBuyCards) { this.canBuyCards = canBuyCards; }
+    public boolean canBuyCards = true;
+  }
 
   // Evaluator Parameters to Tune
   protected double coinFactor          =  0.0;//1.0;
@@ -150,20 +160,10 @@ public class Game {
   protected double coinTokenFactor     =  0.0;//1.0;
   protected double debtTokenFactor     =  0.0;//-1.0;
   protected double victoryTokenFactor  =  0.0;//1.0;
-  protected double enemyHandSizeFactor = 0.0;//-1.0;
-  protected double treasureDeltaFactor = 0.0; //1.0;
+  protected double enemyHandSizeFactor =  0.0;//-1.0;
+  protected double treasureDeltaFactor =  0.0; //1.0;
   protected double actionDeltaFactor   =  0.0; //-1.0;
   protected double victoryPointFactor  =  0.0; //0.17;
-
-
-
-
-  // Extra Turn Info Class
-  protected static class ExtraTurnInfo {
-    public ExtraTurnInfo() { ; }
-    public ExtraTurnInfo(boolean canBuyCards) { this.canBuyCards = canBuyCards; }
-    public boolean canBuyCards = true;
-  }
 
 
   /*
@@ -172,7 +172,7 @@ public class Game {
   public Game() {
 
     // Num Games and Players
-    numGames   = 20;
+    numGames   = 10;
     numPlayers = 2;
 
     // CARD SET to use for the game (See com.vdom.api.GameType)
@@ -275,22 +275,32 @@ public class Game {
 
   public static void main(String[] args) {
 
-    // Hashmap for holding game results
+    // Variables for holding game results
     HashMap<String, Double> gameResults;
-
-
-
-
+    double player1_totalWins = 0.0;
+    double player2_totalWins = 0.0;
 
     // Set up game(s) and Start
     Game game = new Game();
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 100; i++) {
       gameResults = game.start();
       double player1wins = gameResults.get("com.vdom.players.VDomPlayerJarvis");
       double player2wins = gameResults.get("com.vdom.players.VDomPlayerJarvisJr");
 
-      System.out.println("GAME " + i + " RESULTS: PL1: " + player1wins + ", PL2: " + player2wins);
+      player1_totalWins += player1wins;
+      player2_totalWins += player2wins;
+
+      System.out.println("CURRENT GAME (" + i + ") RESULTS: PL1: " + player1wins + ", PL2: " + player2wins);
+      System.out.println("CUMULATIVE RESULTS:    PL1: " + player1_totalWins + ", PL2: " + player2_totalWins);
+
+      try (BufferedWriter writer = new BufferedWriter(
+                                      new OutputStreamWriter(
+                                          new FileOutputStream("evaluation_output.txt", true), "utf-8"))) {
+         writer.write("CUMULATIVE RESULTS:\tPL1:\t" + player1_totalWins + "\tPL2:\t" + player2_totalWins + "\n");
+      } catch (Exception e) {
+        System.out.println("ERROR:" + e);
+      }
 
     }
 
@@ -299,6 +309,10 @@ public class Game {
 
     // Print Overall Game Stats
     game.printGameTypeStats();
+
+    System.out.println("OVERALL WINS.............");
+    System.out.println(" --> Player 1: " + player1_totalWins + ", Player 2: " + player2_totalWins);
+
 
   }
 
@@ -327,7 +341,7 @@ public class Game {
 
       // Set Up Planning Player IF the Player has Planning
       if (players[0].getPlayerName() == "Flynn") {
-        DeckPlanner planner = new DeckPlanner(this.cloneGame(), 100);
+        DeckPlanner planner = new DeckPlanner(this.cloneGame(), 30);
         ((VDomPlayerFlynn) players[0]).setIdealDeck(planner.findBestDeck());
       }
 
@@ -606,14 +620,20 @@ public class Game {
 
       if (i == 0) {
         players[i] = new VDomPlayerJarvis();
+        // if (resetEvaluators) {
+        //   ((VDomPlayerJarvis)players[i]).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
+        //                                               fourCostGainFactor, fiveCostGainFactor, coinTokenFactor,
+        //                                               debtTokenFactor, victoryTokenFactor, enemyHandSizeFactor,
+        //                                               treasureDeltaFactor, actionDeltaFactor, victoryPointFactor);
+        // }
+      } else {
+        players[i] = new VDomPlayerJarvisJr();
         if (resetEvaluators) {
           ((VDomPlayerJarvis)players[i]).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
                                                       fourCostGainFactor, fiveCostGainFactor, coinTokenFactor,
                                                       debtTokenFactor, victoryTokenFactor, enemyHandSizeFactor,
                                                       treasureDeltaFactor, actionDeltaFactor, victoryPointFactor);
         }
-      } else {
-        players[i] = new VDomPlayerJarvisJr();
       }
 
       players[i].game = this;

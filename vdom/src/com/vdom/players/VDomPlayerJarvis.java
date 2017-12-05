@@ -59,7 +59,23 @@ public class VDomPlayerJarvis extends BasePlayer {
   @Override
   public void newGame(MoveContext context) {
     super.newGame(context);
-    gameEvaluator = new Evaluator(this);
+    if (gameEvaluator.isDefaultEvaluator == true) {
+      gameEvaluator = new Evaluator(this);
+    } else {
+      gameEvaluator = new Evaluator(this,
+                                    gameEvaluator.coinFactor,
+                                    gameEvaluator.potionFactor,
+                                    gameEvaluator.threeCostGainFactor,
+                                    gameEvaluator.fourCostGainFactor,
+                                    gameEvaluator.fiveCostGainFactor,
+                                    gameEvaluator.coinTokenFactor,
+                                    gameEvaluator.debtTokenFactor,
+                                    gameEvaluator.victoryTokenFactor,
+                                    gameEvaluator.enemyHandSizeFactor,
+                                    gameEvaluator.treasureDeltaFactor,
+                                    gameEvaluator.actionDeltaFactor,
+                                    gameEvaluator.victoryPointFactor);
+    }
   }
 
   @Override
@@ -67,7 +83,8 @@ public class VDomPlayerJarvis extends BasePlayer {
     if(getActionsInHand(this).size() > 0) {
       searchTree = new DomTree(context.cloneContext(), gameEvaluator);
       searching = true;
-      bestPlay = searchTree.chooseAction();
+      bestPlay = searchTree.chooseAction(5,3,5);
+      searchTree = null; // release tree
       searching = false;
     }
     if (bestPlay == null) {

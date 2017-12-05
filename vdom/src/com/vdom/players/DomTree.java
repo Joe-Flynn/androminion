@@ -121,8 +121,6 @@ public class DomTree {
 
     public void expand_state(DomTreeNode state) {
 
-        state.evaluation = evaluator.evaluateActionPhase(state.context);
-
         // log state in TT; if we've been here before, don't expand.
         if(!tt.add(new TranspositionEntry(state.context)))
         {
@@ -178,6 +176,10 @@ public class DomTree {
             state.type = DomNodeType.dead;
         }
 
+        state.evaluation = evaluator.evaluateActionPhase(state.context);
+        state.expanded = true;
+        if(state.parent != null) {state.context = null;}
+
     }
 
 
@@ -191,6 +193,7 @@ public class DomTree {
         // Used exclusively in state nodes
         MoveContext context = null;
         double evaluation = neg_infinity - 1;
+        boolean expanded = false;
 
         // Used exclusively in play nodes
         Card card = null;
@@ -242,7 +245,7 @@ public class DomTree {
         public ArrayList<DomTreeNode> get_leaf_states()
         {
             ArrayList<DomTreeNode> leaves = new ArrayList<>();
-            if(type == DomNodeType.state && children.size() == 0 && evaluation < neg_infinity)
+            if(type == DomNodeType.state && children.size() == 0 && !expanded)
             {
                 leaves.add(this);
             }

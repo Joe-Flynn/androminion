@@ -136,13 +136,11 @@ public class VDomPlayerAndrew extends BasePlayer  {
         Card supplyCard = context.game.piles.get(p).placeholderCard();
         if (supplyCard.getKind() == terminal.getKind()) {
           terminalCard = terminal;
-          System.out.println(">>>> ANDREW: TERMINAL SELECTED: " + terminal);
         }
       }
     }
     if (terminalCard == null) {
       terminalCard = Cards.province; // Default Terminal Card
-      System.out.println(">>>> ANDREW: TERMINAL SELECTED: " + Cards.province);
     }
 
     // Buy Terminal Card if Possible
