@@ -397,15 +397,11 @@ public class CardImplBase extends CardImpl {
 
 	private void mine(MoveContext context, Player currentPlayer) {
 		Card cardToUpgrade = currentPlayer.controlPlayer.mine_treasureFromHandToUpgrade(context);
-		if (cardToUpgrade != null && !cardToUpgrade.is(Type.Treasure, currentPlayer)) {
-			Card[] cards = currentPlayer.getTreasuresInHand().toArray(new Card[] {});
-			if (cards.length != 0) {
-				Util.playerError(currentPlayer, "Mine card to upgrade was invalid, picking treasure from hand.");
-				cardToUpgrade = Util.randomCard(cards);
-			}
+		//gain nothing if you have no treasures
+		if (cardToUpgrade == null) {
+			return;
 		}
-		// Drew's quick fix. Haven't seen what Joe did.
-		if ((Game.errataMineForced && cardToUpgrade == null)) {
+		if ((Game.errataMineForced && cardToUpgrade == null) || !cardToUpgrade.is(Type.Treasure, currentPlayer)) {
 			Card[] cards = currentPlayer.getTreasuresInHand().toArray(new Card[] {});
 			if (cards.length != 0) {
 				Util.playerError(currentPlayer, "Mine card to upgrade was invalid, picking treasure from hand.");

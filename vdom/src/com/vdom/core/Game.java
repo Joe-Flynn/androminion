@@ -1,20 +1,7 @@
 package com.vdom.core;
 
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Queue;
-import java.util.Random;
-import java.util.Set;
 
 import com.vdom.api.Card;
 import com.vdom.api.CardCostComparator;
@@ -257,7 +244,6 @@ public class Game {
 
   }
 
-
   // NOTE: The remainder of this file is organized into 5 Secions, as such:
   //   - SECTION 1: MAIN FUNCTION (entry point to game engine)
   //   - SECTION 2: GAME SETUP & INITIALIZATION FUNCTIONS (Sets up game parameters)
@@ -291,9 +277,8 @@ public class Game {
   ** start - Starts the Dominion game simulator
   */
   void start() {
-
     HashMap<String, Double> playerToWins = new HashMap<>();
-    playerToWins.put("com.vdom.players.VDomPlayerJarvis", 0.0);
+    playerToWins.put("com.vdom.players.VDomPlayerFlynn", 0.0);  // SAME THING. RESOLVE JARVIS-FLYNN Merge.
     playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
 
     // Variables for Overall Stats over all Games
@@ -309,6 +294,9 @@ public class Game {
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
+      DeckPlanner planner = new DeckPlanner(this.cloneGame(), 100);
+      ((VDomPlayerFlynn) players[0]).setIdealDeck(planner.findBestDeck());
+
 
       // Set up Player's Turn Information
       playersTurn = 0;
@@ -416,6 +404,127 @@ public class Game {
 
   }
 
+  // only call from games cloned by DeckPlanner
+  public double playPlanningGame(int numTurns, Deck deck) {
+
+    Util.debug("---------------------", false);
+    Util.debug("New Planning Game: " + gameType);
+
+    // Initialize Plannings Players
+    initPlayersPlanning(2);
+
+    // Set joe's deck , draw, and shuffle deck
+    Player joe = players[0];
+    ((VDomPlayerJoe) joe).setDeck(deck);
+    joe.shuffleDeck(new MoveContext(this, joe), null);
+    while (joe.hand.size() < 5)
+      drawToHand(new MoveContext(this, joe), null, 5 - joe.hand.size(), false);
+      drawToHand(new MoveContext(this, joe), null, 5 - joe.hand.size(), false);
+
+    // Make joe's evaluator
+    Evaluator evaluator = new Evaluator(joe);
+
+    //Set Dummies deck and hand with init starting cards to stop =errors with cards played by joe's that require dummy's
+    // hand/deck to exist
+    Player dummy = players[1];
+    ArrayList<Card> dummyDeck  = new ArrayList<>();
+    for (int i = 0; i < 7; i++) {
+      if (i < 3) {
+        dummyDeck.add(this.getGamePile(Cards.estate).topCard());
+      }
+      dummyDeck.add(this.getGamePile(Cards.copper).topCard());
+    }
+    ((VDomPlayerDummy) dummy).setDeck(dummyDeck);
+
+    dummy.shuffleDeck(new MoveContext(this, dummy), null);
+    while (dummy.hand.size() < 5)
+      drawToHand(new MoveContext(this, dummy), null, 5 - dummy.hand.size(), false);
+
+
+    // Set up Player's Turn Information
+    playersTurn = 0;
+    gameTurnCount = 1;
+    Util.debug("Turn " + gameTurnCount + " --------------------");
+    Queue<ExtraTurnInfo> extraTurnsInfo = new LinkedList<ExtraTurnInfo>();
+
+
+    // Play Turns until Game Ends
+    boolean gameOver = false;
+    int turnsPlayed = 0;
+    double turnEconomySummation = 0;
+    while (!gameOver && turnsPlayed < numTurns) {
+
+      // Create text for New Turn
+      Player player = players[playersTurn];
+      boolean canBuyCards = extraTurnsInfo.isEmpty() ? true : extraTurnsInfo.remove().canBuyCards;
+      MoveContext context = new MoveContext(this, player, canBuyCards);
+
+      // Begin Phase of Turn
+      context.phase = TurnPhase.Action;
+      context.startOfTurn = true;
+      playerBeginTurn(player, context);
+      context.startOfTurn = false;
+
+      do {
+
+        // Action Phase of Turn
+        context.phase = TurnPhase.Action;
+        context.returnToActionPhase = false;
+        playerAction(player, context);
+
+        // Buy Phase of Turn
+        context.phase = TurnPhase.Buy;
+        playerBeginBuy(player, context);
+        playTreasures(player, context, -1, null);
+        playGuildsTokens(player, context);
+        playerBuy(player, context);
+
+      } while (context.returnToActionPhase);
+
+      // Broadcast No-Buy Event
+      if (context.totalCardsBoughtThisTurn + context.totalEventsBoughtThisTurn == 0) {
+        GameEvent event = new GameEvent(GameEvent.EventType.NoBuy, context);
+        broadcastEvent(event);
+        Util.debug(player.getPlayerName() + " did not buy a card with coins:" + context.getCoinAvailableForBuy());
+      }
+
+      // Discard and Draw New Hand
+      context.phase = TurnPhase.CleanUp;
+      player.cleanup(context);
+
+      // Clean up other players cards in play without future duration effects, e.g. Duplicate
+      for (Player otherPlayer : getPlayersInTurnOrder()) {
+        if (otherPlayer != player) {
+          otherPlayer.cleanupOutOfTurn(new MoveContext(this, otherPlayer));
+        }
+      }
+
+      if (player.getPlayerName().equals(joe.getPlayerName())) {
+        turnEconomySummation += evaluator.evaluateActionPhase(context);
+        turnsPlayed++;
+      }
+
+
+      // Update Turn Information
+      extraTurnsInfo.addAll(playerEndTurn(player, context));
+      gameOver = checkGameOver();
+
+      // Check if Game has ended
+      if (!gameOver) {
+        playerAfterTurn(player, context);
+        if (player.isControlled()) {
+          player.stopBeingControlled();
+        }
+        setPlayersTurn(!extraTurnsInfo.isEmpty());
+      }
+
+
+    }
+
+
+    return turnEconomySummation / (double) turnsPlayed;
+  }
+
 
   /***************************************
   ** SECTION 2: GAME SETUP & INITIALIZATION FUNCTIONS
@@ -459,10 +568,80 @@ public class Game {
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerJarvis();
+        players[i] = new VDomPlayerFlynn(); // NEED TO RESOLVED WITH VDomPlayerJarvis Merge.
       }
       else {
         players[i] = new VDomPlayerAndrew();
+      }
+
+      players[i].game = this;
+      players[i].playerNumber = i;
+
+      // Interactive player needs this called once for each player on startup so internal counts work properly.
+      players[i].getPlayerName();
+
+      MoveContext context = new MoveContext(this, players[i]);
+      players[i].newGame(context);
+      players[i].initCards();
+
+      context = new MoveContext(this, players[i]);
+      String s = cardListText + "\n---------------\n\n";
+
+      if (platColonyPassedIn || chanceForPlatColony > 0.9999) {
+        s += "Platinum/Colony included...\n";
+      } else if (platColonyNotPassedIn || Math.round(chanceForPlatColony * 100) == 0) {
+        s += "Platinum/Colony not included...\n";
+      } else {
+        s += "Chance for Platinum/Colony\n   " + (Math.round(chanceForPlatColony * 100)) + "% ... " + (isPlatInGame() ? "included\n" : "not included\n");
+      }
+
+      if (baneCard != null) {
+        s += "Bane card: " + baneCard.getName() + "\n";
+      }
+
+      // When Baker is included in the game, each Player starts with 1 coin token
+      if (bakerInPlay) {
+        players[i].gainGuildsCoinTokens(1);
+      }
+
+      /* The journey token is face up at the start of a game.
+      ** It can be turned over by Ranger, Giant and Pilgrimage. */
+      if (journeyTokenInPlay) {
+        players[i].flipJourneyToken(null);
+      }
+
+      if (sheltersPassedIn || chanceForShelters > 0.9999) {
+        s += "Shelters included...\n";
+      } else if (sheltersNotPassedIn || Math.round(chanceForShelters * 100) == 0) {
+        s += "Shelters not included...\n";
+      } else {
+        s += "Chance for Shelters\n   " + (Math.round(chanceForShelters * 100)) + "% ... " + (sheltersInPlay ? "included\n" : "not included\n");
+      }
+
+      s += unfoundCardText;
+      context.message = s;
+      broadcastEvent(new GameEvent(GameEvent.EventType.GameStarting, context));
+
+    }
+  }
+
+  public void initPlayersPlanning(int numPlayers) {
+
+    players = new Player[numPlayers];
+    playersTurn = 0;
+
+    cardsObtainedLastTurn = new ArrayList[numPlayers];
+    for (int i = 0; i < numPlayers; i++) {
+      cardsObtainedLastTurn[i] = new ArrayList<Card>();
+    }
+
+    for (int i = 0; i < numPlayers; i++) {
+
+      if (i == 0) {
+        players[i] = new VDomPlayerJoe();
+      }
+      else {
+        players[i] = new VDomPlayerDummy();
       }
 
       players[i].game = this;
@@ -2035,7 +2214,7 @@ public class Game {
               durationEffectsAreCards.add(false);
             }
           } else if (thisCard.equals(Cards.archive)) {
-            if (player.archive.size() > 0) {
+            if (player.archive.size() > 0 && player.archive.size() != (archiveNum + 1)) {
               durationEffects.add(thisCard);
               durationEffects.add(player.archive.get(archiveNum++));
               durationEffectsAreCards.add(clone == cloneCount && !((CardImpl) card.behaveAsCard()).trashAfterPlay);
@@ -2452,6 +2631,7 @@ public class Game {
         }
       }
 
+
       while (context.actions > 0 && actionCards != null && !actionCards.isEmpty()) {
 
         action = actionCards.remove(0);
@@ -2603,6 +2783,8 @@ public class Game {
         return true;
       }
     }
+
+
     return false;
   }
 

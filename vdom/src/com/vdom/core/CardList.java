@@ -8,6 +8,8 @@ import java.util.Iterator;
 import com.vdom.api.Card;
 import com.vdom.api.GameEvent;
 
+import javax.crypto.AEADBadTagException;
+
 public class CardList implements Iterable<Card> {
 
   ArrayList<Card> a = new ArrayList<Card>();
@@ -38,7 +40,8 @@ public class CardList implements Iterable<Card> {
     }
     if (card == null) {
       Util.playerError(player, name + " contains null card.", true);
-    } else {
+    }
+    else {
       Util.playerError(player, "Trying to add template card to " + name, true);
     }
     return false;
@@ -54,15 +57,15 @@ public class CardList implements Iterable<Card> {
 
   public Card get(Card card) {
     for (Card c : a)
-    if (c.equals(card))
-    return c;
+      if (c.equals(card))
+        return c;
     return null;
   }
 
   public int indexOf(Integer id) {
-    for (int i = a.size() - 1; i >= 0 ; i--) {
+    for (int i = a.size() - 1; i >= 0; i--) {
       if (a.get(i).getId() == id)
-      return i;
+        return i;
     }
     return -1;
   }
@@ -112,7 +115,8 @@ public class CardList implements Iterable<Card> {
     if (checkValid(card)) {
       if (index != -1) {
         a.add(index, card);
-      } else {
+      }
+      else {
         a.add(card);
       }
       if (showUI && name.equals("Hand")) {
@@ -131,6 +135,15 @@ public class CardList implements Iterable<Card> {
       }
     }
   }
+
+  public void addAll(ArrayList<Card> cardList) {
+    for (Card card : cardList) {
+      if (checkValid(card)) {
+        a.add(card);
+      }
+    }
+  }
+
   public int size() {
     return a.size();
   }
@@ -169,11 +182,11 @@ public class CardList implements Iterable<Card> {
   }
 
   public Card getLastCard() {
-    return a.size() == 0 ? null : a.get(a.size()-1);
+    return a.size() == 0 ? null : a.get(a.size() - 1);
   }
 
   public Card removeLastCard() {
-    return a.size() == 0 ? null : a.remove(a.size()-1);
+    return a.size() == 0 ? null : a.remove(a.size() - 1);
   }
 
   public Card[] sort(Comparator<Card> comp) {
@@ -197,5 +210,4 @@ public class CardList implements Iterable<Card> {
     }
     return clone;
   }
-
 }

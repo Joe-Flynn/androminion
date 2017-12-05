@@ -10,16 +10,7 @@ import com.vdom.api.Card;
 import com.vdom.api.GameEvent;
 import com.vdom.api.GameType;
 
-import com.vdom.core.BasePlayer;
-import com.vdom.core.CardPile;
-import com.vdom.core.Cards;
-import com.vdom.core.Game;
-import com.vdom.core.Expansion;
-import com.vdom.core.GetCardsInGameOptions;
-import com.vdom.core.MoveContext;
-import com.vdom.core.Player;
-import com.vdom.core.Type;
-import com.vdom.core.Util;
+import com.vdom.core.*;
 
 
 public class VDomPlayerJoe extends BasePlayer  {
@@ -51,18 +42,26 @@ public class VDomPlayerJoe extends BasePlayer  {
       super.newGame(context);
     }
 
-
     @Override
     public Card doAction(MoveContext context) {
-		System.out.printf("<EVALUATOR> Action eval: %s\n", evaluator.evaluateBuyPhase(context, this.getAllCards()));
-      return null;
+    	if (context.player.getPlayerName().equals("Dummy")) {
+    		return null;
+		}
+
+        for (int i = 0; i < hand.size(); i++) {
+            Card cardInHand = hand.get(i);
+            if (cardInHand.is(Type.Action)) {
+                return cardInHand;
+            }
+        }
+        return null;
     }
 
-    /*
-    ** doBuy - Simple Big Money Strategy
-    */
     @Override
-    public Card doBuy(MoveContext context) {
+
+    public Card doBuy(MoveContext context) { return null; }
+
+    public Card doBuyBigMoney(MoveContext context) {
         System.out.printf("<EVALUATOR> Buy eval: %s\n", evaluator.evaluateBuyPhase(context, this.getAllCards()));
 
       int coins = context.getCoinAvailableForBuy();
@@ -86,7 +85,6 @@ public class VDomPlayerJoe extends BasePlayer  {
 
       return retCard;
 
-
       // // Buy a Duchy
       // if (context.canBuy(Cards.duchy)) {
       //   int provincesLeft = 0;
@@ -99,7 +97,11 @@ public class VDomPlayerJoe extends BasePlayer  {
       //     return Cards.duchy;
       //   }
       // }
-
     }
 
+    public void setDeck(Deck deck) {
+        CardList playerDeck = new CardList(this, "Deck");
+        playerDeck.addAll(deck.getCards());
+        this.deck = playerDeck;
+    }
 }

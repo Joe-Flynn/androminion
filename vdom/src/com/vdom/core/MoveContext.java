@@ -203,7 +203,7 @@ public class MoveContext {
     }
     for (Card c : player.nextTurnCards) {
       if (c instanceof CardImpl && ((CardImpl)c).trashAfterPlay)
-      continue;
+        continue;
       if (c.is(type, player)) {
         numInPlay++;
       }
@@ -394,7 +394,7 @@ public class MoveContext {
 
     coins += coinsToAdd;
     if (coins < 0)
-    coins = 0;
+      coins = 0;
   }
 
   public void spendCoins(int coinsToSpend) {
