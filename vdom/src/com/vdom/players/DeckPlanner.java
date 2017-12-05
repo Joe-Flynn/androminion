@@ -75,13 +75,6 @@ public class DeckPlanner {
 		currentPool.addAll(survivors);
 		currentPool.addAll(createMutantChildren(survivors, initPercentFirstKingdom, mutantPercentFirstDeck));
 
-		for (Deck d : currentPool){
-			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			for (Card c : d.getCards()) {
-				System.out.println(c.getName());
-			}
-		}
-
 		averageTurnEconomies.clear();
 		for (Deck deck : currentPool) {
 			Game clone = game.cloneGame();
