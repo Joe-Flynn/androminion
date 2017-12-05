@@ -474,6 +474,11 @@ public class Game {
         context.returnToActionPhase = false;
         playerAction(player, context);
 
+        if (player.getPlayerName().equals(planningPlayer.getPlayerName())) {
+          turnEconomySummation += evaluator.evaluateActionPhase(context);
+          //turnsPlayed++;
+        }
+
         // Buy Phase of Turn
         context.phase = TurnPhase.Buy;
         playerBeginBuy(player, context);
@@ -482,6 +487,11 @@ public class Game {
         playerBuy(player, context);
 
       } while (context.returnToActionPhase);
+
+      if (player.getPlayerName().equals(planningPlayer.getPlayerName())) {
+        //turnEconomySummation += evaluator.evaluateActionPhase(context);
+        turnsPlayed++;
+      }
 
       // Broadcast No-Buy Event
       if (context.totalCardsBoughtThisTurn + context.totalEventsBoughtThisTurn == 0) {
@@ -499,11 +509,6 @@ public class Game {
         if (otherPlayer != player) {
           otherPlayer.cleanupOutOfTurn(new MoveContext(this, otherPlayer));
         }
-      }
-
-      if (player.getPlayerName().equals(planningPlayer.getPlayerName())) {
-        turnEconomySummation += evaluator.evaluateActionPhase(context);
-        turnsPlayed++;
       }
 
 

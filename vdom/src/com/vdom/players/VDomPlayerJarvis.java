@@ -102,6 +102,8 @@ public class VDomPlayerJarvis extends BasePlayer {
     double numProvinces = context.game.piles.get("Province").getCount();
     double percentProvinces = (8.0 - numProvinces) / 8.0;
 
+    //return percentProvinces;
+
     if(numProvinces > 6)
     {
       return 0.0;
@@ -131,8 +133,8 @@ public class VDomPlayerJarvis extends BasePlayer {
     double costMultiplier;
     double percent;
     double percentDelta;
-    double tolerance = .25;
-    double dampening = .25;
+    double tolerance = .20;
+    double dampening = .80;
     double totalTreasure = 0;
     double idealTreasure = 0;
     double treasureDelta;
@@ -174,7 +176,7 @@ public class VDomPlayerJarvis extends BasePlayer {
 
     eval += treasureDelta * (2 - idealDeck.getPercentKingdom());
 
-    return (1.0 - gameProgression(context)) * eval + (gameProgression(context)) * context.player.getTotalVictoryPoints() * 6;
+    return (1.0 - gameProgression(context)) * eval + (gameProgression(context)) * context.player.getTotalVictoryPoints();
   }
 
 
