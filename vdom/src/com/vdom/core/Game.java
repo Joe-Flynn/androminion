@@ -141,6 +141,23 @@ public class Game {
   protected ArrayList<GameStats> gameTypeStats;
 
 
+  // Evaluator Parameters to Tune
+  protected double coinFactor          =  0.0;//1.0;
+  protected double potionFactor        =  0.0;//0.5;
+  protected double threeCostGainFactor =  0.0;//1.0;
+  protected double fourCostGainFactor  =  0.0;//0.0;
+  protected double fiveCostGainFactor  =  0.0;//1.25;
+  protected double coinTokenFactor     =  0.0;//1.0;
+  protected double debtTokenFactor     =  0.0;//-1.0;
+  protected double victoryTokenFactor  =  0.0;//1.0;
+  protected double enemyHandSizeFactor = 0.0;//-1.0;
+  protected double treasureDeltaFactor = 0.0; //1.0;
+  protected double actionDeltaFactor   =  0.0; //-1.0;
+  protected double victoryPointFactor  =  0.0; //0.17;
+
+
+
+
   // Extra Turn Info Class
   protected static class ExtraTurnInfo {
     public ExtraTurnInfo() { ; }
@@ -155,7 +172,7 @@ public class Game {
   public Game() {
 
     // Num Games and Players
-    numGames   = 100;
+    numGames   = 20;
     numPlayers = 2;
 
     // CARD SET to use for the game (See com.vdom.api.GameType)
@@ -258,12 +275,24 @@ public class Game {
 
   public static void main(String[] args) {
 
+    // Hashmap for holding game results
+    HashMap<String, Double> gameResults;
+
+
+
+
+
     // Set up game(s) and Start
     Game game = new Game();
-    game.start();
 
-    Util.log("");
-    Util.log("--------------------------------");
+    for (int i = 0; i < 3; i++) {
+      gameResults = game.start();
+      double player1wins = gameResults.get("com.vdom.players.VDomPlayerJarvis");
+      double player2wins = gameResults.get("com.vdom.players.VDomPlayerJarvisJr");
+
+      System.out.println("GAME " + i + " RESULTS: PL1: " + player1wins + ", PL2: " + player2wins);
+
+    }
 
     // Print Overall Game Stats
     game.printStats(game.overallWins, game.numGames * GameType.values().length, "Total");
@@ -276,7 +305,7 @@ public class Game {
   /*
   ** start - Starts the Dominion game simulator
   */
-  void start() {
+  public HashMap<String, Double> start() {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
     playerToWins.put("com.vdom.players.VDomPlayerJarvis", 0.0);
@@ -405,6 +434,9 @@ public class Game {
     stats.aveVictoryPoints = (int) (vpTotal / (numGames * numPlayers));
 
     gameTypeStats.add(stats);
+
+    // Return Player-To-Wins Mapping
+    return playerToWins;
 
   }
 
@@ -560,7 +592,7 @@ public class Game {
   ** initPlayers - Sets up the Game's players
   */
   @SuppressWarnings("unchecked")
-  public void initPlayers(int numPlayers, boolean isRandom) {
+  public void initPlayers(int numPlayers, boolean resetEvaluators) {
 
     players = new Player[numPlayers];
     playersTurn = 0;
@@ -574,8 +606,13 @@ public class Game {
 
       if (i == 0) {
         players[i] = new VDomPlayerJarvis();
-      }
-      else {
+        if (resetEvaluators) {
+          ((VDomPlayerJarvis)players[i]).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
+                                                      fourCostGainFactor, fiveCostGainFactor, coinTokenFactor,
+                                                      debtTokenFactor, victoryTokenFactor, enemyHandSizeFactor,
+                                                      treasureDeltaFactor, actionDeltaFactor, victoryPointFactor);
+        }
+      } else {
         players[i] = new VDomPlayerJarvisJr();
       }
 

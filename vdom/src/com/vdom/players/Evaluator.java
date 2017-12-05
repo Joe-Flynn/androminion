@@ -35,7 +35,7 @@ public class Evaluator {
                    double fourCostGainFactor, double fiveCostGainFactor, double coinTokenFactor,
                    double debtTokenFactor, double victoryTokenFactor, double enemyHandSizeFactor,
                    double treasureDeltaFactor, double actionDeltaFactor, double victoryPointFactor) {
-                     
+
     this.player              = player;
     this.coinFactor          = coinFactor;
     this.potionFactor        = potionFactor;
@@ -86,6 +86,8 @@ public class Evaluator {
 
     // TODO: ADD A TURN DIMENSION (i.e. player.getTurnCount())
     // TODO: ADD something that evaluates HOW CLOSE THE DECK IS to the Original Plan
+
+    System.out.println(">>>>>DEBUG, Turn Economy = " + turnEconomy);
 
     return turnEconomy;
 
