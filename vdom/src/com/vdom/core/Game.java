@@ -155,7 +155,7 @@ public class Game {
   public Game() {
 
     // Num Games and Players
-    numGames   = 100;
+    numGames   = 2;
     numPlayers = 2;
 
     // CARD SET to use for the game (See com.vdom.api.GameType)
@@ -278,7 +278,7 @@ public class Game {
   */
   void start() {
     HashMap<String, Double> playerToWins = new HashMap<>();
-    playerToWins.put("com.vdom.players.VDomPlayerJarvis", 0.0);  // SAME THING. RESOLVE JARVIS-FLYNN Merge.
+    playerToWins.put("com.vdom.players.VDomPlayerFlynn", 0.0);  // SAME THING. RESOLVE JARVIS-FLYNN Merge.
     playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
 
     // Variables for Overall Stats over all Games
@@ -294,8 +294,8 @@ public class Game {
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
-      DeckPlanner planner = new DeckPlanner(this.cloneGame(), 100);
-      planner.findBestDeck(players[0]);
+      DeckPlanner planner = new DeckPlanner(this.cloneGame(), 30);
+      ((VDomPlayerFlynn) players[0]).setIdealDeck(planner.findBestDeck(players[0]));
 
 
       // Set up Player's Turn Information
@@ -568,7 +568,7 @@ public class Game {
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerJarvis(); // NEED TO RESOLVED WITH VDomPlayerJarvis Merge.
+        players[i] = new VDomPlayerFlynn(); // NEED TO RESOLVED WITH VDomPlayerJarvis Merge.
       }
       else {
         players[i] = new VDomPlayerAndrew();

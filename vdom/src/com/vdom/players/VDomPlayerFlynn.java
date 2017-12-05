@@ -47,6 +47,10 @@ public class VDomPlayerFlynn extends BasePlayer  {
 
 	@Override
 	public Card doAction(MoveContext context) {
+		if (!context.player.getPlayerName().equals("Joe")) {
+			return null;
+		}
+
 		for (int i = 0; i < hand.size(); i++) {
 			Card cardInHand = hand.get(i);
 			if (cardInHand.is(Type.Action)) {
@@ -74,9 +78,12 @@ public class VDomPlayerFlynn extends BasePlayer  {
 		}
 
 		HashMap<Card, Double> currentPercentAwayFromIdeal = new HashMap<>();
-		for (Card key : currentPercentages.keySet())  {
+		for (Card key : currentPercentages.keySet()) {
 			double cardPercentage = currentPercentages.get(key) / (double) cards.size();
-			currentPercentAwayFromIdeal.put(key, cardPercentage / idealPercentages.get(key));
+			if (idealPercentages.containsKey(key))
+				currentPercentAwayFromIdeal.put(key, cardPercentage / idealPercentages.get(key));
+			else
+				currentPercentAwayFromIdeal.put(key, -1.0);
 		}
 
 		for (Card card : idealPercentages.keySet()) {
@@ -92,6 +99,9 @@ public class VDomPlayerFlynn extends BasePlayer  {
 		Collections.sort(percentsAwayFromIdeal);
 
 		for (double percentAwayFromIdeal : percentsAwayFromIdeal) {
+			if (percentAwayFromIdeal == - 1)
+				continue;
+
 			for (Card card : currentPercentAwayFromIdeal.keySet()) {
 				if (percentAwayFromIdeal == currentPercentAwayFromIdeal.get(card)) {
 					if (context.canBuy(card)) {

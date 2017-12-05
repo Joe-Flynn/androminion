@@ -133,7 +133,7 @@ public class DeckPlanner {
 					deck2.add(game.getGamePile(Cards.estate).topCard());
 				}
 				deck1.add(game.getGamePile(Cards.copper).topCard());
-				deck2.add(game.getGamePile(Cards.estate).topCard());
+				deck2.add(game.getGamePile(Cards.copper).topCard());
 			}
 
 			// add kingdom cards
