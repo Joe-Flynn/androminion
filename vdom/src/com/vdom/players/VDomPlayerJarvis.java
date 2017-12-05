@@ -61,13 +61,17 @@ public class VDomPlayerJarvis extends BasePlayer {
 
     System.out.println(">>>> JARVIS: BEGINNING DO_ACTION, HAND = " + hand);
 
-    searchTree = new DomTree(context, gameEvaluator);
-    searching = true;
-    searchTree.expand();
-    searching = false;
 
-    bestPlay = searchTree.root.getTopPlay();
 
+      if(getActionsInHand(this).size() > 0) {
+      searchTree = new DomTree(context.cloneContext(), gameEvaluator);
+      searching = true;
+      bestPlay = searchTree.chooseAction();
+      searching = false;
+    }
+
+
+    
     if (bestPlay == null) {
       return null;
     } else {
