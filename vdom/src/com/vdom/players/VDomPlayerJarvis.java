@@ -96,7 +96,7 @@ public class VDomPlayerJarvis extends BasePlayer {
 
   @Override
   public Card doBuy(MoveContext context) {
-    Card returnCard = doBuyHeuristic(context);
+    Card returnCard = doBuyEvalSearch(context);
     return returnCard;
   }
 

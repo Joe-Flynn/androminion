@@ -151,19 +151,19 @@ public class Game {
     public boolean canBuyCards = true;
   }
 
-  // Evaluator Parameters to Tune
-  protected double coinFactor          =  -1.0;//1.0;
-  protected double potionFactor        =  10.0;//0.5;
-  protected double threeCostGainFactor =  -1.0;//1.0;
-  protected double fourCostGainFactor  =  0.0;//0.0;
-  protected double fiveCostGainFactor  =  0.0;//1.25;
-  protected double coinTokenFactor     =  0.0;//1.0;
-  protected double debtTokenFactor     =  0.0;//-1.0;
-  protected double victoryTokenFactor  =  0.0;//1.0;
-  protected double enemyHandSizeFactor =  1.0;//-1.0;
-  protected double treasureDeltaFactor =  0.0; //1.0;
-  protected double actionDeltaFactor   =  0.0; //-1.0;
-  protected double victoryPointFactor  =  0.0; //0.17;
+  // Evaluator Parameters to Tune        Good    Bad     Good
+  protected double coinFactor          =  1.0;  //-1.0;  //1.0;
+  protected double potionFactor        =  0.5;  //10.0;  //0.5;
+  protected double threeCostGainFactor =  1.0;  //-1.0;  //1.0;
+  protected double fourCostGainFactor  =  1.1;  // 0.0;   //0.0;
+  protected double fiveCostGainFactor  =  1.2;  //0.0;   //1.25;
+  protected double coinTokenFactor     =  1.0;  //0.0;   //1.0;
+  protected double debtTokenFactor     = -1.0;  //0.0;   //-1.0;
+  protected double victoryTokenFactor  =  1.0;  //0.0;   //1.0;
+  protected double enemyHandSizeFactor = -1.0;  //1.0;   //-1.0;
+  protected double treasureDeltaFactor =  1.0;  //-1.0;  //1.0;
+  protected double actionDeltaFactor   = -1.0;  //1.0;   //-1.0;
+  protected double victoryPointFactor  =  0.17; //0.0;   //0.17;
 
 
   /*
