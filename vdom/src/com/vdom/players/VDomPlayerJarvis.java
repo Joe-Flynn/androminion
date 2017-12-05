@@ -273,7 +273,7 @@ public class VDomPlayerJarvis extends BasePlayer {
   private <T> T choose(ArrayList<T> options) {
 
     // Reduce width of Tree
-    while (options.size() > 3) { options.remove(3); }
+    // while (options.size() > 3) { options.remove(3); }
 
     // If in search:
     // Check if current node has been expanded already.
