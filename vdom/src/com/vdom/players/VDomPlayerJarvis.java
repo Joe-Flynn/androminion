@@ -1,7 +1,9 @@
 package com.vdom.players;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import com.intellij.codeInsight.daemon.impl.quickfix.RemoveQualifierFix;
 import com.vdom.api.Card;
 import com.vdom.api.GameEvent;
 
@@ -64,7 +66,8 @@ public class VDomPlayerJarvis extends BasePlayer {
       if(getActionsInHand(this).size() > 0) {
       searchTree = new DomTree(context.cloneContext(), gameEvaluator);
       searching = true;
-      bestPlay = searchTree.chooseAction(6,3,10);
+      bestPlay = searchTree.chooseAction(5,3,5);
+      searchTree = null;
       searching = false;
     }
 
@@ -78,12 +81,102 @@ public class VDomPlayerJarvis extends BasePlayer {
 
   @Override
   public Card doBuy(MoveContext context) {
-//    Card returnCard = doBuyHeuristic(context);
-//    System.out.println(">>>> JARVIS: ACTUALLY BUYING CARD: " + returnCard);
-//    return returnCard;
-    return null;
+
+    if(idealDeck == null)
+    {
+      Card returnCard = doBuyHeuristic(context);
+      System.out.println(">>>> JARVIS: ACTUALLY BUYING CARD: " + returnCard);
+      return returnCard;
+    }
+    else
+    {
+      Card returnCard = doBuyEvalSearch(context);
+      System.out.println(">>>> JARVIS: ACTUALLY BUYING CARD: " + returnCard);
+      return returnCard;
+    }
+
   }
 
+  public double gameProgression(MoveContext context)
+  {
+    return (8.0 - context.game.piles.get("Province").getCount()) / 8.0;
+  }
+
+  public double evaluateDeckAgainstIdeal(MoveContext context)
+  {
+    if(idealDeck == null){return -1000.0;}
+
+    HashMap<String, Integer> counts = getCardCounts(context.player.getAllCards());
+    double deckSize = context.player.getAllCards().size();
+    double eval = 0.0;
+    double costMultiplier;
+    double percent;
+    double percentDelta;
+    double tolerance = .5;
+    double dampening = .5;
+    double totalTreasure = 0;
+    double idealTreasure = 0;
+    double treasureDelta;
+
+    for(Card c : idealDeck.getCardPercentages().keySet())
+    {
+      if(c.is(Type.Action)) {
+        costMultiplier = (c.getCost(null) >= 5) ? 2.0 : 1.0;
+        if (counts.containsKey(c.getName())) {
+          percent = counts.get(c.getName()) / deckSize;
+        } else {
+          percent = 0.0;
+        }
+        // continue to improve score for additional cards up to a certain tolerance threshold, but dampen this extra score.
+        percent = Math.min(percent, idealDeck.getCardPercentages().get(c) * (1.0 + tolerance));
+        percentDelta = percent - idealDeck.getCardPercentages().get(c);
+        if (percentDelta > 0.0) {
+          percentDelta *= dampening;
+        }
+        percentDelta *= costMultiplier;
+
+        eval += percentDelta;
+      }
+    }
+
+    for(Card c : idealDeck.getCards())
+    {
+      if (c.is(Type.Treasure)){
+        idealTreasure  += c.getAddGold();
+      }
+    }
+    for(Card c : getAllCards())
+    {
+      if (c.is(Type.Treasure)){
+        totalTreasure  += c.getAddGold();
+      }
+    }
+    treasureDelta = totalTreasure / deckSize - idealTreasure / idealDeck.getCards().size();
+
+    eval += treasureDelta * (2 - idealDeck.getPercentKingdom());
+
+    return gameProgression(context) * eval + (1.0 - gameProgression(context)) * getTotalVictoryPoints();
+  }
+
+
+  private HashMap<String, Integer> getCardCounts(ArrayList<Card> cards)
+  {
+    HashMap<String, Integer> counts = new HashMap<String, Integer>();
+
+    for (Card c : cards)
+    {
+      String name = c.getName();
+      if (counts.containsKey(name))
+      {
+        counts.put(name, counts.get(name) + 1);
+      }
+      else
+      {
+        counts.put(name, 1);
+      }
+    }
+    return counts;
+  }
 
   /*
   ** doBuyHeuristic - Simple Big Money Strategy, with the option to buy cards if
@@ -154,7 +247,8 @@ public class VDomPlayerJarvis extends BasePlayer {
     Card returnCard = null;
 
     // Buy Card that Improves Player's Evaluation Most
-    double currentEvaluation = gameEvaluator.evaluateBuyPhase(context, this.getAllCards());
+    //double currentEvaluation = gameEvaluator.evaluateBuyPhase(context, this.getAllCards());
+    double currentEvaluation = evaluateDeckAgainstIdeal(context);
     String cardToBuy = "";
 
     for (String pileName : context.game.piles.keySet()) {
@@ -167,7 +261,7 @@ public class VDomPlayerJarvis extends BasePlayer {
           clonedSelf = (VDomPlayerJarvis) clonedPlayer;
         }
       }
-      Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
+      //Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
       MoveContext clonedContext = new MoveContext(context, clonedGame, clonedSelf);
 
       // Try the Buy
@@ -178,8 +272,8 @@ public class VDomPlayerJarvis extends BasePlayer {
         clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
         clonedGame.playBuy(clonedContext, buyCard);
         clonedGame.playerPayOffDebt(clonedSelf, clonedContext);
-        if (clonedEvaluator.evaluateBuyPhase(clonedContext, clonedSelf.getAllCards()) > currentEvaluation) {
-          currentEvaluation = clonedEvaluator.evaluateBuyPhase(clonedContext, clonedSelf.getAllCards());
+        if (evaluateDeckAgainstIdeal(clonedContext) > currentEvaluation) {
+          currentEvaluation = evaluateDeckAgainstIdeal(clonedContext);
           cardToBuy = pileName;
         }
       }

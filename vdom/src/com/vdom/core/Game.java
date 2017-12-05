@@ -155,7 +155,7 @@ public class Game {
   public Game() {
 
     // Num Games and Players
-    numGames   = 100;
+    numGames   = 1;
     numPlayers = 2;
 
     // CARD SET to use for the game (See com.vdom.api.GameType)
@@ -294,8 +294,9 @@ public class Game {
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
-      DeckPlanner planner = new DeckPlanner(this.cloneGame(), 100);
-      planner.findBestDeck(players[0]);
+      DeckPlanner planner = new DeckPlanner(this.cloneGame(), 30);
+
+      players[0].idealDeck = planner.findBestDeck(players[0]);
 
 
       // Set up Player's Turn Information
@@ -415,6 +416,7 @@ public class Game {
 
     // Set planningPlayer's deck , draw, and shuffle deck
     Player pPlayer = players[0];
+    pPlayer.idealDeck = deck;
     pPlayer.setDeck(deck);
     pPlayer.shuffleDeck(new MoveContext(this, pPlayer), null);
     while (pPlayer.hand.size() < 5)
@@ -477,7 +479,7 @@ public class Game {
         playerBeginBuy(player, context);
         playTreasures(player, context, -1, null);
         playGuildsTokens(player, context);
-        //playerBuy(player, context);
+        playerBuy(player, context);
 
       } while (context.returnToActionPhase);
 

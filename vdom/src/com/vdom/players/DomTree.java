@@ -34,6 +34,7 @@ public class DomTree {
     public <T> T get_next_option()
     {
         // This is the big puzzle... what if something happens between plays and the options are different??
+        // Answer (for now): we reshuffle only at the top of a new search
         if(curNode == null) {return null;}
         curNode = curNode.get_next_expand_option();
         if(curNode == null) {return null;}
@@ -44,11 +45,15 @@ public class DomTree {
     public <T> T get_next_option(ArrayList<T> options)
     {
         // This is the big puzzle... what if something happens between plays and the options are different??
+        // Answer (for now): we reshuffle only at the top of a new search
         if(curNode == null) {return null;}
         curNode = curNode.get_next_expand_option(options);
         if(curNode == null) {return null;}
         return (T)(curNode.choice);
     }
+
+    public int getNodeCount()    {        return root.getNodeCount();    }
+    public int getStateCount()    {        return root.getStateCount();    }
 
     public Card chooseAction() {return chooseAction(10, 3, 10);}
 
@@ -121,8 +126,6 @@ public class DomTree {
 
     public void expand_state(DomTreeNode state) {
 
-        state.evaluation = evaluator.evaluateActionPhase(state.context);
-
         // log state in TT; if we've been here before, don't expand.
         if(!tt.add(new TranspositionEntry(state.context)))
         {
@@ -178,6 +181,9 @@ public class DomTree {
             state.type = DomNodeType.dead;
         }
 
+        state.evaluation = evaluator.evaluateActionPhase(state.context);
+        state.expanded = true;
+        if(state.parent != null) {state.context = null;}
     }
 
 
@@ -191,6 +197,7 @@ public class DomTree {
         // Used exclusively in state nodes
         MoveContext context = null;
         double evaluation = neg_infinity - 1;
+        boolean expanded = false;
 
         // Used exclusively in play nodes
         Card card = null;
@@ -239,10 +246,36 @@ public class DomTree {
             this.parent = parent;
         }
 
+
+        public int getStateCount()
+        {
+            int n = 0;
+            if(type == DomNodeType.state) {n++;}
+
+            for(DomTreeNode tn : children)
+            {
+                n += tn.getStateCount();
+            }
+
+            return n;
+        }
+
+        public int getNodeCount()
+        {
+            int n = 1;
+
+            for(DomTreeNode tn : children)
+            {
+                n += tn.getNodeCount();
+            }
+
+            return n;
+        }
+
         public ArrayList<DomTreeNode> get_leaf_states()
         {
             ArrayList<DomTreeNode> leaves = new ArrayList<>();
-            if(type == DomNodeType.state && children.size() == 0 && evaluation < neg_infinity)
+            if(type == DomNodeType.state && children.size() == 0 && !expanded)
             {
                 leaves.add(this);
             }

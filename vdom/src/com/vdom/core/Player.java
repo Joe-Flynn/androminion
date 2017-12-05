@@ -55,6 +55,8 @@ public abstract class Player {
   protected Card inheritance;
   protected Card save;
 
+  public Deck idealDeck = null;
+
   // Player's Game and Game Features
 
   public Game game;

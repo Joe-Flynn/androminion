@@ -13,7 +13,7 @@ public class DeckPlanner {
 	private final static int initPercentKingdoms = 80;
 	private final static int initPercentFirstKingdom = 50;
 	private final static int mutantPercentFirstDeck = 80;
-	private final static int numTurns = 100;
+	private final static int numTurns = 5;
 	private int deckSize;
 	private Game game;
 
@@ -26,10 +26,10 @@ public class DeckPlanner {
 		Player pPlayer = ((BasePlayer)player).clone(game);
 
 		ArrayList<Card> kingdomCards = new ArrayList<>();
-		for (CardPile cardPile : game.piles.values()) {
-			if (cardPile.topCard().is(Type.Action) && !cardPile.topCard().is(Type.Ruins) && !cardPile.topCard().is(Type.Treasure)
-					&& !cardPile.topCard().is(Type.Victory) && !cardPile.topCard().equals(Cards.cultist)) {
-				kingdomCards.add(cardPile.topCard());
+		for (Card c : game.getCardsInGame(GetCardsInGameOptions.Buyables, true, Type.Action)) {
+			if (c.is(Type.Action) && !c.is(Type.Ruins) && !c.equals(Cards.possession)
+					&& !c.equals(Cards.rats) && !c.equals(Cards.cultist)) {
+				kingdomCards.add(c);
 			}
 		}
 
@@ -79,7 +79,7 @@ public class DeckPlanner {
 
 		averageTurnEconomies.clear();
 		for (Deck deck : currentPool) {
-			Game clone = game.cloneGame();
+			//Game clone = game.cloneGame();
 			averageTurnEconomies.add(playSimulations(numTurns, deck, pPlayer));
 		}
 
@@ -113,7 +113,13 @@ public class DeckPlanner {
 		ArrayList<Deck> mutantChildren = new ArrayList<>();
 		ArrayList<Deck[]> combos = getCombinationsDecks(2, decks);
 
-		for (Deck[] combo : combos) {
+		// Choose a random subset of combos.
+		for(int n = 0; n < decks.size() * 2; n++)
+		{
+			Deck[] combo = combos.remove(game.rand.nextInt(combos.size() -1));
+		//}
+
+		//for (Deck[] combo : combos) {
 			ArrayList<Card> kingdomCards = new ArrayList<>();
 			kingdomCards.addAll(combo[0].getKingdomCards());
 			kingdomCards.addAll(combo[1].getKingdomCards());
