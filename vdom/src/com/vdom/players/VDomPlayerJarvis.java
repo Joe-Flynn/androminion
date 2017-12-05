@@ -11,18 +11,24 @@ import com.vdom.core.*;
 public class VDomPlayerJarvis extends BasePlayer {
 
   // Turn and Game Evaluator
-  Evaluator gameEvaluator = new Evaluator(this);
+  protected Evaluator gameEvaluator = new Evaluator(this);
 
   // Action Phase Search Tree
-  DomTree searchTree = null;
-  boolean searching  = false;
-  Card    bestPlay   = null;
+  protected DomTree searchTree = null;
+  protected boolean searching  = false;
+  protected Card    bestPlay   = null;
 
   // Buy Phase Parameters
-  int numTreasuresBought    = 0;
-  int numKingdomCardsBought = 0;
-  int numVictoriesBought    = 0;
-  double maxKingdomRatio    = 0.2;
+  protected int numTreasuresBought    = 0;
+  protected int numKingdomCardsBought = 0;
+  protected int numVictoriesBought    = 0;
+  protected double maxKingdomRatio    = 0.2;
+
+  public VDomPlayerJarvis() {
+		super();
+		this.setName("Jarvis");
+		gameEvaluator = new Evaluator(this);
+	}
 
   @Override
   public BasePlayer clone(Game inputGame)
@@ -58,28 +64,22 @@ public class VDomPlayerJarvis extends BasePlayer {
 
   @Override
   public Card doAction(MoveContext context) {
-
-    System.out.println(">>>> JARVIS: BEGINNING DO_ACTION, HAND = " + hand);
-
-      if(getActionsInHand(this).size() > 0) {
+    if(getActionsInHand(this).size() > 0) {
       searchTree = new DomTree(context.cloneContext(), gameEvaluator);
       searching = true;
       bestPlay = searchTree.chooseAction();
       searching = false;
     }
-
     if (bestPlay == null) {
       return null;
     } else {
       return fromHand(bestPlay);
     }
-
   }
 
   @Override
   public Card doBuy(MoveContext context) {
     Card returnCard = doBuyHeuristic(context);
-    System.out.println(">>>> JARVIS: ACTUALLY BUYING CARD: " + returnCard);
     return returnCard;
   }
 
@@ -119,12 +119,6 @@ public class VDomPlayerJarvis extends BasePlayer {
       if (highestValueCard != null) {
         double totalCardsBought = (double) (numTreasuresBought + numKingdomCardsBought + numVictoriesBought + 1);
         double kingdomRatio = (double) numKingdomCardsBought / totalCardsBought;
-
-        System.out.println(">>>> JARVIS: totalCardsBought = " + totalCardsBought);
-        System.out.println(">>>> JARVIS: numKingdomCardsBought = " + numKingdomCardsBought);
-        System.out.println(">>>> JARVIS: kingdomRatio = " + kingdomRatio);
-        System.out.println("-----------------------------------------------");
-
         if (kingdomRatio <= maxKingdomRatio) {
           numKingdomCardsBought++;
           returnCard = highestValueCard;
@@ -199,7 +193,6 @@ public class VDomPlayerJarvis extends BasePlayer {
   }
 
 
-
   // ---------------------------------------------------------------------
   // Overrides to BasePlayer Functions
   // ---------------------------------------------------------------------
@@ -265,7 +258,6 @@ public class VDomPlayerJarvis extends BasePlayer {
   }
 
 
-
   private <T> T choose(ArrayList<T> options) {
 
     // Reduce width of Tree
@@ -284,5 +276,20 @@ public class VDomPlayerJarvis extends BasePlayer {
     }
   }
 
+
+
+  // ---------------------------------------------------------------------
+  // Sets the Parameters for the Evaluator
+  // ---------------------------------------------------------------------
+
+  public void setEvaluator(double coinFactor, double potionFactor, double threeCostGainFactor,
+                           double fourCostGainFactor, double fiveCostGainFactor, double coinTokenFactor,
+                           double debtTokenFactor, double victoryTokenFactor, double enemyHandSizeFactor,
+                           double treasureDeltaFactor, double actionDeltaFactor, double victoryPointFactor) {
+
+    this.gameEvaluator = new Evaluator(this, coinFactor, potionFactor, threeCostGainFactor, fourCostGainFactor,
+                                       fiveCostGainFactor, coinTokenFactor, debtTokenFactor, victoryTokenFactor,
+                                       enemyHandSizeFactor, treasureDeltaFactor, actionDeltaFactor, victoryPointFactor);
+  }
 
 }

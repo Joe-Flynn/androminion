@@ -37,8 +37,11 @@ public class VDomPlayerAndrew extends BasePlayer  {
   protected Evaluator evaluator;
 
   public VDomPlayerAndrew() {
+    super();
+    this.setName("Andrew");
     evaluator = new Evaluator(this);
   }
+
   @Override
   public String getPlayerName() {
     return getPlayerName(game.maskPlayerNames);

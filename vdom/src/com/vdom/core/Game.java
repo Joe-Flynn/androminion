@@ -277,8 +277,9 @@ public class Game {
   ** start - Starts the Dominion game simulator
   */
   void start() {
+
     HashMap<String, Double> playerToWins = new HashMap<>();
-    playerToWins.put("com.vdom.players.VDomPlayerFlynn", 0.0);  // SAME THING. RESOLVE JARVIS-FLYNN Merge.
+    playerToWins.put("com.vdom.players.VDomPlayerJarvisJr", 0.0);
     playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
 
     // Variables for Overall Stats over all Games
@@ -294,9 +295,12 @@ public class Game {
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard();
-      DeckPlanner planner = new DeckPlanner(this.cloneGame(), 100);
-      ((VDomPlayerFlynn) players[0]).setIdealDeck(planner.findBestDeck());
 
+      // Set Up Planning Player IF the Player has Planning
+      if (players[0].getPlayerName() == "Flynn") {
+        DeckPlanner planner = new DeckPlanner(this.cloneGame(), 100);
+        ((VDomPlayerFlynn) players[0]).setIdealDeck(planner.findBestDeck());
+      }
 
       // Set up Player's Turn Information
       playersTurn = 0;
@@ -405,6 +409,7 @@ public class Game {
   }
 
   // only call from games cloned by DeckPlanner
+  @SuppressWarnings("unchecked")
   public double playPlanningGame(int numTurns, Deck deck) {
 
     Util.debug("---------------------", false);
@@ -568,10 +573,10 @@ public class Game {
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerFlynn(); // NEED TO RESOLVED WITH VDomPlayerJarvis Merge.
+        players[i] = new VDomPlayerJarvis();
       }
       else {
-        players[i] = new VDomPlayerAndrew();
+        players[i] = new VDomPlayerJarvisJr();
       }
 
       players[i].game = this;
@@ -625,6 +630,7 @@ public class Game {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void initPlayersPlanning(int numPlayers) {
 
     players = new Player[numPlayers];

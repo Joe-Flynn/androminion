@@ -194,8 +194,6 @@ public class SearchTree {
     */
     public boolean expandNode() {
 
-      System.out.println(">>>> SEARCH TREE: Expanding Node: " + actionCard);
-
       boolean nodeExpanded = false;
 
       // Do NOT Expand, if Limits are Reached
@@ -293,8 +291,6 @@ public class SearchTree {
     */
     public ArrayList<TreeNode> getPathToEvalValue(double value) {
 
-      System.out.println(">>>> SEARCH TREE: getPathToEvalValue for Node: " + actionCard + ", Node Eval: " + evaluation);
-
       ArrayList<TreeNode> path = new ArrayList<TreeNode>();
       if (evaluation >= value) {
         path.add(this);
@@ -327,7 +323,6 @@ public class SearchTree {
   {
     if(root == null) {return;}
 
-    System.out.println(">>>> SEARCH TREE: Creating new search tree.");
     // Expand Tree
     boolean doneExpanding = false;
     while (!doneExpanding) {
@@ -354,7 +349,6 @@ public class SearchTree {
   */
   public ArrayList<TreeNode> getPathToMaxEval() {
     double maxEval = this.root.getMaxEval();
-    System.out.println(">>>> SEARCH TREE: Max Eval:" + maxEval);
     return this.root.getPathToEvalValue(maxEval);
   }
 
