@@ -528,7 +528,7 @@ public abstract class BasePlayer extends Player implements GameEventListener {
     return discardAttackCardsToKeep(context, 3);
   }
 
-  private Card[] discardAttackCardsToKeep(MoveContext context, int numToKeep) {
+  protected Card[] discardAttackCardsToKeep(MoveContext context, int numToKeep) {
     ArrayList<Card> keepers = new ArrayList<Card>();
     ArrayList<Card> discards = new ArrayList<Card>();
 
@@ -4403,10 +4403,11 @@ public abstract class BasePlayer extends Player implements GameEventListener {
   @SuppressWarnings("unchecked")
   public BasePlayer clone(Game inputGame) {
 
-    // Create Player Clone
+    // Create Player Clone (by name) <-- This is real Hacky, but it works for now...
     BasePlayer clone = new VDomPlayerJoe();
     if (getPlayerName() == "Phil") { clone = new VDomPlayerPhil(); }
     if (getPlayerName() == "Andrew") { clone = new VDomPlayerAndrew(); }
+    if (getPlayerName() == "Jarvis") { clone = new VDomPlayerJarvis(); }
 
     // Copy Player's Game and Turn Info
     clone.game = inputGame;

@@ -155,4 +155,7 @@ public class CardPile  {
 		return cards.toString();
 	}
 
+	public ArrayList<Card> toArrayList() {
+		return cards;
+	}
 }

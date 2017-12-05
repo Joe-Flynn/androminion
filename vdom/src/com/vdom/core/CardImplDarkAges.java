@@ -140,7 +140,7 @@ public class CardImplDarkAges extends CardImpl {
         	break;
         case Squire:
             squire(context, currentPlayer);
-            break;            
+            break;
         case Storeroom:
             storeroom(game, context, currentPlayer);
             break;
@@ -158,17 +158,17 @@ public class CardImplDarkAges extends CardImpl {
             break;
 		default:
 			break;
-        
+
 		}
 	}
-	
+
 	@Override
 	public void isTrashed(MoveContext context) {
 		Cards.Kind trashKind = this.getKind();
     	if (this.getControlCard().equals(Cards.estate) && context.player.getInheritance() != null) {
     		trashKind = context.player.getInheritance().getKind();
     	}
-    	
+
     	switch (trashKind) {
         case Rats:
             context.game.drawToHand(context, this, 1, true);
@@ -190,7 +190,7 @@ public class CardImplDarkAges extends CardImpl {
             {
                 Card s = context.player.controlPlayer.squire_cardToObtain(context);
 
-                if (s != null) 
+                if (s != null)
                 {
                     context.player.controlPlayer.gainNewCard(s, this.getControlCard(), context);
                 }
@@ -208,7 +208,7 @@ public class CardImplDarkAges extends CardImpl {
             break;
         case HuntingGrounds:
               // Wiki: If you trash Hunting Grounds and the Duchy pile is empty,
-              // you can still choose Duchy (and gain nothing). 
+              // you can still choose Duchy (and gain nothing).
             int duchyCount      = context.game.getPile(Cards.duchy).getCount();
             int estateCount     = context.game.getPile(Cards.estate).getCount();
             boolean gainDuchy   = false;
@@ -230,7 +230,7 @@ public class CardImplDarkAges extends CardImpl {
                     }
                 }
             }
-            
+
             if (gainDuchy)
             {
                 context.player.controlPlayer.gainNewCard(Cards.duchy, this.getControlCard(), context);
@@ -267,12 +267,12 @@ public class CardImplDarkAges extends CardImpl {
         default:
             break;
 	    }
-	    
+
 	    // card left play - stop any impersonations
 	    this.getControlCard().stopImpersonatingCard();
 	    this.getControlCard().stopInheritingCardAbilities();
 	}
-	
+
 	private void altar(Player currentPlayer, MoveContext context) {
         if (currentPlayer.getHand().size() > 0) {
             Card card = currentPlayer.controlPlayer.altar_cardToTrash(context);
@@ -294,7 +294,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-	
+
 	public void armory(Player currentPlayer, MoveContext context) {
         Card card = currentPlayer.controlPlayer.armory_cardToObtain(context);
         if (card != null) {
@@ -304,7 +304,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-	
+
 	private void bandOfMisfits(Game game, MoveContext context, Player currentPlayer) {
         // Already impersonating another card?
         if (!this.isImpersonatingAnotherCard()) {
@@ -315,7 +315,7 @@ public class CardImplDarkAges extends CardImpl {
 
             // Get card to impersonate
             Card cardToImpersonate = currentPlayer.controlPlayer.bandOfMisfits_actionCardToImpersonate(context, cost - 1);
-            if (cardToImpersonate != null 
+            if (cardToImpersonate != null
                 && !game.isPileEmpty(cardToImpersonate)
                 && Cards.isSupplyCard(cardToImpersonate)
                 && cardToImpersonate.is(Type.Action, null)
@@ -397,7 +397,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-    
+
     private void count(Player currentPlayer, MoveContext context) {
         Player.CountFirstOption option1 = currentPlayer.controlPlayer.count_chooseFirstOption(context);
         if (option1 == null) {
@@ -483,7 +483,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-    
+
     private void cultist(MoveContext context, Game game, Player currentPlayer) {
         for (Player player : game.getPlayersInTurnOrder()) {
             if (player != currentPlayer && !Util.isDefendedFromAttack(game, player, this)) {
@@ -505,7 +505,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-    
+
     private void dameAnna(MoveContext context, Player currentPlayer) {
         Card[] cards = currentPlayer.controlPlayer.dameAnna_cardsToTrash(context);
         if (cards != null) {
@@ -528,7 +528,7 @@ public class CardImplDarkAges extends CardImpl {
 
         knight(context, currentPlayer);
     }
-    
+
     private void dameNatalie(MoveContext context, Player currentPlayer) {
         Card card = currentPlayer.controlPlayer.dameNatalie_cardToObtain(context);
         if (card != null) {
@@ -542,7 +542,7 @@ public class CardImplDarkAges extends CardImpl {
 
         knight(context, currentPlayer);
     }
-    
+
     private void deathCart(Player currentPlayer, MoveContext context)
     {
         Card actionCardToTrash = currentPlayer.controlPlayer.deathCart_actionToTrash(context);
@@ -622,8 +622,8 @@ public class CardImplDarkAges extends CardImpl {
 
                 context.graverobberGainedCardOnTop = false;
                 toGain = currentPlayer.controlPlayer.graverobber_cardToReplace(context, 3 + toTrash.getCost(context), toTrash.getDebtCost(context), toTrash.costPotion());
-                if (toGain != null && toGain.getCost(context) <= toTrash.getCost(context) + 3 && 
-                		toGain.getDebtCost(context) <= toTrash.getDebtCost(context) && 
+                if (toGain != null && toGain.getCost(context) <= toTrash.getCost(context) + 3 &&
+                		toGain.getDebtCost(context) <= toTrash.getDebtCost(context) &&
                 		(!toGain.costPotion() || toTrash.costPotion()) &&
                 		toGain.is(Type.Action)) {
                     currentPlayer.gainNewCard(toGain, this, context);
@@ -631,7 +631,7 @@ public class CardImplDarkAges extends CardImpl {
                 break;
         }
     }
-    
+
     private void hermit(MoveContext context, Game game, Player currentPlayer)
     {
         ArrayList<Card> options = new ArrayList<Card>();
@@ -680,15 +680,15 @@ public class CardImplDarkAges extends CardImpl {
         if (c != null) {
             if (c.getCost(context, false) > 3 || c.getDebtCost(context) > 0 || c.costPotion() || !Cards.isSupplyCard(c)) {
                 Util.playerError(currentPlayer, "Hermit card selection error, picking card from table.");
-                c = (context.getCardsLeftInPile(Cards.silver) > 0) ? Cards.silver : Cards.copper; 
+                c = (context.getCardsLeftInPile(Cards.silver) > 0) ? Cards.silver : Cards.copper;
             }
             currentPlayer.controlPlayer.gainNewCard(c, this.getControlCard(), context);
         }
     }
-    
+
     private void ironmonger(Game game, Player currentPlayer, MoveContext context) {
         Card card = game.draw(context, Cards.ironmonger, 1);
-        
+
         if (card != null) {
             currentPlayer.reveal(card, this.getControlCard(), context);
             if (currentPlayer.controlPlayer.ironmonger_shouldDiscard(context, card)) {
@@ -696,7 +696,7 @@ public class CardImplDarkAges extends CardImpl {
             } else {
                 currentPlayer.putOnTopOfDeck(card, context, true);
             }
-            
+
             if (card.is(Type.Action, currentPlayer)) {
                 context.actions += 1;
             }
@@ -720,7 +720,7 @@ public class CardImplDarkAges extends CardImpl {
             currentPlayer.trash(card, this.getControlCard(), context);
         }
     }
-    
+
     private void madman(MoveContext context, Game game, Player currentPlayer) {
         if (currentPlayer.playedCards.contains(this.getControlCard())) {
             // Return to the Madman pile
@@ -739,9 +739,9 @@ public class CardImplDarkAges extends CardImpl {
     private void marauder(MoveContext context, Game game, Player currentPlayer) {
         currentPlayer.gainNewCard(Cards.spoils, this.getControlCard(), context);
 
-        for (Player player : game.getPlayersInTurnOrder()) 
+        for (Player player : game.getPlayersInTurnOrder())
         {
-            if (player != currentPlayer && !Util.isDefendedFromAttack(game, player, this)) 
+            if (player != currentPlayer && !Util.isDefendedFromAttack(game, player, this))
             {
                 player.attacked(this.getControlCard(), context);
                 MoveContext playerContext = new MoveContext(game, player);
@@ -750,7 +750,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-    
+
     private void mercenary(MoveContext context, Game game, Player currentPlayer) {
         int cardsTrashedCount = 0;
 
@@ -799,12 +799,12 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-    
+
     private void mystic(Game game, MoveContext context, Player currentPlayer) {
 
         if (currentPlayer.deck.size() > 0 || currentPlayer.discard.size() > 0) {  // Only allow a guess if there are cards in the deck or discard pile
 
-            // Create a list of all possible cards to guess, using the player's hand, discard pile, and deck 
+            // Create a list of all possible cards to guess, using the player's hand, discard pile, and deck
             // (even though the player could technically name a card he doesn't have)
             ArrayList<Card> options = new ArrayList<Card>(currentPlayer.getDistinctCards());
             Collections.sort(options, new Util.CardNameComparator());
@@ -826,7 +826,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-    
+
     private void pillage(Game game, MoveContext context, Player currentPlayer) {
 
         // Each other player with 5 cards in hand reveals his hand and discards a card that you choose.
@@ -861,7 +861,7 @@ public class CardImplDarkAges extends CardImpl {
         currentPlayer.gainNewCard(Cards.spoils, this.getControlCard(), context);
         currentPlayer.gainNewCard(Cards.spoils, this.getControlCard(), context);
     }
-    
+
     private void poorHouse(MoveContext context, Player currentPlayer) {
         int treasures = 0;
 
@@ -874,7 +874,7 @@ public class CardImplDarkAges extends CardImpl {
         }
         context.addCoins(-treasures);
     }
-    
+
     private void rats(MoveContext context, Player currentPlayer) {
         currentPlayer.gainNewCard(Cards.rats, this.getControlCard(), context);
 
@@ -908,7 +908,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-    
+
     private void rebuild(Player currentPlayer, MoveContext context) {
         ArrayList<Card> allCards = new ArrayList<Card>(currentPlayer.getDistinctCards());
         ArrayList<Card> options = new ArrayList<Card>();
@@ -917,8 +917,8 @@ public class CardImplDarkAges extends CardImpl {
                 options.add(c);
         }
         Collections.sort(options, new Util.CardNameComparator());
-        
-        Card named = currentPlayer.controlPlayer.rebuild_cardToPick(context, options);        
+
+        Card named = currentPlayer.controlPlayer.rebuild_cardToPick(context, options);
         currentPlayer.controlPlayer.namedCard(named, this.getControlCard(), context);
         ArrayList<Card> cards = new ArrayList<Card>();
         Card last = null;
@@ -1019,7 +1019,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-    
+
     private void sage(Game game, MoveContext context, Player currentPlayer) {
         HashSet<String> cardNames = new HashSet<String>();
 
@@ -1046,7 +1046,7 @@ public class CardImplDarkAges extends CardImpl {
             currentPlayer.discard(toDiscard.remove(0), this.getControlCard(), null);
         }
     }
-    
+
     private void scavenger(Game game, MoveContext context, Player currentPlayer) {
         boolean discard = currentPlayer.getDeckSize() == 0 ? false : currentPlayer.controlPlayer.scavenger_shouldDiscardDeck(context);
 
@@ -1070,13 +1070,13 @@ public class CardImplDarkAges extends CardImpl {
             {
                 currentPlayer.discard.remove(card);
                 currentPlayer.putOnTopOfDeck(card);
-                
+
                 GameEvent event = new GameEvent(GameEvent.EventType.CardOnTopOfDeck, context);
                 game.broadcastEvent(event);
             }
         }
     }
-    
+
     private void sirMichael(MoveContext context, Game game, Player currentPlayer) {
         for (Player player : context.game.getPlayersInTurnOrder()) {
             if (player != currentPlayer && !Util.isDefendedFromAttack(context.game, player, this)) {
@@ -1094,14 +1094,14 @@ public class CardImplDarkAges extends CardImpl {
 
         knight(context, currentPlayer);
     }
-    
+
     private void spoils(Game game, Player currentPlayer) {
     	if (isInPlay(currentPlayer)) {
             CardPile pile = game.getPile(this);
             pile.addCard(currentPlayer.playedCards.remove(currentPlayer.playedCards.indexOf(this.getId())));
     	}
     }
-    
+
     private void squire(MoveContext context, Player currentPlayer) {
         Player.SquireOption option = currentPlayer.controlPlayer.squire_chooseOption(context);
 
@@ -1117,7 +1117,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-    
+
     private void storeroom(Game game, MoveContext context, Player currentPlayer) {
         Card[] cards = currentPlayer.controlPlayer.storeroom_cardsToDiscardForCards(context);
         if (cards != null) {
@@ -1166,7 +1166,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-    
+
     private void survivors(MoveContext context, Game game, Player currentPlayer) {
         ArrayList<Card> topOfTheDeck = new ArrayList<Card>();
         for (int i = 0; i < 2; i++) {
@@ -1220,7 +1220,7 @@ public class CardImplDarkAges extends CardImpl {
         }
     }
 
-    private void urchin(MoveContext context, Game game, Player currentPlayer)   {       
+    private void urchin(MoveContext context, Game game, Player currentPlayer)   {
         for (Player player : context.game.getPlayersInTurnOrder()) {
             if (player != currentPlayer && !Util.isDefendedFromAttack(context.game, player, this)) {
                 player.attacked(this.getControlCard(), context);
@@ -1247,7 +1247,7 @@ public class CardImplDarkAges extends CardImpl {
             }
         }
     }
-    
+
     private void wanderingMinstrel(Player currentPlayer, MoveContext context) {
         ArrayList<Card> cards = new ArrayList<Card>();
         for (int i = 0; i < 3; i++) {
@@ -1274,12 +1274,12 @@ public class CardImplDarkAges extends CardImpl {
         }
 
     }
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     private void knight(MoveContext context, Player currentPlayer) {
         for (Player targetPlayer : context.game.getPlayersInTurnOrder()) {
             if (targetPlayer != currentPlayer && !Util.isDefendedFromAttack(context.game, targetPlayer, this)) {
@@ -1336,7 +1336,7 @@ public class CardImplDarkAges extends CardImpl {
                     }
                 }
             }
-        }       
+        }
     }
 
 }
