@@ -71,15 +71,6 @@ public class DeckPlanner {
 			}
 		}
 
-		Deck maxDeck = null;
-		double max = (double) Collections.max(averageTurnEconomies);
-		for (int i = 0; i < averageTurnEconomies.size(); i++) {
-			if (averageTurnEconomies.get(i) == max) {
-				maxDeck = currentPool.get(i);
-			}
-		}
-		maxDeck.getKingdomCards();
-
 		currentPool.clear();
 		currentPool.addAll(survivors);
 		currentPool.addAll(createMutantChildren(survivors, initPercentFirstKingdom, mutantPercentFirstDeck));
@@ -97,15 +88,15 @@ public class DeckPlanner {
 			averageTurnEconomies.add(playSimulations(numTurns, deck));
 		}
 
-		Deck maxDeck2 = null;
-		max = (double) Collections.max(averageTurnEconomies);
+		Deck maxDeck = null;
+		double max = (double) Collections.max(averageTurnEconomies);
 		for (int i = 0; i < averageTurnEconomies.size(); i++) {
 			if (averageTurnEconomies.get(i) == max) {
-				maxDeck2 = currentPool.get(i);
+				maxDeck = currentPool.get(i);
 			}
 		}
 
-		return maxDeck2;
+		return maxDeck;
 	}
 
 	//Plays x amount of turns in increments of 5 turns per each "game"
