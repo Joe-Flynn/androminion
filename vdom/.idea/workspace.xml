@@ -25,7 +25,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Game.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Game.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/core/Game.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="393">
@@ -103,8 +103,8 @@
       <file leaf-file-name="DeckPlanner.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/players/DeckPlanner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="106" column="5" lean-forward="true" selection-start-line="106" selection-start-column="5" selection-end-line="106" selection-end-column="5" />
+            <state relative-caret-position="232">
+              <caret line="28" column="92" lean-forward="false" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="92" />
               <folding />
             </state>
           </provider>
@@ -140,14 +140,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VDomPlayerJarvis.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="VDomPlayerJarvis.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJarvis.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="109" column="0" lean-forward="false" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
+            <state relative-caret-position="572">
+              <caret line="188" column="7" lean-forward="true" selection-start-line="188" selection-start-column="7" selection-end-line="188" selection-end-column="7" />
               <folding>
-                <element signature="e#9393#9399#0" expanded="true" />
-                <element signature="e#9450#9456#0" expanded="true" />
+                <element signature="e#9691#9697#0" expanded="true" />
+                <element signature="e#9748#9754#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -209,9 +209,9 @@
         <option value="$PROJECT_DIR$/src/com/vdom/core/BasePlayer.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/core/Player.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/core/Game.java" />
-        <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJarvis.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/players/DeckPlanner.java" />
         <option value="$PROJECT_DIR$/src/com/vdom/players/Evaluator.java" />
+        <option value="$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJarvis.java" />
       </list>
     </option>
   </component>
@@ -623,7 +623,7 @@
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="30" />
+      <option name="time" value="31" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -851,8 +851,8 @@
         <state relative-caret-position="459">
           <caret line="32" column="33" lean-forward="true" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
           <folding>
-            <element signature="e#9393#9399#0" expanded="true" />
-            <element signature="e#9450#9456#0" expanded="true" />
+            <element signature="e#9691#9697#0" expanded="true" />
+            <element signature="e#9748#9754#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1174,25 +1174,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/DeckPlanner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="106" column="5" lean-forward="true" selection-start-line="106" selection-start-column="5" selection-end-line="106" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJarvis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="109" column="0" lean-forward="false" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
-          <folding>
-            <element signature="e#9393#9399#0" expanded="true" />
-            <element signature="e#9450#9456#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/vdom/players/DomTree.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="249">
@@ -1274,6 +1255,25 @@
             <marker date="1512467904727" expanded="false" signature="137897:137903" ph="&lt;~&gt;" />
             <marker date="1512467904727" expanded="false" signature="145147:145153" ph="&lt;~&gt;" />
             <marker date="1512467904727" expanded="false" signature="146798:146828" ph="/unchecked/" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/DeckPlanner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="28" column="92" lean-forward="false" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="92" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/vdom/players/VDomPlayerJarvis.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="572">
+          <caret line="188" column="7" lean-forward="true" selection-start-line="188" selection-start-column="7" selection-end-line="188" selection-end-column="7" />
+          <folding>
+            <element signature="e#9691#9697#0" expanded="true" />
+            <element signature="e#9748#9754#0" expanded="true" />
           </folding>
         </state>
       </provider>
