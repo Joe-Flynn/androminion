@@ -11,6 +11,10 @@ import com.vdom.core.*;
 
 public class VDomPlayerJarvis extends BasePlayer {
 
+  // Customize Jarvis by selecting these:
+  protected static final boolean actionPhaseHeuristicOnly = false;
+  protected static final boolean buyPhaseHeuristicOnly = false;
+
   // Turn and Game Evaluator
   protected Evaluator gameEvaluator = new Evaluator(this);
 
@@ -23,11 +27,12 @@ public class VDomPlayerJarvis extends BasePlayer {
   protected int numTreasuresBought    = 0;
   protected int numKingdomCardsBought = 0;
   protected int numVictoriesBought    = 0;
-  protected double maxKingdomRatio    = 0.2;
+  protected double maxKingdomRatio    = 0.5;
 
   public VDomPlayerJarvis() {
 		super();
 		this.setName("Jarvis");
+    this.isPlanningPlayer = true;
 		gameEvaluator = new Evaluator(this);
 	}
 
@@ -79,8 +84,92 @@ public class VDomPlayerJarvis extends BasePlayer {
     }
   }
 
+
   @Override
   public Card doAction(MoveContext context) {
+    if (actionPhaseHeuristicOnly) {
+      return doActionHeuristic(context);
+    } else {
+      return doActionEvalSearch(context);
+    }
+  }
+
+  @Override
+  public Card doBuy(MoveContext context) {
+    if (buyPhaseHeuristicOnly || (idealDeck == null)) {
+      return doBuyHeuristic(context);
+    } else {
+      return doBuyEvalSearch(context);
+    }
+  }
+
+
+  // ----------------------------------------------
+  // ACTUAL SMARTS BELOW...
+  // ----------------------------------------------
+
+
+  /*
+  ** doActionHeuristic - Action Card Selection, based on Very Simple Heuristics.
+  ** Needed to add this in here to see if the Search Improves over a baseline.
+  */
+  public Card doActionHeuristic(MoveContext context) {
+
+    Card returnCard = null;
+
+    // Get +Action Cards First
+    for (int i = 0; i < hand.size(); i++) {
+      Card cardInHand = hand.get(i);
+      if (cardInHand.is(Type.Action) && cardInHand.getAddActions() > 0) {
+        returnCard = cardInHand;
+      }
+    }
+
+    // Get +Draw Cards Next
+    if (returnCard == null && context.actions > 1) {
+      for (int i = 0; i < hand.size(); i++) {
+        Card cardInHand = hand.get(i);
+        if (cardInHand.is(Type.Action) && cardInHand.getAddCards() > 0) {
+          returnCard = cardInHand;
+        }
+      }
+    }
+
+    // Get +Gold Cards Next
+    if (returnCard == null && context.actions > 1) {
+      for (int i = 0; i < hand.size(); i++) {
+        Card cardInHand = hand.get(i);
+        if (cardInHand.is(Type.Action) && cardInHand.getAddGold() > 0) {
+          returnCard = cardInHand;
+        }
+      }
+    }
+
+    // Pick a Terminal Card (optimally with the highest value)
+    if (returnCard == null) {
+      int  highestValue = 0;
+      Card highestValueCard = null;
+      for (int i = 0; i < hand.size(); i++) {
+        Card cardInHand = hand.get(i);
+        if (cardInHand.is(Type.Action)) {
+          if (cardInHand.getCost(context) > highestValue) {
+            highestValue = cardInHand.getCost(context);
+            highestValueCard = cardInHand;
+          }
+        }
+      }
+      returnCard = highestValueCard;
+    }
+
+    return returnCard;
+
+  }
+
+
+  /*
+  ** doActionEvalSearch - Actually uses the Dom-Tree to Evaluate Searches
+  */
+  public Card doActionEvalSearch(MoveContext context) {
     if(getActionsInHand(this).size() > 0) {
       searchTree = new DomTree(context.cloneContext(), gameEvaluator);
       searching = true;
@@ -95,50 +184,28 @@ public class VDomPlayerJarvis extends BasePlayer {
     }
   }
 
-  @Override
-  public Card doBuy(MoveContext context) {
 
-    if(idealDeck == null)
-    {
-      Card returnCard = doBuyHeuristic(context);
-      System.out.println(">>>> JARVIS: ACTUALLY BUYING CARD: " + returnCard);
-      return returnCard;
-    }
-    else
-    {
-      Card returnCard = doBuyEvalSearch(context);
-      System.out.println(">>>> JARVIS: ACTUALLY BUYING CARD: " + returnCard);
-      return returnCard;
-    }
-
-  }
-
+  /*
+  ** gameProgression - Estimate for how far along the game is progressing
+  */
   public double gameProgression(MoveContext context)
   {
     double numProvinces = context.game.piles.get("Province").getCount();
-    double percentProvinces = (8.0 - numProvinces) / 8.0;
-
-    //return percentProvinces;
-
-    if(numProvinces > 6)
-    {
+    if (numProvinces > 6) {
       return 0.0;
-    }
-    else if(numProvinces > 4)
-    {
+    } else if (numProvinces > 4) {
       return 0.2;
-    }
-    else if(numProvinces > 2)
-    {
+    } else if (numProvinces > 2) {
       return 0.4;
-    }
-    else
-    {
+    } else {
       return 1.0;
     }
-
   }
 
+
+  /*
+  ** evaluateDeckAgainstIdeal - Compares against the Ideal Deck
+  */
   public double evaluateDeckAgainstIdeal(MoveContext context)
   {
     if(idealDeck == null){return -1000.0;}
@@ -365,7 +432,7 @@ public class VDomPlayerJarvis extends BasePlayer {
 
 
   // ---------------------------------------------------------------------
-  // Overrides to BasePlayer Functions
+  // Overrides to BasePlayer Functions (Helper to Search)
   // ---------------------------------------------------------------------
 
   @Override

@@ -23,6 +23,7 @@ public class VDomPlayerFlynn extends BasePlayer  {
 	public VDomPlayerFlynn() {
 		super();
 		this.setName("Flynn");
+		this.isPlanningPlayer = true;
 		evaluator = new Evaluator(this);
 	}
 

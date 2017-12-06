@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class Evaluator {
 
+  // TODO: ADD PARAMETERS FOR TUNING THE EVAL TO PRE-PLAN!!!!
+
   protected Player player;
 
   // Action Phase Evaluator Tunable Parameters

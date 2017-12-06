@@ -11,12 +11,11 @@ import com.vdom.core.*;
 
 public class VDomPlayerPhil extends BasePlayer  {
 
-  protected Evaluator gameEvaluator = null;
-
   // Customize Phil by selecting these:
   protected static final boolean actionPhaseHeuristicOnly = true;
   protected static final boolean buyPhaseHeuristicOnly = false;
 
+  protected Evaluator gameEvaluator = null;
 
   public VDomPlayerPhil() {
     super();
@@ -63,6 +62,11 @@ public class VDomPlayerPhil extends BasePlayer  {
       return doBuyEvalSearch(context);
     }
   }
+
+
+  // ----------------------------------------------
+  // ACTUAL SMARTS BELOW...
+  // ----------------------------------------------
 
 
   /*
@@ -116,7 +120,6 @@ public class VDomPlayerPhil extends BasePlayer  {
       returnCard = highestValueCard;
     }
 
-    // Update Game Evaluator
     return returnCard;
 
   }

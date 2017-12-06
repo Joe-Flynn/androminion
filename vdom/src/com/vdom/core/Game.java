@@ -292,8 +292,8 @@ public class Game {
     }
 
     // Players to Play
-    String playerName1 = "Jarvis";
-    String playerName2 = "Andrew";
+    String playerName1 = "Joe";
+    String playerName2 = "Joe Jr";
 
     for (int i = 0; i < 100; i++) {
 
@@ -371,10 +371,10 @@ public class Game {
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard(player1, player2);
 
-      // Set Up Planning Player IF the Player has Planning
-      if (players[0].getPlayerName() == "Flynn") {
+      // Set Up Planning Player1 ONLY IF the Player1 has Planning (Screw Player 2, lol).
+      if (player1.isPlanningPlayer) {
         DeckPlanner planner = new DeckPlanner(this.cloneGame(), 30);
-        players[0].idealDeck = planner.findBestDeck(players[0]);
+        player1.idealDeck = planner.findBestDeck(player1);
       }
 
       // Set up Player's Turn Information
@@ -498,6 +498,8 @@ public class Game {
 
     // Set planningPlayer's deck , draw, and shuffle deck
     Player pPlayer = players[0];
+    if (!pPlayer.isPlanningPlayer) { pPlayer = players[1]; }
+
     pPlayer.idealDeck = deck;
     pPlayer.setDeck(deck);
     pPlayer.shuffleDeck(new MoveContext(this, pPlayer), null);

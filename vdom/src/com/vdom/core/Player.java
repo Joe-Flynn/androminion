@@ -76,6 +76,8 @@ public abstract class Player {
   private   boolean minusOneCoinTokenOn;
   private   boolean minusOneCardTokenOn;
 
+  public    boolean isPlanningPlayer = false;
+
 
   // ////////////////////////////////////////////
   // Player Functions
