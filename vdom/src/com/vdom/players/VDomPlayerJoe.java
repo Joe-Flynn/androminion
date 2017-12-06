@@ -19,6 +19,7 @@ public class VDomPlayerJoe extends BasePlayer  {
 
     public VDomPlayerJoe() {
         super();
+        this.setName("Joe");
         evaluator = new Evaluator(this);
     }
 

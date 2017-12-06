@@ -11,7 +11,13 @@ import com.vdom.core.*;
 
 public class VDomPlayerPhil extends BasePlayer  {
 
-  Evaluator gameEvaluator = new Evaluator(this);
+  protected Evaluator gameEvaluator = null;
+
+  public VDomPlayerPhil() {
+    super();
+    this.setName("Phil");
+    gameEvaluator = new Evaluator(this);
+  }
 
   @Override
   public String getPlayerName() {
@@ -44,7 +50,7 @@ public class VDomPlayerPhil extends BasePlayer  {
     return doBuyEvalSearch(context);
   }
 
-  
+
   /*
   ** Card Action Interactions - Overridden to enter search tree!
   */
@@ -429,7 +435,7 @@ public class VDomPlayerPhil extends BasePlayer  {
 
     */
   }
-  
+
 
   /*
   ** doActionEvalSearch - Evaluate Best Action to Play Using a Cloned Game

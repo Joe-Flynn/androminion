@@ -174,7 +174,6 @@ public class DomTree {
                             optionCount++;
                         }
                         while(curPlay.get_next_expand_option() != null && optionCount < 100);
-
                     }
                 }
             }
@@ -188,8 +187,8 @@ public class DomTree {
         state.evaluation = evaluator.evaluateActionPhase(state.context);
         state.expanded = true;
         if(state.parent != null) {state.context = null;}
-    }
 
+    }
 
 
     public class DomTreeNode {

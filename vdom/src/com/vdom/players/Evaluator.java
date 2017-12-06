@@ -25,9 +25,12 @@ public class Evaluator {
   protected double actionDeltaFactor   = -1.0;
   protected double victoryPointFactor  =  0.17;
 
+  protected boolean isDefaultEvaluator = true;
+
   // DEFAULT Constructor
   public Evaluator(Player player) {
     this.player = player;
+    this.isDefaultEvaluator = true;
   }
 
   // TUNABLE Constructor (i.e. For Machine Learning)
@@ -35,7 +38,7 @@ public class Evaluator {
                    double fourCostGainFactor, double fiveCostGainFactor, double coinTokenFactor,
                    double debtTokenFactor, double victoryTokenFactor, double enemyHandSizeFactor,
                    double treasureDeltaFactor, double actionDeltaFactor, double victoryPointFactor) {
-                     
+
     this.player              = player;
     this.coinFactor          = coinFactor;
     this.potionFactor        = potionFactor;
@@ -49,6 +52,8 @@ public class Evaluator {
     this.treasureDeltaFactor = treasureDeltaFactor;
     this.actionDeltaFactor   = actionDeltaFactor;
     this.victoryPointFactor  = victoryPointFactor;
+
+    this.isDefaultEvaluator = false;
 
   }
 
@@ -85,7 +90,7 @@ public class Evaluator {
                          (enemyHandSize * enemyHandSizeFactor);
 
     // TODO: ADD A TURN DIMENSION (i.e. player.getTurnCount())
-    // TODO: ADD something that evaluates HOW CLOSE THE DECK IS to the Original Plan
+    // TODO: ADD something that evaluates HOW CLOSE THE DECK IS to the Original Plans
 
     return turnEconomy;
 
