@@ -67,7 +67,7 @@ public class Evaluator {
 
     int buyFactor = 8;
     if (context.game.isPlatInGame()) { buyFactor = 11; }
-    if (context.game.isColonyInGame()) { buyFactor = 14; }
+    //if (context.game.isColonyInGame()) { buyFactor = 14; } - this should be dominate. Colony and Platinum are always together.
 
     int usableCoin       = Math.min(coin, context.getBuysLeft() * buyFactor);
     int potionGains      = Math.min(context.getPotions(), Math.min(context.getBuysLeft(), coin / 3));

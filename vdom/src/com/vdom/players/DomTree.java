@@ -34,6 +34,7 @@ public class DomTree {
     public <T> T get_next_option()
     {
         // This is the big puzzle... what if something happens between plays and the options are different??
+        // Answer (for now): we reshuffle only at the top of a new search
         if(curNode == null) {return null;}
         curNode = curNode.get_next_expand_option();
         if(curNode == null) {return null;}
@@ -44,11 +45,15 @@ public class DomTree {
     public <T> T get_next_option(ArrayList<T> options)
     {
         // This is the big puzzle... what if something happens between plays and the options are different??
+        // Answer (for now): we reshuffle only at the top of a new search
         if(curNode == null) {return null;}
         curNode = curNode.get_next_expand_option(options);
         if(curNode == null) {return null;}
         return (T)(curNode.choice);
     }
+
+    public int getNodeCount()    {        return root.getNodeCount();    }
+    public int getStateCount()    {        return root.getStateCount();    }
 
     public Card chooseAction() {return chooseAction(10, 3, 10);}
 
@@ -146,7 +151,6 @@ public class DomTree {
                         }
                     }
 
-
                     if (!alreadyChecked) { // NOTE: We can make this more elegant by just having a list of unique actions.
 
                         curNode = state.new_card_node(playerCard);
@@ -243,6 +247,32 @@ public class DomTree {
             type = DomNodeType.option;
             choice = playOption;
             this.parent = parent;
+        }
+
+
+        public int getStateCount()
+        {
+            int n = 0;
+            if(type == DomNodeType.state) {n++;}
+
+            for(DomTreeNode tn : children)
+            {
+                n += tn.getStateCount();
+            }
+
+            return n;
+        }
+
+        public int getNodeCount()
+        {
+            int n = 1;
+
+            for(DomTreeNode tn : children)
+            {
+                n += tn.getNodeCount();
+            }
+
+            return n;
         }
 
         public ArrayList<DomTreeNode> get_leaf_states()
@@ -366,6 +396,34 @@ public class DomTree {
             }
 
             return ret;
+        }
+
+        public String toString()
+        {
+            return toString(0);
+        }
+
+        public String toString(int depth)
+        {
+            String s = "";
+            for(int i = 0; i < depth; i++) {s += "\t";}
+            if(type == DomNodeType.state || type == DomNodeType.dead)
+            {
+                s += "State";
+            }
+            else if(type == DomNodeType.play)
+            {
+                s += "PlayCard:" + card;
+            }
+            else if(type == DomNodeType.option)
+            {
+                s += "Option:" + choice;
+            }
+            for(DomTreeNode tn : children)
+            {
+                s += "\n" + tn.toString(depth + 1);
+            }
+            return s;
         }
 
     }

@@ -333,6 +333,7 @@ public class Game {
   public HashMap<String, Double> start() {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
+
     playerToWins.put("com.vdom.players.VDomPlayerJarvis", 0.0);
     playerToWins.put("com.vdom.players.VDomPlayerJarvisJr", 0.0);
 
@@ -353,7 +354,7 @@ public class Game {
       // Set Up Planning Player IF the Player has Planning
       if (players[0].getPlayerName() == "Flynn") {
         DeckPlanner planner = new DeckPlanner(this.cloneGame(), 30);
-        ((VDomPlayerFlynn) players[0]).setIdealDeck(planner.findBestDeck());
+        players[0].idealDeck = planner.findBestDeck(players[0]);
       }
 
       // Set up Player's Turn Information
@@ -467,24 +468,25 @@ public class Game {
 
   // only call from games cloned by DeckPlanner
   @SuppressWarnings("unchecked")
-  public double playPlanningGame(int numTurns, Deck deck) {
+  public double playPlanningGame(int numTurns, Deck deck, Player planningPlayer) {
 
     Util.debug("---------------------", false);
     Util.debug("New Planning Game: " + gameType);
 
     // Initialize Plannings Players
-    initPlayersPlanning(2);
+    initPlayersPlanning(2, planningPlayer);
 
-    // Set joe's deck , draw, and shuffle deck
-    Player joe = players[0];
-    ((VDomPlayerJoe) joe).setDeck(deck);
-    joe.shuffleDeck(new MoveContext(this, joe), null);
-    while (joe.hand.size() < 5)
-      drawToHand(new MoveContext(this, joe), null, 5 - joe.hand.size(), false);
-      drawToHand(new MoveContext(this, joe), null, 5 - joe.hand.size(), false);
+    // Set planningPlayer's deck , draw, and shuffle deck
+    Player pPlayer = players[0];
+    pPlayer.idealDeck = deck;
+    pPlayer.setDeck(deck);
+    pPlayer.shuffleDeck(new MoveContext(this, pPlayer), null);
+    while (pPlayer.hand.size() < 5)
+      drawToHand(new MoveContext(this, pPlayer), null, 5 - pPlayer.hand.size(), false);
 
-    // Make joe's evaluator
-    Evaluator evaluator = new Evaluator(joe);
+
+    // Make planningPlayer's evaluator
+    Evaluator evaluator = new Evaluator(planningPlayer);
 
     //Set Dummies deck and hand with init starting cards to stop =errors with cards played by joe's that require dummy's
     // hand/deck to exist
@@ -534,6 +536,11 @@ public class Game {
         context.returnToActionPhase = false;
         playerAction(player, context);
 
+        if (player.getPlayerName().equals(planningPlayer.getPlayerName())) {
+          turnEconomySummation += evaluator.evaluateActionPhase(context);
+          //turnsPlayed++;
+        }
+
         // Buy Phase of Turn
         context.phase = TurnPhase.Buy;
         playerBeginBuy(player, context);
@@ -542,6 +549,11 @@ public class Game {
         playerBuy(player, context);
 
       } while (context.returnToActionPhase);
+
+      if (player.getPlayerName().equals(planningPlayer.getPlayerName())) {
+        //turnEconomySummation += evaluator.evaluateActionPhase(context);
+        turnsPlayed++;
+      }
 
       // Broadcast No-Buy Event
       if (context.totalCardsBoughtThisTurn + context.totalEventsBoughtThisTurn == 0) {
@@ -559,11 +571,6 @@ public class Game {
         if (otherPlayer != player) {
           otherPlayer.cleanupOutOfTurn(new MoveContext(this, otherPlayer));
         }
-      }
-
-      if (player.getPlayerName().equals(joe.getPlayerName())) {
-        turnEconomySummation += evaluator.evaluateActionPhase(context);
-        turnsPlayed++;
       }
 
 
@@ -698,8 +705,9 @@ public class Game {
     }
   }
 
+  
   @SuppressWarnings("unchecked")
-  public void initPlayersPlanning(int numPlayers) {
+  public void initPlayersPlanning(int numPlayers, Player player) {
 
     players = new Player[numPlayers];
     playersTurn = 0;
@@ -712,7 +720,7 @@ public class Game {
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerJoe();
+        players[i] = player;
       }
       else {
         players[i] = new VDomPlayerDummy();
