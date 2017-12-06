@@ -109,11 +109,11 @@ public class VDomPlayerJarvis extends BasePlayer {
     }
     else if(numProvinces > 4)
     {
-      return 0.4;
+      return 0.2;
     }
     else if(numProvinces > 2)
     {
-      return 0.9;
+      return 0.4;
     }
     else
     {
@@ -132,16 +132,17 @@ public class VDomPlayerJarvis extends BasePlayer {
     double costMultiplier;
     double percent;
     double percentDelta;
-    double tolerance = .20;
+    double tolerance = .15;
     double dampening = .80;
     double totalTreasure = 0;
     double idealTreasure = 0;
     double treasureDelta;
+    double actionMultiplier = 8.0;
 
     for(Card c : idealDeck.getCardPercentages().keySet())
     {
       if(c.is(Type.Action)) {
-        costMultiplier = (c.getCost(null) >= 5) ? 2.0 : 1.0;
+        costMultiplier = (c.getCost(null) >= 5) ? 1.5 : 1.0;
         if (counts.containsKey(c.getName())) {
           percent = counts.get(c.getName()) / deckSize;
         } else {
@@ -159,23 +160,57 @@ public class VDomPlayerJarvis extends BasePlayer {
       }
     }
 
+    eval *= actionMultiplier;
+
+    // not buying enough gold... lets try this: count sum of COST of treasure in deck.
+    // subtract 2 to further increase relative value of gold, and to give copper a negative score.
     for(Card c : idealDeck.getCards())
     {
       if (c.is(Type.Treasure)){
-        idealTreasure  += c.getAddGold();
+        idealTreasure  += c.getCost(null) - 2;
       }
     }
     for(Card c : getAllCards())
     {
-      if (c.is(Type.Treasure)){
-        totalTreasure  += c.getAddGold();
+      if (c.is(Type.Treasure) ){
+        totalTreasure  += c.getCost(null) - 2;
       }
     }
-    treasureDelta = totalTreasure / deckSize - idealTreasure / idealDeck.getCards().size();
 
-    eval += treasureDelta * (2 - idealDeck.getPercentKingdom());
+    // treasureDelta = totalTreasure / deckSize - idealTreasure / idealDeck.getCards().size();
+    // treasureDelta = totalTreasure  - idealTreasure * (deckSize / idealDeck.getCards().size());
 
-    return (1.0 - gameProgression(context)) * eval + (gameProgression(context)) * context.player.getTotalVictoryPoints();
+    idealTreasure = idealTreasure * (deckSize / idealDeck.getCards().size());
+    totalTreasure = Math.min(totalTreasure, idealTreasure * (1.0 + tolerance));
+    treasureDelta = totalTreasure - idealTreasure;
+    if(treasureDelta > 0) {treasureDelta *= dampening;}
+
+    // before treasure COST approach
+//    for(Card c : idealDeck.getCards())
+//    {
+//      if (c.is(Type.Treasure) && c != Cards.copper){
+//        idealTreasure  += c.getAddGold();
+//      }
+//    }
+//    for(Card c : getAllCards())
+//    {
+//      if (c.is(Type.Treasure) && c != Cards.copper){
+//        totalTreasure  += c.getAddGold();
+//      }
+//    }
+//
+//    // treasureDelta = totalTreasure / deckSize - idealTreasure / idealDeck.getCards().size();
+//    // treasureDelta = totalTreasure  - idealTreasure * (deckSize / idealDeck.getCards().size());
+//
+//    idealTreasure = idealTreasure * (deckSize / idealDeck.getCards().size());
+//    totalTreasure = Math.min(totalTreasure, idealTreasure * (1.0 + tolerance));
+//    treasureDelta = totalTreasure - idealTreasure;
+//    if(treasureDelta > 0) {treasureDelta *= dampening;}
+
+
+    eval += treasureDelta;
+
+    return (1.0 - gameProgression(context)) * eval + (gameProgression(context)) * context.player.getTotalVictoryPoints() / 6.0;
   }
 
 
@@ -269,9 +304,9 @@ public class VDomPlayerJarvis extends BasePlayer {
     // Buy Card that Improves Player's Evaluation Most
     //double currentEvaluation = gameEvaluator.evaluateBuyPhase(context, this.getAllCards());
     double currentEvaluation = evaluateDeckAgainstIdeal(context);
-    String cardToBuy = "";
+    Card cardToBuy = null;
 
-    for (String pileName : context.game.piles.keySet()) {
+    for (Card c : context.game.getCardsInGame(GetCardsInGameOptions.TopOfPiles, true)) {
 
       // Clone Game and Players
       Game clonedGame = context.game.cloneGame();
@@ -285,23 +320,27 @@ public class VDomPlayerJarvis extends BasePlayer {
       MoveContext clonedContext = new MoveContext(context, clonedGame, clonedSelf);
 
       // Try the Buy
-      Card supplyCard = clonedContext.game.piles.get(pileName).placeholderCard();
-      Card buyCard = clonedGame.getPile(supplyCard).topCard();
+      //Card supplyCard = c;
+      //Card buyCard = clonedGame.getPile(supplyCard).topCard();
+      Card buyCard = c;
 
-      if (buyCard != null && clonedGame.isValidBuy(clonedContext, buyCard)) {
+
+      if (buyCard != null && clonedContext.canBuy(buyCard)) {
         clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
         clonedGame.playBuy(clonedContext, buyCard);
         clonedGame.playerPayOffDebt(clonedSelf, clonedContext);
         if (evaluateDeckAgainstIdeal(clonedContext) > currentEvaluation) {
           currentEvaluation = evaluateDeckAgainstIdeal(clonedContext);
-          cardToBuy = pileName;
+          cardToBuy = buyCard;
         }
       }
     }
 
     // Update Card to Buy
-    if (cardToBuy != "") {
-      returnCard = context.game.piles.get(cardToBuy).placeholderCard();
+    if (cardToBuy != null) {
+      returnCard = cardToBuy;
+    } else if (context.canBuy(Cards.gold)) {
+      returnCard = Cards.gold;
     } else if (context.canBuy(Cards.silver)) {
       returnCard = Cards.silver;
     } else {

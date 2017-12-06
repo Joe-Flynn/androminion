@@ -1,6 +1,9 @@
 package com.vdom.players;
 
 import com.vdom.api.Card;
+import com.vdom.core.GetCardsInGameOptions;
+import com.vdom.core.MoveContext;
+import com.vdom.core.Type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,5 +46,26 @@ public class Deck {
 	public double getPercentKingdom() { return percentKingdom; }
 
 	public HashMap<Card, Double> getCardPercentages() { return cardPercentages; }
+
+	public void generate(MoveContext context, HashMap<Card, Double> percentages, int deckSize)
+	{
+		cards = new ArrayList<>();
+		kingdomCards = new ArrayList<>();
+		Card[] context_kingdom_cards = context.game.getCardsInGame(GetCardsInGameOptions.TopOfPiles, true, Type.Action);
+		for(Card c : percentages.keySet())
+		{
+			for(Card kc : context_kingdom_cards)
+			{
+				if(c == kc) {
+					kingdomCards.add(c);
+				}
+			}
+			for(int i = 0; i < deckSize * percentages.get(c) + 0.5; i++)
+			{
+				cards.add(c);
+			}
+		}
+		return;
+	}
 
 }

@@ -133,45 +133,49 @@ public class DomTree {
             return;
         }
 
-        // Examine Possible Cards to Play from Hand
-        Player player = state.context.player;
+        if(state.context.actions > 0)
+        {
 
-        for (int i = 0; i < player.getHand().size(); i++) {
-            Card playerCard = player.getHand().get(i);
-            if (playerCard.is(Type.Action)) {
+            // Examine Possible Cards to Play from Hand
+            Player player = state.context.player;
 
-                // Check if Another of the Same Type of Action Card was ALREADY Expanded
-                boolean alreadyChecked = false;
-                for (int j = 0; j < i; j++) {
-                    if (player.getHand().get(i).getKind() == player.getHand().get(j).getKind()) {
-                        alreadyChecked = true;
-                    }
-                }
+            for (int i = 0; i < player.getHand().size(); i++) {
+                Card playerCard = player.getHand().get(i);
+                if (playerCard.is(Type.Action)) {
 
-                if (!alreadyChecked) { // NOTE: We can make this more elegant by just having a list of unique actions.
-
-                    curNode = state.new_card_node(playerCard);
-                    curPlay = curNode;
-                    int optionCount = 0;
-
-                    do {
-                        curNode = curPlay;
-
-                        MoveContext contextClone = state.context.cloneContext();
-
-                        // Play the Action in the Cloned Game State
-                        if (contextClone.game.isValidAction(contextClone, contextClone.player.getHand().get(i))) {
-                            contextClone.game.broadcastEvent(new GameEvent(GameEvent.EventType.Status, contextClone));
-                            contextClone.player.getHand().get(i).play(contextClone.game, contextClone, true);
+                    // Check if Another of the Same Type of Action Card was ALREADY Expanded
+                    boolean alreadyChecked = false;
+                    for (int j = 0; j < i; j++) {
+                        if (player.getHand().get(i).getKind() == player.getHand().get(j).getKind()) {
+                            alreadyChecked = true;
                         }
-
-                        // In the play action call, if any interactions are chosen by the tree in the play call, then curNode position is updated
-                        curNode.new_state_node(contextClone);
-
-                        optionCount++;
                     }
-                    while(curPlay.get_next_expand_option() != null && optionCount < 100);
 
+                    if (!alreadyChecked) { // NOTE: We can make this more elegant by just having a list of unique actions.
+
+                        curNode = state.new_card_node(playerCard);
+                        curPlay = curNode;
+                        int optionCount = 0;
+
+                        do {
+                            curNode = curPlay;
+
+                            MoveContext contextClone = state.context.cloneContext();
+
+                            // Play the Action in the Cloned Game State
+                            if (contextClone.game.isValidAction(contextClone, contextClone.player.getHand().get(i))) {
+                                contextClone.game.broadcastEvent(new GameEvent(GameEvent.EventType.Status, contextClone));
+                                contextClone.player.getHand().get(i).play(contextClone.game, contextClone, true);
+                            }
+
+                            // In the play action call, if any interactions are chosen by the tree in the play call, then curNode position is updated
+                            curNode.new_state_node(contextClone);
+
+                            optionCount++;
+                        }
+                        while(curPlay.get_next_expand_option() != null && optionCount < 100);
+
+                    }
                 }
             }
         }
@@ -393,6 +397,34 @@ public class DomTree {
             }
 
             return ret;
+        }
+
+        public String toString()
+        {
+            return toString(0);
+        }
+
+        public String toString(int depth)
+        {
+            String s = "";
+            for(int i = 0; i < depth; i++) {s += "\t";}
+            if(type == DomNodeType.state || type == DomNodeType.dead)
+            {
+                s += "State";
+            }
+            else if(type == DomNodeType.play)
+            {
+                s += "PlayCard:" + card;
+            }
+            else if(type == DomNodeType.option)
+            {
+                s += "Option:" + choice;
+            }
+            for(DomTreeNode tn : children)
+            {
+                s += "\n" + tn.toString(depth + 1);
+            }
+            return s;
         }
 
     }
