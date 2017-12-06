@@ -4409,6 +4409,8 @@ public abstract class BasePlayer extends Player implements GameEventListener {
     if (getPlayerName() == "Phil")      { clone = new VDomPlayerPhil(); }
     if (getPlayerName() == "Flynn")     { clone = new VDomPlayerFlynn(); }
     if (getPlayerName() == "Jarvis")    { clone = new VDomPlayerJarvis(); }
+
+    if (getPlayerName() == "Joe Jr")    { clone = new VDomPlayerJoeJr(); }
     if (getPlayerName() == "Jarvis Jr") { clone = new VDomPlayerJarvisJr(); }
 
     // Copy Player's Game and Turn Info

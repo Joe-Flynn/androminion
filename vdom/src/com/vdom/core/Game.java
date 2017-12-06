@@ -284,28 +284,29 @@ public class Game {
     // Set up game(s) and Start
     Game game = new Game();
 
-    // Write to Log
+    // Write Time Stamp to Log
     try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("evaluation_output.txt", true), "utf-8"))) {
        writer.write("-----------" + new java.util.Date() + "-----------\n");
     } catch (Exception e) {
       System.out.println("ERROR:" + e);
     }
 
+    // Players to Play
+    String playerName1 = "Jarvis";
+    String playerName2 = "Andrew";
+
     for (int i = 0; i < 100; i++) {
 
-      gameResults = game.start();
-      double player1wins = gameResults.get("com.vdom.players.VDomPlayerJoe");
-      double player2wins = gameResults.get("com.vdom.players.VDomPlayerJoeJr");
+      gameResults = game.start(playerName1, playerName2);
+      double player1wins = gameResults.get(playerName1);
+      double player2wins = gameResults.get(playerName2);
 
       player1_totalWins += player1wins;
       player2_totalWins += player2wins;
 
-      System.out.println("CURRENT GAME (" + i + ") RESULTS: PL1: " + player1wins + ", PL2: " + player2wins);
-      System.out.println("CUMULATIVE RESULTS:    PL1: " + player1_totalWins + ", PL2: " + player2_totalWins);
-
       // Write to Log
       try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("evaluation_output.txt", true), "utf-8"))) {
-         writer.write("CUMULATIVE RESULTS:\tPL1:\t" + player1_totalWins + "\tPL2:\t" + player2_totalWins + "\n");
+         writer.write("CUMULATIVE RESULTS:\t" + playerName1 + ":\t" + player1_totalWins + "\t" + playerName2+ ":\t" + player2_totalWins + "\n");
       } catch (Exception e) {
         System.out.println("ERROR:" + e);
       }
@@ -327,12 +328,12 @@ public class Game {
   /*
   ** start - Starts the Dominion game simulator
   */
-  public HashMap<String, Double> start() {
+  public HashMap<String, Double> start(String playerName1, String playerName2) {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
 
-    playerToWins.put("com.vdom.players.VDomPlayerJoe", 0.0);
-    playerToWins.put("com.vdom.players.VDomPlayerJoeJr", 0.0);
+    playerToWins.put(playerName1, 0.0);
+    playerToWins.put(playerName2, 0.0);
 
     // Variables for Overall Stats over all Games
     long turnCountTotal = 0;
@@ -345,8 +346,30 @@ public class Game {
       Util.debug("---------------------", false);
       Util.debug("New Game: " + gameType);
 
+      // Initialize the Game's Players (yes this is hacky)
+      Player player1 = new VDomPlayerJoe();
+      if (playerName1 == "Andrew")    { player1 = new VDomPlayerAndrew(); }
+      if (playerName1 == "Phil")      { player1 = new VDomPlayerPhil(); }
+      if (playerName1 == "Flynn")     { player1 = new VDomPlayerFlynn(); }
+      if (playerName1 == "Jarvis")    { player1 = new VDomPlayerJarvis(); }
+      if (playerName1 == "Joe Jr")    { player1 = new VDomPlayerJoeJr(); }
+      if (playerName1 == "Jarvis Jr") { player1 = new VDomPlayerJarvisJr(); }
+
+      Player player2 = new VDomPlayerJoe();
+      if (playerName2 == "Andrew")    { player2 = new VDomPlayerAndrew(); }
+      if (playerName2 == "Phil")      { player2 = new VDomPlayerPhil(); }
+      if (playerName2 == "Flynn")     { player2 = new VDomPlayerFlynn(); }
+      if (playerName2 == "Jarvis")    { player2 = new VDomPlayerJarvis(); }
+      if (playerName2 == "Joe Jr")    { player2 = new VDomPlayerJoeJr(); }
+      if (playerName2 == "Jarvis Jr") { player2 = new VDomPlayerJarvisJr(); }
+
+      // ((VDomPlayerJarvis)player1).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
+      //                                          fourCostGainFactor, fiveCostGainFactor, coinTokenFactor,
+      //                                          debtTokenFactor, victoryTokenFactor, enemyHandSizeFactor,
+      //                                          treasureDeltaFactor, actionDeltaFactor, victoryPointFactor);
+
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
-      initGameBoard();
+      initGameBoard(player1, player2);
 
       // Set Up Planning Player IF the Player has Planning
       if (players[0].getPlayerName() == "Flynn") {
@@ -600,28 +623,22 @@ public class Game {
   /*
   ** initGameBoard - Sets up the game's cards, players, and game listeners
   */
-  void initGameBoard() {
+  void initGameBoard(Player player1, Player player2) {
     baneCard = null;
     firstProvinceWasGained = false;
     doMountainPassAfterThisTurn = false;
     initGameListener();
     initCards();
-    initPlayers(numPlayers);
+    initPlayers(numPlayers, player1, player2);
     initPlayerCards();
   }
 
-  /*
-  ** initPlayers - Sets up the Game's players
-  */
-  public void initPlayers(int numPlayers) {
-    initPlayers(numPlayers, true, true);
-  }
 
   /*
   ** initPlayers - Sets up the Game's players
   */
   @SuppressWarnings("unchecked")
-  public void initPlayers(int numPlayers, boolean resetEvaluators, boolean randomOrder) {
+  public void initPlayers(int numPlayers, Player player1, Player player2) {
 
     players = new Player[numPlayers];
     playersTurn = 0;
@@ -631,28 +648,15 @@ public class Game {
       cardsObtainedLastTurn[i] = new ArrayList<Card>();
     }
 
-    if (randomOrder) {
-      int playSwap = rand.nextInt(numPlayers);
-    }
-    
+    // Randomize Player Order
+    int playSwap = rand.nextInt(numPlayers);
+
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == playSwap) {
-        players[i] = new VDomPlayerJoe();
-        // if (resetEvaluators) {
-        //   ((VDomPlayerJarvis)players[i]).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
-        //                                               fourCostGainFactor, fiveCostGainFactor, coinTokenFactor,
-        //                                               debtTokenFactor, victoryTokenFactor, enemyHandSizeFactor,
-        //                                               treasureDeltaFactor, actionDeltaFactor, victoryPointFactor);
-        // }
+        players[i] = player1;
       } else {
-        players[i] = new VDomPlayerJoeJr();
-        // if (resetEvaluators) {
-        //   ((VDomPlayerJarvis)players[i]).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
-        //                                               fourCostGainFactor, fiveCostGainFactor, coinTokenFactor,
-        //                                               debtTokenFactor, victoryTokenFactor, enemyHandSizeFactor,
-        //                                               treasureDeltaFactor, actionDeltaFactor, victoryPointFactor);
-        // }
+        players[i] = player2;
       }
 
       players[i].game = this;
@@ -3667,9 +3671,9 @@ public class Game {
       }
 
       if (!loss) {
-        String s = players[i].getClass().getName();
-        double num = gameTypeSpecificWins.get(players[i].getClass().getName());
-        Double overall = overallWins.get(players[i].getClass().getName());
+        String s = players[i].getPlayerName();
+        double num = gameTypeSpecificWins.get(players[i].getPlayerName());
+        Double overall = overallWins.get(players[i].getPlayerName());
         boolean trackOverall = (overall != null);
         if (tieCount == 0) {
           num += 1.0;
@@ -3682,9 +3686,9 @@ public class Game {
             overall += 1.0 / (tieCount + 1);
           }
         }
-        gameTypeSpecificWins.put(players[i].getClass().getName(), num);
+        gameTypeSpecificWins.put(players[i].getPlayerName(), num);
         if (trackOverall) {
-          overallWins.put(players[i].getClass().getName(), overall);
+          overallWins.put(players[i].getPlayerName(), overall);
         }
       }
 
@@ -3743,31 +3747,31 @@ public class Game {
     Iterator<String> keyIter = wins.keySet().iterator();
 
     while (keyIter.hasNext()) {
-      String className = keyIter.next();
-      double num = wins.get(className);
+      String playerName = keyIter.next();
+      double num = wins.get(playerName);
       double val = Math.round((num * 100 / gameCount));
       if (val > high) {
         high = val;
-        winner = className;
+        winner = playerName;
       }
     }
 
     keyIter = wins.keySet().iterator();
     while (keyIter.hasNext()) {
-      String className = keyIter.next();
-      double num = wins.get(className);
+      String playerName = keyIter.next();
+      double num = wins.get(playerName);
       double val = Math.round((num * 100 / gameCount));
       String numStr = "" + (int) val;
       while (numStr.length() < 3) {
         numStr += " ";
       }
       sb.append(" ");
-      if (className.equals(winner)) {
+      if (playerName.equals(winner)) {
         sb.append("*");
       } else {
         sb.append(" ");
       }
-      sb.append(className + " " + numStr + "%");
+      sb.append(playerName + " " + numStr + "%");
     }
 
     Util.log(sb.toString());

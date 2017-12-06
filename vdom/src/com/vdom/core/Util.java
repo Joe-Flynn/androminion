@@ -17,7 +17,7 @@ import com.vdom.core.Cards.Kind;
 public class Util {
 
   // Set <debug_on> to True to Print Move Info
-  public static boolean debug_on = false;
+  public static boolean debug_on = true;
 
   /*
   ** cardArrayToString - Returns a String of Card Names
