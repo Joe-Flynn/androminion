@@ -51,6 +51,7 @@ public class Deck {
 	{
 		cards = new ArrayList<>();
 		kingdomCards = new ArrayList<>();
+		percentKingdom = 0.0;
 		Card[] context_kingdom_cards = context.game.getCardsInGame(GetCardsInGameOptions.TopOfPiles, true, Type.Action);
 		for(Card c : percentages.keySet())
 		{
@@ -58,6 +59,7 @@ public class Deck {
 			{
 				if(c == kc) {
 					kingdomCards.add(c);
+					percentKingdom += percentages.get(c);
 				}
 			}
 			for(int i = 0; i < deckSize * percentages.get(c) + 0.5; i++)
@@ -67,5 +69,4 @@ public class Deck {
 		}
 		return;
 	}
-
 }

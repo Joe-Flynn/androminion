@@ -198,6 +198,8 @@ public class DomTree {
         DomTreeNode parent = null;
         ArrayList<DomTreeNode> children = new ArrayList<>();
 
+        boolean highlight = false;
+
         // Used exclusively in state nodes
         MoveContext context = null;
         double evaluation = neg_infinity - 1;
@@ -274,6 +276,20 @@ public class DomTree {
             }
 
             return n;
+        }
+
+        public ArrayList<DomTreeNode> get_states()
+        {
+            ArrayList<DomTreeNode> states = new ArrayList<>();
+            if(type == DomNodeType.state)
+            {
+                states.add(this);
+            }
+            for(DomTreeNode tn : children)
+            {
+                states.addAll(tn.get_states());
+            }
+            return states;
         }
 
         public ArrayList<DomTreeNode> get_leaf_states()
@@ -370,7 +386,7 @@ public class DomTree {
             double best_eval = neg_infinity;
             DomTreeNode best_node = this;
 
-            for(DomTreeNode tn : children)
+            for(DomTreeNode tn : get_states())
             {
                 if(tn.evaluation > best_eval)
                 {
@@ -380,6 +396,18 @@ public class DomTree {
             }
 
             return best_node;
+        }
+
+        public DomTreeNode getRoot() {
+
+            DomTreeNode tn = this;
+
+            while(tn.parent != null)
+            {
+                tn = tn.parent;
+            }
+
+            return tn;
         }
 
         public Card get_top_play()
@@ -399,6 +427,40 @@ public class DomTree {
             return ret;
         }
 
+        public String pathString()
+        {
+            getRoot().unhighlight_tree();
+            highlight_branch();
+            return getRoot().toString();
+        }
+
+
+        public void highlight_branch()
+        {
+            DomTreeNode tn = this;
+            this.highlight = true;
+
+            while(tn.parent != null)
+            {
+                if(tn.type == DomNodeType.play)
+                {
+                    tn.highlight = true;
+                }
+                tn = tn.parent;
+            }
+            return;
+        }
+
+        public void unhighlight_tree()
+        {
+            this.highlight = false;
+            for(DomTreeNode tn : children)
+            {
+                tn.unhighlight_tree();
+            }
+        }
+
+
         public String toString()
         {
             return toString(0);
@@ -408,9 +470,10 @@ public class DomTree {
         {
             String s = "";
             for(int i = 0; i < depth; i++) {s += "\t";}
+            if(highlight) {s += "[";}
             if(type == DomNodeType.state || type == DomNodeType.dead)
             {
-                s += "State";
+                s += "State (" + evaluation + ")";
             }
             else if(type == DomNodeType.play)
             {
@@ -420,6 +483,7 @@ public class DomTree {
             {
                 s += "Option:" + choice;
             }
+            if(highlight) {s += "]";}
             for(DomTreeNode tn : children)
             {
                 s += "\n" + tn.toString(depth + 1);
