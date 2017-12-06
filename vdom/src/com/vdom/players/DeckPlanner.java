@@ -3,6 +3,7 @@ package com.vdom.players;
 import com.vdom.api.Card;
 import com.vdom.core.*;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -67,24 +68,45 @@ public class DeckPlanner {
 		}
 
 		ArrayList<Deck> survivors = new ArrayList<>();
-		for (int i = 0; i < averageTurnEconomies.size(); i++) {
+		ArrayList<Double> newAverageTurnEconomies = new ArrayList<>();
+ 		for (int i = 0; i < averageTurnEconomies.size(); i++) {
 			if (maxes.contains(averageTurnEconomies.get(i))) {
 				survivors.add(currentPool.get(i));
+				newAverageTurnEconomies.add(averageTurnEconomies.get(i));
 			}
 		}
 
 		currentPool.clear();
 		currentPool.addAll(survivors);
-		currentPool.addAll(createMutantChildren(survivors, initPercentFirstKingdom, mutantPercentFirstDeck));
+		averageTurnEconomies = newAverageTurnEconomies;
 
-		averageTurnEconomies.clear();
-		for (Deck deck : currentPool) {
-			//Game clone = game.cloneGame();
+		ArrayList<Deck> mutants = createMutantChildren(survivors, initPercentFirstKingdom, mutantPercentFirstDeck);
+		currentPool.addAll(mutants);
+		for (Deck deck : mutants) {
 			averageTurnEconomies.add(playSimulations(numTurns, deck, pPlayer));
 		}
 
 		Deck maxDeck = null;
 		double max = (double) Collections.max(averageTurnEconomies);
+		for (int i = 0; i < averageTurnEconomies.size(); i++) {
+			if (averageTurnEconomies.get(i) == max) {
+				maxDeck = currentPool.get(i);
+			}
+		}
+
+		averageTurnEconomies.clear();
+		averageTurnEconomies.add(max);
+		currentPool.clear();
+		currentPool.add(maxDeck);
+
+		mutants = mutateInternalRatio(maxDeck);
+		currentPool.addAll(mutants);
+
+		for (Deck mutant : mutants) {
+			averageTurnEconomies.add(playSimulations(numTurns, mutant, pPlayer));
+		}
+
+		max = (double) Collections.max(averageTurnEconomies);
 		for (int i = 0; i < averageTurnEconomies.size(); i++) {
 			if (averageTurnEconomies.get(i) == max) {
 				maxDeck = currentPool.get(i);
@@ -106,6 +128,45 @@ public class DeckPlanner {
 		return turnEconomySummation / (double) numGames;
 	}
 
+	private ArrayList<Deck> mutateInternalRatio(Deck deck) {
+		HashMap<Card, Double> idealPercentages = deck.getCardPercentages();
+		ArrayList<Card> uniqueCards = new ArrayList<>(idealPercentages.keySet());
+
+		ArrayList<Deck> decks = new ArrayList<>();
+		for (int j = 0; j < 20; j++) {
+			ArrayList<Card> cards = (ArrayList<Card>) deck.getCards().clone();
+
+			for (int i = 0; i < 10; i++) {
+				double percentTake = ThreadLocalRandom.current().nextDouble(0.15, .50);
+				int cardToTake = ThreadLocalRandom.current().nextInt(0, uniqueCards.size());
+				int cardToReceive = ThreadLocalRandom.current().nextInt(0, uniqueCards.size());
+
+				while (cardToTake == cardToReceive) {
+					cardToReceive = ThreadLocalRandom.current().nextInt(0, uniqueCards.size());
+				}
+
+				int cardsToMove = (int) (idealPercentages.get(uniqueCards.get(cardToTake)) * percentTake * cards.size());
+				if (cardsToMove == 0 ) cardsToMove = 1;
+
+				for (int k = 0; k < cardsToMove; k++) {
+					cards.add(uniqueCards.get(cardToReceive));
+					cards.remove(uniqueCards.get(cardToTake));
+				}
+			}
+
+			int numKingdom = 0;
+			for (Card card : cards) {
+				if (deck.getKingdomCards().contains(card)){
+					numKingdom++;
+				}
+			}
+
+			decks.add(new Deck(cards, deck.getKingdomCards(), numKingdom / (double) cards.size()));
+		}
+
+		return decks;
+	}
+
 	// this one was fun to name lol
 	// This could potentially exceed the deck size if the amount of cards in the percent that are not kingdom cards are
 	// less than 10, but we shouldn't run into issues with the size deck we are using
@@ -113,13 +174,9 @@ public class DeckPlanner {
 		ArrayList<Deck> mutantChildren = new ArrayList<>();
 		ArrayList<Deck[]> combos = getCombinationsDecks(2, decks);
 
-		// Choose a random subset of combos.
 		for(int n = 0; n < decks.size() * 2; n++)
 		{
 			Deck[] combo = combos.remove(game.rand.nextInt(combos.size() -1));
-		//}
-
-		//for (Deck[] combo : combos) {
 			ArrayList<Card> kingdomCards = new ArrayList<>();
 			kingdomCards.addAll(combo[0].getKingdomCards());
 			kingdomCards.addAll(combo[1].getKingdomCards());

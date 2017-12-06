@@ -3,7 +3,6 @@ package com.vdom.players;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.intellij.codeInsight.daemon.impl.quickfix.RemoveQualifierFix;
 import com.vdom.api.Card;
 import com.vdom.api.GameEvent;
 

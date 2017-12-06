@@ -13,10 +13,10 @@ public class Deck {
 
 	private ArrayList<Card> kingdomCards; //kingdom cards in deck
 	private ArrayList<Card> cards; //all cards
-	private int percentKingdom;
+	private double percentKingdom;
 	private HashMap<Card, Double> cardPercentages;
 
-	public Deck(ArrayList<Card> cards, ArrayList<Card> kingdomCards, int percentKingdom) {
+	public Deck(ArrayList<Card> cards, ArrayList<Card> kingdomCards, double percentKingdom) {
 		this.kingdomCards = kingdomCards;
 		this.cards = cards;
 		this.percentKingdom = percentKingdom;
@@ -40,7 +40,7 @@ public class Deck {
 
 	public ArrayList<Card> getCards() { return cards; }
 
-	public int getPercentKingdom() { return percentKingdom; }
+	public double getPercentKingdom() { return percentKingdom; }
 
 	public HashMap<Card, Double> getCardPercentages() { return cardPercentages; }
 
