@@ -176,6 +176,7 @@ public class DeckPlanner {
 
 		for(int n = 0; n < decks.size() * 2; n++)
 		{
+			if(combos.size() < 1) {break;}
 			Deck[] combo = combos.remove(game.rand.nextInt(combos.size() -1));
 			ArrayList<Card> kingdomCards = new ArrayList<>();
 			kingdomCards.addAll(combo[0].getKingdomCards());
