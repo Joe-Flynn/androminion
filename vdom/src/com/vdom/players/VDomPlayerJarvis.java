@@ -184,13 +184,13 @@ public class VDomPlayerJarvis extends BasePlayer {
     for(Card c : idealDeck.getCards())
     {
       if (c.is(Type.Treasure)){
-        idealTreasure  += c.getCost(null) - 2;
+        idealTreasure  += c.getCost(null) - 1;
       }
     }
     for(Card c : getAllCards())
     {
       if (c.is(Type.Treasure) ){
-        totalTreasure  += c.getCost(null) - 2;
+        totalTreasure  += c.getCost(null) - 1;
       }
     }
 

@@ -285,9 +285,7 @@ public class Game {
     Game game = new Game();
 
     // Write to Log
-    try (BufferedWriter writer = new BufferedWriter(
-                                    new OutputStreamWriter(
-                                        new FileOutputStream("evaluation_output.txt", true), "utf-8"))) {
+    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("evaluation_output.txt", true), "utf-8"))) {
        writer.write("-----------" + new java.util.Date() + "-----------\n");
     } catch (Exception e) {
       System.out.println("ERROR:" + e);
@@ -306,9 +304,7 @@ public class Game {
       System.out.println("CUMULATIVE RESULTS:    PL1: " + player1_totalWins + ", PL2: " + player2_totalWins);
 
       // Write to Log
-      try (BufferedWriter writer = new BufferedWriter(
-                                      new OutputStreamWriter(
-                                          new FileOutputStream("evaluation_output.txt", true), "utf-8"))) {
+      try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("evaluation_output.txt", true), "utf-8"))) {
          writer.write("CUMULATIVE RESULTS:\tPL1:\t" + player1_totalWins + "\tPL2:\t" + player2_totalWins + "\n");
       } catch (Exception e) {
         System.out.println("ERROR:" + e);
@@ -618,14 +614,14 @@ public class Game {
   ** initPlayers - Sets up the Game's players
   */
   public void initPlayers(int numPlayers) {
-    initPlayers(numPlayers, true);
+    initPlayers(numPlayers, true, true);
   }
 
   /*
   ** initPlayers - Sets up the Game's players
   */
   @SuppressWarnings("unchecked")
-  public void initPlayers(int numPlayers, boolean resetEvaluators) {
+  public void initPlayers(int numPlayers, boolean resetEvaluators, boolean randomOrder) {
 
     players = new Player[numPlayers];
     playersTurn = 0;
@@ -635,9 +631,13 @@ public class Game {
       cardsObtainedLastTurn[i] = new ArrayList<Card>();
     }
 
+    if (randomOrder) {
+      int playSwap = rand.nextInt(numPlayers);
+    }
+    
     for (int i = 0; i < numPlayers; i++) {
 
-      if (i == 0) {
+      if (i == playSwap) {
         players[i] = new VDomPlayerJoe();
         // if (resetEvaluators) {
         //   ((VDomPlayerJarvis)players[i]).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
