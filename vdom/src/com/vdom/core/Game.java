@@ -161,6 +161,7 @@ public class Game {
   protected double debtTokenFactor     = -1.0;  //0.0;   //-1.0;
   protected double victoryTokenFactor  =  1.0;  //0.0;   //1.0;
   protected double enemyHandSizeFactor = -1.0;  //1.0;   //-1.0;
+
   protected double treasureDeltaFactor =  1.0;  //-1.0;  //1.0;
   protected double actionDeltaFactor   = -1.0;  //1.0;   //-1.0;
   protected double victoryPointFactor  =  0.17; //0.0;   //0.17;
@@ -295,8 +296,8 @@ public class Game {
     for (int i = 0; i < 100; i++) {
 
       gameResults = game.start();
-      double player1wins = gameResults.get("com.vdom.players.VDomPlayerJarvis");
-      double player2wins = gameResults.get("com.vdom.players.VDomPlayerJarvisJr");
+      double player1wins = gameResults.get("com.vdom.players.VDomPlayerJoe");
+      double player2wins = gameResults.get("com.vdom.players.VDomPlayerJoeJr");
 
       player1_totalWins += player1wins;
       player2_totalWins += player2wins;
@@ -334,8 +335,8 @@ public class Game {
 
     HashMap<String, Double> playerToWins = new HashMap<>();
 
-    playerToWins.put("com.vdom.players.VDomPlayerJarvis", 0.0);
-    playerToWins.put("com.vdom.players.VDomPlayerJarvisJr", 0.0);
+    playerToWins.put("com.vdom.players.VDomPlayerJoe", 0.0);
+    playerToWins.put("com.vdom.players.VDomPlayerJoeJr", 0.0);
 
     // Variables for Overall Stats over all Games
     long turnCountTotal = 0;
@@ -637,15 +638,15 @@ public class Game {
     for (int i = 0; i < numPlayers; i++) {
 
       if (i == 0) {
-        players[i] = new VDomPlayerJarvis();
-        if (resetEvaluators) {
-          ((VDomPlayerJarvis)players[i]).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
-                                                      fourCostGainFactor, fiveCostGainFactor, coinTokenFactor,
-                                                      debtTokenFactor, victoryTokenFactor, enemyHandSizeFactor,
-                                                      treasureDeltaFactor, actionDeltaFactor, victoryPointFactor);
-        }
+        players[i] = new VDomPlayerJoe();
+        // if (resetEvaluators) {
+        //   ((VDomPlayerJarvis)players[i]).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
+        //                                               fourCostGainFactor, fiveCostGainFactor, coinTokenFactor,
+        //                                               debtTokenFactor, victoryTokenFactor, enemyHandSizeFactor,
+        //                                               treasureDeltaFactor, actionDeltaFactor, victoryPointFactor);
+        // }
       } else {
-        players[i] = new VDomPlayerJarvisJr();
+        players[i] = new VDomPlayerJoeJr();
         // if (resetEvaluators) {
         //   ((VDomPlayerJarvis)players[i]).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
         //                                               fourCostGainFactor, fiveCostGainFactor, coinTokenFactor,
@@ -705,7 +706,7 @@ public class Game {
     }
   }
 
-  
+
   @SuppressWarnings("unchecked")
   public void initPlayersPlanning(int numPlayers, Player player) {
 

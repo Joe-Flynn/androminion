@@ -1,7 +1,5 @@
 package com.vdom.players;
 
-// ??? - KEEP WHAT YOU NEED
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -34,12 +32,10 @@ public class VDomPlayerAndrew extends BasePlayer  {
   protected int  numTerminals = 0;
   protected Card terminalCard = null;
 
-  protected Evaluator evaluator;
 
   public VDomPlayerAndrew() {
     super();
     this.setName("Andrew");
-    evaluator = new Evaluator(this);
   }
 
   @Override
@@ -186,6 +182,9 @@ public class VDomPlayerAndrew extends BasePlayer  {
   }
 
 
+  /*
+  ** doAction - Just returns the first Action
+  */
   @Override
   public Card doAction(MoveContext context) {
     for (int i = 0; i < hand.size(); i++) {

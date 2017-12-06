@@ -225,7 +225,7 @@ public class VDomPlayerJarvis extends BasePlayer {
 //    if(treasureDelta > 0) {treasureDelta *= dampening;}
 
 
-    eval += treasureDelta;
+    eval += treasureDelta;  // multiply by a TREASURE MULTIPLIER
 
     return (1.0 - gameProgression(context)) * eval + (gameProgression(context)) * context.player.getTotalVictoryPoints() / 6.0;
   }

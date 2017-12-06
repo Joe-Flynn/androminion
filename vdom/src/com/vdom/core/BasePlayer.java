@@ -4403,13 +4403,13 @@ public abstract class BasePlayer extends Player implements GameEventListener {
   @SuppressWarnings("unchecked")
   public BasePlayer clone(Game inputGame) {
 
-    // Create Player Clone (by name) <-- This is real Hacky, but it works for now...
+    // Create Player Clone (in a real Hacky way)
     BasePlayer clone = new VDomPlayerJoe();
-    if (getPlayerName() == "Phil")      { clone = new VDomPlayerPhil(); }
     if (getPlayerName() == "Andrew")    { clone = new VDomPlayerAndrew(); }
+    if (getPlayerName() == "Phil")      { clone = new VDomPlayerPhil(); }
+    if (getPlayerName() == "Flynn")     { clone = new VDomPlayerFlynn(); }
     if (getPlayerName() == "Jarvis")    { clone = new VDomPlayerJarvis(); }
     if (getPlayerName() == "Jarvis Jr") { clone = new VDomPlayerJarvisJr(); }
-    if (getPlayerName() == "Flynn")     { clone = new VDomPlayerFlynn(); }
 
     // Copy Player's Game and Turn Info
     clone.game = inputGame;
