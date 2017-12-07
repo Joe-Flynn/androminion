@@ -456,16 +456,16 @@ public class CardImpl implements Card, Comparable<Card>{
 		CardImpl clone = isTemplateCard() ? instantiate() : templateCard.instantiate();
 
 		clone.isPlaceholderCard = isPlaceholderCard;
-		clone.pileCreator = null; // TODO (PHIL): OK?
+		clone.pileCreator = null;
 
 		clone.movedToNextTurnPile = movedToNextTurnPile;
 		clone.trashAfterPlay = trashAfterPlay;
 		clone.numberTimesAlreadyPlayed = numberTimesAlreadyPlayed;
-		clone.cloneCount = cloneCount; // TODO (PHIL): WHAT IS THIS?
+		clone.cloneCount = cloneCount;
 
 		clone.controlCard = clone;
 
-		// TODO (PHIL): IMPLEMENT A COPY OF THESE REFERENCED CARDS???
+		// Ignore these effects in the Clone, for now:
 		clone.impersonatingCard = null;
 		clone.inheritingAbilitiesCard = null;
 

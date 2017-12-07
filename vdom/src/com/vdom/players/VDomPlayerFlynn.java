@@ -17,12 +17,14 @@ import com.vdom.core.*;
 
 public class VDomPlayerFlynn extends BasePlayer  {
 
-	private Evaluator evaluator;
 	private Deck idealDeck;
+
+	protected Evaluator gameEvaluator = new Evaluator(this);
 
 	public VDomPlayerFlynn() {
 		super();
-		evaluator = new Evaluator(this);
+		this.setName("Flynn");
+		this.isPlanningPlayer = true;
 	}
 
 	@Override
@@ -111,4 +113,5 @@ public class VDomPlayerFlynn extends BasePlayer  {
 	public void setIdealDeck(Deck deck) {
 		this.idealDeck = deck;
 	}
+
 }

@@ -76,6 +76,8 @@ public abstract class Player {
   private   boolean minusOneCoinTokenOn;
   private   boolean minusOneCardTokenOn;
 
+  public    boolean isPlanningPlayer = false;
+
 
   // ////////////////////////////////////////////
   // Player Functions
@@ -92,8 +94,9 @@ public abstract class Player {
   }
 
   public void setName(String name) {
-    this.name = name.replace("_", " ");
+    this.name = name;
   }
+
 
   /*
   ** initCards - Initialize all of the player's piles (i.e. CardLists)

@@ -11,19 +11,30 @@ import com.vdom.core.*;
 
 public class VDomPlayerJarvis extends BasePlayer {
 
+  // Customize Jarvis by selecting these:
+  protected static final boolean actionPhaseHeuristicOnly = false;
+  protected static final boolean buyPhaseHeuristicOnly = false;
+
   // Turn and Game Evaluator
-  Evaluator gameEvaluator = new Evaluator(this);
+  protected Evaluator gameEvaluator = new Evaluator(this);
 
   // Action Phase Search Tree
-  DomTree searchTree = null;
-  boolean searching  = false;
-  Card    bestPlay   = null;
+  protected DomTree searchTree = null;
+  protected boolean searching  = false;
+  protected Card    bestPlay   = null;
 
   // Buy Phase Parameters
-  int numTreasuresBought    = 0;
-  int numKingdomCardsBought = 0;
-  int numVictoriesBought    = 0;
-  double maxKingdomRatio    = 0.2;
+  protected int numTreasuresBought    = 0;
+  protected int numKingdomCardsBought = 0;
+  protected int numVictoriesBought    = 0;
+  protected double maxKingdomRatio    = 0.5;
+
+  public VDomPlayerJarvis() {
+		super();
+		this.setName("Jarvis");
+    this.isPlanningPlayer = true;
+		gameEvaluator = new Evaluator(this);
+	}
 
   @Override
   public BasePlayer clone(Game inputGame)
@@ -54,74 +65,151 @@ public class VDomPlayerJarvis extends BasePlayer {
   @Override
   public void newGame(MoveContext context) {
     super.newGame(context);
-    gameEvaluator = new Evaluator(this);
+    if (gameEvaluator.isDefaultEvaluator == true) {
+      gameEvaluator = new Evaluator(this);
+    } else {
+      // Copy old params (in case they were tweaked)
+      gameEvaluator = new Evaluator(this,
+                                    gameEvaluator.coinFactor,
+                                    gameEvaluator.potionFactor,
+                                    gameEvaluator.threeCostGainFactor,
+                                    gameEvaluator.fourCostGainFactor,
+                                    gameEvaluator.fiveCostGainFactor,
+                                    gameEvaluator.coinTokenFactor,
+                                    gameEvaluator.debtTokenFactor,
+                                    gameEvaluator.victoryTokenFactor,
+                                    gameEvaluator.enemyHandSizeFactor,
+                                    gameEvaluator.treasureDeltaFactor,
+                                    gameEvaluator.actionDeltaFactor,
+                                    gameEvaluator.victoryPointFactor,
+                                    gameEvaluator.planEvalActionMultiplier,
+                                    gameEvaluator.planEvalTreasureMultiplier,
+                                    gameEvaluator.planEvalVictoryPointFactor);
+    }
   }
+
 
   @Override
   public Card doAction(MoveContext context) {
+    if (actionPhaseHeuristicOnly) {
+      return doActionHeuristic(context);
+    } else {
+      return doActionEvalSearch(context);
+    }
+  }
 
-    System.out.println(">>>> JARVIS: BEGINNING DO_ACTION, HAND = " + hand);
+  @Override
+  public Card doBuy(MoveContext context) {
+    if (buyPhaseHeuristicOnly || (idealDeck == null)) {
+      return doBuyHeuristic(context);
+    } else {
+      return doBuyEvalSearch(context);
+    }
+  }
 
-      if(getActionsInHand(this).size() > 0) {
+
+  // ----------------------------------------------
+  // ACTUAL SMARTS BELOW...
+  // ----------------------------------------------
+
+
+  /*
+  ** doActionHeuristic - Action Card Selection, based on Very Simple Heuristics.
+  ** Needed to add this in here to see if the Search Improves over a baseline.
+  */
+  public Card doActionHeuristic(MoveContext context) {
+
+    Card returnCard = null;
+
+    // Get +Action Cards First
+    for (int i = 0; i < hand.size(); i++) {
+      Card cardInHand = hand.get(i);
+      if (cardInHand.is(Type.Action) && cardInHand.getAddActions() > 0) {
+        returnCard = cardInHand;
+      }
+    }
+
+    // Get +Draw Cards Next
+    if (returnCard == null && context.actions > 1) {
+      for (int i = 0; i < hand.size(); i++) {
+        Card cardInHand = hand.get(i);
+        if (cardInHand.is(Type.Action) && cardInHand.getAddCards() > 0) {
+          returnCard = cardInHand;
+        }
+      }
+    }
+
+    // Get +Gold Cards Next
+    if (returnCard == null && context.actions > 1) {
+      for (int i = 0; i < hand.size(); i++) {
+        Card cardInHand = hand.get(i);
+        if (cardInHand.is(Type.Action) && cardInHand.getAddGold() > 0) {
+          returnCard = cardInHand;
+        }
+      }
+    }
+
+    // Pick a Terminal Card (optimally with the highest value)
+    if (returnCard == null) {
+      int  highestValue = 0;
+      Card highestValueCard = null;
+      for (int i = 0; i < hand.size(); i++) {
+        Card cardInHand = hand.get(i);
+        if (cardInHand.is(Type.Action)) {
+          if (cardInHand.getCost(context) > highestValue) {
+            highestValue = cardInHand.getCost(context);
+            highestValueCard = cardInHand;
+          }
+        }
+      }
+      returnCard = highestValueCard;
+    }
+
+    return returnCard;
+
+  }
+
+
+  /*
+  ** doActionEvalSearch - Actually uses the Dom-Tree to Evaluate Searches
+  */
+  public Card doActionEvalSearch(MoveContext context) {
+    if(getActionsInHand(this).size() > 0) {
       searchTree = new DomTree(context.cloneContext(), gameEvaluator);
       searching = true;
       bestPlay = searchTree.chooseAction(5,3,5);
-      searchTree = null;
+      searchTree = null; // release tree
       searching = false;
     }
-
     if (bestPlay == null) {
       return null;
     } else {
       return fromHand(bestPlay);
     }
-
   }
 
-  @Override
-  public Card doBuy(MoveContext context) {
 
-    if(idealDeck == null)
-    {
-      Card returnCard = doBuyHeuristic(context);
-      System.out.println(">>>> JARVIS: ACTUALLY BUYING CARD: " + returnCard);
-      return returnCard;
-    }
-    else
-    {
-      Card returnCard = doBuyEvalSearch(context);
-      System.out.println(">>>> JARVIS: ACTUALLY BUYING CARD: " + returnCard);
-      return returnCard;
-    }
-
-  }
-
+  /*
+  ** gameProgression - Estimate for how far along the game is progressing
+  */
   public double gameProgression(MoveContext context)
   {
     double numProvinces = context.game.piles.get("Province").getCount();
-    double percentProvinces = (8.0 - numProvinces) / 8.0;
-
-    //return percentProvinces;
-
-    if(numProvinces > 6)
-    {
+    if (numProvinces > 6) {
       return 0.0;
-    }
-    else if(numProvinces > 4)
-    {
+    } else if (numProvinces > 4) {
       return 0.2;
-    }
-    else if(numProvinces > 2)
-    {
+    } else if (numProvinces > 2) {
       return 0.4;
-    }
-    else
-    {
+    } else {
       return 1.0;
     }
-
   }
 
+
+  /*
+  ** evaluateDeckAgainstIdeal - Compares against the Ideal Deck
+  */
   public double evaluateDeckAgainstIdeal(MoveContext context)
   {
     if(idealDeck == null){return -1000.0;}
@@ -148,7 +236,8 @@ public class VDomPlayerJarvis extends BasePlayer {
         } else {
           percent = 0.0;
         }
-        // continue to improve score for additional cards up to a certain tolerance threshold, but dampen this extra score.
+        // Continue to improve score for additional cards up to a certain tolerance
+        // threshold, but dampen this extra score.
         percent = Math.min(percent, idealDeck.getCardPercentages().get(c) * (1.0 + tolerance));
         percentDelta = percent - idealDeck.getCardPercentages().get(c);
         if (percentDelta > 0.0) {
@@ -160,9 +249,9 @@ public class VDomPlayerJarvis extends BasePlayer {
       }
     }
 
-    eval *= actionMultiplier;
+    eval *= gameEvaluator.planEvalActionMultiplier; // actionMultiplier
 
-    // not buying enough gold... lets try this: count sum of COST of treasure in deck.
+    // Not buying enough gold... lets try this: count sum of COST of treasure in deck.
     // subtract 2 to further increase relative value of gold, and to give copper a negative score.
     for(Card c : idealDeck.getCards())
     {
@@ -177,40 +266,15 @@ public class VDomPlayerJarvis extends BasePlayer {
       }
     }
 
-    // treasureDelta = totalTreasure / deckSize - idealTreasure / idealDeck.getCards().size();
-    // treasureDelta = totalTreasure  - idealTreasure * (deckSize / idealDeck.getCards().size());
-
     idealTreasure = idealTreasure * (deckSize / idealDeck.getCards().size());
     totalTreasure = Math.min(totalTreasure, idealTreasure * (1.0 + tolerance));
     treasureDelta = totalTreasure - idealTreasure;
     if(treasureDelta > 0) {treasureDelta *= dampening;}
 
-    // before treasure COST approach
-//    for(Card c : idealDeck.getCards())
-//    {
-//      if (c.is(Type.Treasure) && c != Cards.copper){
-//        idealTreasure  += c.getAddGold();
-//      }
-//    }
-//    for(Card c : getAllCards())
-//    {
-//      if (c.is(Type.Treasure) && c != Cards.copper){
-//        totalTreasure  += c.getAddGold();
-//      }
-//    }
-//
-//    // treasureDelta = totalTreasure / deckSize - idealTreasure / idealDeck.getCards().size();
-//    // treasureDelta = totalTreasure  - idealTreasure * (deckSize / idealDeck.getCards().size());
-//
-//    idealTreasure = idealTreasure * (deckSize / idealDeck.getCards().size());
-//    totalTreasure = Math.min(totalTreasure, idealTreasure * (1.0 + tolerance));
-//    treasureDelta = totalTreasure - idealTreasure;
-//    if(treasureDelta > 0) {treasureDelta *= dampening;}
+    eval += (treasureDelta * gameEvaluator.planEvalTreasureMultiplier);  // treasureMultiplier
 
-
-    eval += treasureDelta;
-
-    return (1.0 - gameProgression(context)) * eval + (gameProgression(context)) * context.player.getTotalVictoryPoints() / 6.0;
+    return ((1.0 - gameProgression(context)) * eval) +
+           ((gameProgression(context)) * context.player.getTotalVictoryPoints() * gameEvaluator.planEvalVictoryPointFactor);
   }
 
 
@@ -268,12 +332,6 @@ public class VDomPlayerJarvis extends BasePlayer {
       if (highestValueCard != null) {
         double totalCardsBought = (double) (numTreasuresBought + numKingdomCardsBought + numVictoriesBought + 1);
         double kingdomRatio = (double) numKingdomCardsBought / totalCardsBought;
-
-        System.out.println(">>>> JARVIS: totalCardsBought = " + totalCardsBought);
-        System.out.println(">>>> JARVIS: numKingdomCardsBought = " + numKingdomCardsBought);
-        System.out.println(">>>> JARVIS: kingdomRatio = " + kingdomRatio);
-        System.out.println("-----------------------------------------------");
-
         if (kingdomRatio <= maxKingdomRatio) {
           numKingdomCardsBought++;
           returnCard = highestValueCard;
@@ -302,7 +360,6 @@ public class VDomPlayerJarvis extends BasePlayer {
     Card returnCard = null;
 
     // Buy Card that Improves Player's Evaluation Most
-    //double currentEvaluation = gameEvaluator.evaluateBuyPhase(context, this.getAllCards());
     double currentEvaluation = evaluateDeckAgainstIdeal(context);
     Card cardToBuy = null;
 
@@ -316,14 +373,11 @@ public class VDomPlayerJarvis extends BasePlayer {
           clonedSelf = (VDomPlayerJarvis) clonedPlayer;
         }
       }
-      //Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
+
       MoveContext clonedContext = new MoveContext(context, clonedGame, clonedSelf);
 
       // Try the Buy
-      //Card supplyCard = c;
-      //Card buyCard = clonedGame.getPile(supplyCard).topCard();
-      Card buyCard = c;
-
+      Card buyCard = clonedGame.getPile(c).topCard();
 
       if (buyCard != null && clonedContext.canBuy(buyCard)) {
         clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
@@ -353,9 +407,8 @@ public class VDomPlayerJarvis extends BasePlayer {
   }
 
 
-
   // ---------------------------------------------------------------------
-  // Overrides to BasePlayer Functions
+  // Overrides to BasePlayer Functions (Helper to Search)
   // ---------------------------------------------------------------------
 
   @Override
@@ -419,7 +472,6 @@ public class VDomPlayerJarvis extends BasePlayer {
   }
 
 
-
   private <T> T choose(ArrayList<T> options) {
 
     // Reduce width of Tree
@@ -434,9 +486,30 @@ public class VDomPlayerJarvis extends BasePlayer {
       T choice = searchTree.get_next_option(options);
       return searchTree.get_next_option(options);
     } else {
-      return null; // lets assume this won't happen for now.
+      return null; // Let's assume this won't happen for now.
     }
   }
 
+
+  // ---------------------------------------------------------------------
+  // Sets the Parameters for the Evaluator
+  // ---------------------------------------------------------------------
+
+  public void setEvaluator(double coinFactor, double potionFactor, double threeCostGainFactor,
+                           double fourCostGainFactor, double fiveCostGainFactor, double coinTokenFactor,
+                           double debtTokenFactor, double victoryTokenFactor, double enemyHandSizeFactor,
+                           double treasureDeltaFactor, double actionDeltaFactor, double victoryPointFactor,
+                           double planEvalActionMultiplier, double planEvalTreasureMultiplier,
+                           double planEvalVictoryPointFactor) {
+
+    this.gameEvaluator = new Evaluator(this, coinFactor, potionFactor, threeCostGainFactor, fourCostGainFactor,
+                                       fiveCostGainFactor, coinTokenFactor, debtTokenFactor, victoryTokenFactor,
+                                       enemyHandSizeFactor, treasureDeltaFactor, actionDeltaFactor, victoryPointFactor,
+                                       planEvalActionMultiplier, planEvalTreasureMultiplier, planEvalVictoryPointFactor);
+  }
+
+  public Evaluator getEvaluator() {
+    return this.gameEvaluator;
+  }
 
 }

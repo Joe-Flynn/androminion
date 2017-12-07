@@ -174,7 +174,6 @@ public class DomTree {
                             optionCount++;
                         }
                         while(curPlay.get_next_expand_option() != null && optionCount < 100);
-
                     }
                 }
             }
@@ -188,8 +187,8 @@ public class DomTree {
         state.evaluation = evaluator.evaluateActionPhase(state.context);
         state.expanded = true;
         if(state.parent != null) {state.context = null;}
-    }
 
+    }
 
 
     public class DomTreeNode {
@@ -385,7 +384,6 @@ public class DomTree {
         {
             double best_eval = neg_infinity;
             DomTreeNode best_node = this;
-
             for(DomTreeNode tn : get_states())
             {
                 if(tn.evaluation > best_eval)
@@ -394,19 +392,15 @@ public class DomTree {
                     best_node = tn;
                 }
             }
-
             return best_node;
         }
 
         public DomTreeNode getRoot() {
-
             DomTreeNode tn = this;
-
             while(tn.parent != null)
             {
                 tn = tn.parent;
             }
-
             return tn;
         }
 
@@ -414,7 +408,6 @@ public class DomTree {
         {
             Card ret = null;
             DomTreeNode tn = this;
-
             while(tn.parent != null)
             {
                 if(tn.type == DomNodeType.play)
@@ -423,7 +416,6 @@ public class DomTree {
                 }
                 tn = tn.parent;
             }
-
             return ret;
         }
 
@@ -459,7 +451,6 @@ public class DomTree {
                 tn.unhighlight_tree();
             }
         }
-
 
         public String toString()
         {

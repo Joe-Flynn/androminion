@@ -23,6 +23,7 @@ public class DeckPlanner {
 		this.game = game;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Deck findBestDeck(Player player) {
 		Player pPlayer = ((BasePlayer)player).clone(game);
 
@@ -128,6 +129,7 @@ public class DeckPlanner {
 		return turnEconomySummation / (double) numGames;
 	}
 
+	@SuppressWarnings("unchecked")
 	private ArrayList<Deck> mutateInternalRatio(Deck deck) {
 		HashMap<Card, Double> idealPercentages = deck.getCardPercentages();
 		ArrayList<Card> uniqueCards = new ArrayList<>(idealPercentages.keySet());
@@ -170,6 +172,7 @@ public class DeckPlanner {
 	// this one was fun to name lol
 	// This could potentially exceed the deck size if the amount of cards in the percent that are not kingdom cards are
 	// less than 10, but we shouldn't run into issues with the size deck we are using
+	@SuppressWarnings("unchecked")
 	private ArrayList<Deck> createMutantChildren(ArrayList<Deck> decks, int percentKingdom, int percentFirstDeck) {
 		ArrayList<Deck> mutantChildren = new ArrayList<>();
 		ArrayList<Deck[]> combos = getCombinationsDecks(2, decks);
@@ -240,6 +243,7 @@ public class DeckPlanner {
 
 	// This could potentially exceed the deck size if the amount of cards in the percent that are not kingdom cards are
 	// less than 10, but we shouldn't run into issues with the size deck we are using
+	@SuppressWarnings("unchecked")
 	private ArrayList<Deck> generateDecks(ArrayList<Card> kingdomCards, int percentKingdom, int percentFirstKingdomCard) {
 		ArrayList<Card[]> combos;
 		if (kingdomCards.size() == 2) {
