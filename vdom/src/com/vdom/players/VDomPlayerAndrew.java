@@ -1,7 +1,5 @@
 package com.vdom.players;
 
-// ??? - KEEP WHAT YOU NEED
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -34,11 +32,12 @@ public class VDomPlayerAndrew extends BasePlayer  {
   protected int  numTerminals = 0;
   protected Card terminalCard = null;
 
-  protected Evaluator evaluator;
 
   public VDomPlayerAndrew() {
-    evaluator = new Evaluator(this);
+    super();
+    this.setName("Andrew");
   }
+
   @Override
   public String getPlayerName() {
     return getPlayerName(game.maskPlayerNames);
@@ -133,13 +132,11 @@ public class VDomPlayerAndrew extends BasePlayer  {
         Card supplyCard = context.game.piles.get(p).placeholderCard();
         if (supplyCard.getKind() == terminal.getKind()) {
           terminalCard = terminal;
-          System.out.println(">>>> ANDREW: TERMINAL SELECTED: " + terminal);
         }
       }
     }
     if (terminalCard == null) {
       terminalCard = Cards.province; // Default Terminal Card
-      System.out.println(">>>> ANDREW: TERMINAL SELECTED: " + Cards.province);
     }
 
     // Buy Terminal Card if Possible
@@ -185,6 +182,9 @@ public class VDomPlayerAndrew extends BasePlayer  {
   }
 
 
+  /*
+  ** doAction - Just returns the first Action
+  */
   @Override
   public Card doAction(MoveContext context) {
     for (int i = 0; i < hand.size(); i++) {

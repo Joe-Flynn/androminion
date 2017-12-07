@@ -3,6 +3,10 @@ package com.vdom.core;
 import java.util.*;
 import java.util.Map.Entry;
 
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
+
 import com.vdom.api.Card;
 import com.vdom.api.CardCostComparator;
 import com.vdom.api.GameEvent;
@@ -140,13 +144,34 @@ public class Game {
   // Overall Stat Tracker per GameType
   protected ArrayList<GameStats> gameTypeStats;
 
-
   // Extra Turn Info Class
   protected static class ExtraTurnInfo {
     public ExtraTurnInfo() { ; }
     public ExtraTurnInfo(boolean canBuyCards) { this.canBuyCards = canBuyCards; }
     public boolean canBuyCards = true;
   }
+
+  // -----------------------------------------------
+  // Evaluator Parameters to Tune (or Machine Learn)
+  // -----------------------------------------------
+
+  protected double coinFactor                 =  1.0;
+  protected double potionFactor               =  0.5;
+  protected double threeCostGainFactor        =  1.0;
+  protected double fourCostGainFactor         =  1.1;
+  protected double fiveCostGainFactor         =  1.2;
+  protected double coinTokenFactor            =  1.0;
+  protected double debtTokenFactor            = -1.0;
+  protected double victoryTokenFactor         =  1.0;
+  protected double enemyHandSizeFactor        = -1.0;
+
+  protected double treasureDeltaFactor        =  1.0;
+  protected double actionDeltaFactor          = -1.0;
+  protected double victoryPointFactor         =  0.17;
+
+  protected double planEvalActionMultiplier   = 8.0;
+  protected double planEvalTreasureMultiplier = 1.0;
+  protected double planEvalVictoryPointFactor = 0.17;
 
 
   /*
@@ -258,12 +283,42 @@ public class Game {
 
   public static void main(String[] args) {
 
+    // Variables for holding game results
+    HashMap<String, Double> gameResults;
+    double player1_totalWins = 0.0;
+    double player2_totalWins = 0.0;
+
     // Set up game(s) and Start
     Game game = new Game();
-    game.start();
 
-    Util.log("");
-    Util.log("--------------------------------");
+    // Write Time Stamp to Log
+    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("evaluation_output.txt", true), "utf-8"))) {
+       writer.write("-----------" + new java.util.Date() + "-----------\n");
+    } catch (Exception e) {
+      System.out.println("ERROR:" + e);
+    }
+
+    // Players to Play
+    String playerName1 = "Jarvis";
+    String playerName2 = "Joe";
+
+    for (int i = 0; i < 100; i++) {
+
+      gameResults = game.start(playerName1, playerName2);
+      double player1wins = gameResults.get(playerName1);
+      double player2wins = gameResults.get(playerName2);
+
+      player1_totalWins += player1wins;
+      player2_totalWins += player2wins;
+
+      // Write to Log
+      try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("evaluation_output.txt", true), "utf-8"))) {
+         writer.write("CUMULATIVE RESULTS:\t" + playerName1 + ":\t" + player1_totalWins + "\t" + playerName2+ ":\t" + player2_totalWins + "\n");
+      } catch (Exception e) {
+        System.out.println("ERROR:" + e);
+      }
+
+    }
 
     // Print Overall Game Stats
     game.printStats(game.overallWins, game.numGames * GameType.values().length, "Total");
@@ -271,15 +326,21 @@ public class Game {
     // Print Overall Game Stats
     game.printGameTypeStats();
 
+    System.out.println("OVERALL WINS.............");
+    System.out.println(" --> Player 1: " + player1_totalWins + ", Player 2: " + player2_totalWins);
+
+
   }
 
   /*
   ** start - Starts the Dominion game simulator
   */
-  void start() {
+  public HashMap<String, Double> start(String playerName1, String playerName2) {
+
     HashMap<String, Double> playerToWins = new HashMap<>();
-    playerToWins.put("com.vdom.players.VDomPlayerJarvis", 0.0);  // SAME THING. RESOLVE JARVIS-FLYNN Merge.
-    playerToWins.put("com.vdom.players.VDomPlayerAndrew", 0.0);
+
+    playerToWins.put(playerName1, 0.0);
+    playerToWins.put(playerName2, 0.0);
 
     // Variables for Overall Stats over all Games
     long turnCountTotal = 0;
@@ -292,12 +353,38 @@ public class Game {
       Util.debug("---------------------", false);
       Util.debug("New Game: " + gameType);
 
+      // Initialize the Game's Players (yes this is hacky)
+      Player player1 = new VDomPlayerJoe();
+      if (playerName1 == "Andrew")    { player1 = new VDomPlayerAndrew(); }
+      if (playerName1 == "Phil")      { player1 = new VDomPlayerPhil(); }
+      if (playerName1 == "Flynn")     { player1 = new VDomPlayerFlynn(); }
+      if (playerName1 == "Jarvis")    { player1 = new VDomPlayerJarvis(); }
+      if (playerName1 == "Joe Jr")    { player1 = new VDomPlayerJoeJr(); }
+      if (playerName1 == "Jarvis Jr") { player1 = new VDomPlayerJarvisJr(); }
+
+      Player player2 = new VDomPlayerJoe();
+      if (playerName2 == "Andrew")    { player2 = new VDomPlayerAndrew(); }
+      if (playerName2 == "Phil")      { player2 = new VDomPlayerPhil(); }
+      if (playerName2 == "Flynn")     { player2 = new VDomPlayerFlynn(); }
+      if (playerName2 == "Jarvis")    { player2 = new VDomPlayerJarvis(); }
+      if (playerName2 == "Joe Jr")    { player2 = new VDomPlayerJoeJr(); }
+      if (playerName2 == "Jarvis Jr") { player2 = new VDomPlayerJarvisJr(); }
+
+      // ((VDomPlayerJarvis)player1).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
+      //                                          fourCostGainFactor, fiveCostGainFactor, coinTokenFactor,
+      //                                          debtTokenFactor, victoryTokenFactor, enemyHandSizeFactor,
+      //                                          treasureDeltaFactor, actionDeltaFactor, victoryPointFactor,
+      //                                          planEvalActionMultiplier, planEvalTreasureMultiplier,
+      //                                          planEvalVictoryPointFactor);
+
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
-      initGameBoard();
-      DeckPlanner planner = new DeckPlanner(this.cloneGame(), 30);
+      initGameBoard(player1, player2);
 
-      players[0].idealDeck = planner.findBestDeck(players[0]);
-
+      // Set Up Planning Player1 ONLY IF the Player1 has Planning (Screw Player 2, lol).
+      if (player1.isPlanningPlayer) {
+        DeckPlanner planner = new DeckPlanner(this.cloneGame(), 30);
+        player1.idealDeck = planner.findBestDeck(player1);
+      }
 
       // Set up Player's Turn Information
       playersTurn = 0;
@@ -403,9 +490,13 @@ public class Game {
 
     gameTypeStats.add(stats);
 
+    // Return Player-To-Wins Mapping
+    return playerToWins;
+
   }
 
   // only call from games cloned by DeckPlanner
+  @SuppressWarnings("unchecked")
   public double playPlanningGame(int numTurns, Deck deck, Player planningPlayer) {
 
     Util.debug("---------------------", false);
@@ -416,18 +507,19 @@ public class Game {
 
     // Set planningPlayer's deck , draw, and shuffle deck
     Player pPlayer = players[0];
+    if (!pPlayer.isPlanningPlayer) { pPlayer = players[1]; }
+
     pPlayer.idealDeck = deck;
     pPlayer.setDeck(deck);
     pPlayer.shuffleDeck(new MoveContext(this, pPlayer), null);
     while (pPlayer.hand.size() < 5)
       drawToHand(new MoveContext(this, pPlayer), null, 5 - pPlayer.hand.size(), false);
 
+    // Get the Planning Player's Evaluator
+    Evaluator evaluator = ((VDomPlayerJarvis)planningPlayer).getEvaluator();
 
-    // Make planningPlayer's evaluator
-    Evaluator evaluator = new Evaluator(planningPlayer);
-
-    //Set Dummies deck and hand with init starting cards to stop =errors with cards played by joe's that require dummy's
-    // hand/deck to exist
+    // Set Dummy's deck and hand with init starting cards to stop errors with cards
+    // played by the planning player, but that require dummy's hand/deck to exist
     Player dummy = players[1];
     ArrayList<Card> dummyDeck  = new ArrayList<>();
     for (int i = 0; i < 7; i++) {
@@ -541,28 +633,22 @@ public class Game {
   /*
   ** initGameBoard - Sets up the game's cards, players, and game listeners
   */
-  void initGameBoard() {
+  void initGameBoard(Player player1, Player player2) {
     baneCard = null;
     firstProvinceWasGained = false;
     doMountainPassAfterThisTurn = false;
     initGameListener();
     initCards();
-    initPlayers(numPlayers);
+    initPlayers(numPlayers, player1, player2);
     initPlayerCards();
   }
 
-  /*
-  ** initPlayers - Sets up the Game's players
-  */
-  public void initPlayers(int numPlayers) {
-    initPlayers(numPlayers, true);
-  }
 
   /*
   ** initPlayers - Sets up the Game's players
   */
   @SuppressWarnings("unchecked")
-  public void initPlayers(int numPlayers, boolean isRandom) {
+  public void initPlayers(int numPlayers, Player player1, Player player2) {
 
     players = new Player[numPlayers];
     playersTurn = 0;
@@ -572,13 +658,15 @@ public class Game {
       cardsObtainedLastTurn[i] = new ArrayList<Card>();
     }
 
+    // Randomize Player Order
+    int playSwap = rand.nextInt(numPlayers);
+
     for (int i = 0; i < numPlayers; i++) {
 
-      if (i == 0) {
-        players[i] = new VDomPlayerJarvis(); // NEED TO RESOLVED WITH VDomPlayerJarvis Merge.
-      }
-      else {
-        players[i] = new VDomPlayerAndrew();
+      if (i == playSwap) {
+        players[i] = player1;
+      } else {
+        players[i] = player2;
       }
 
       players[i].game = this;
@@ -632,6 +720,8 @@ public class Game {
     }
   }
 
+
+  @SuppressWarnings("unchecked")
   public void initPlayersPlanning(int numPlayers, Player player) {
 
     players = new Player[numPlayers];
@@ -3591,9 +3681,9 @@ public class Game {
       }
 
       if (!loss) {
-        String s = players[i].getClass().getName();
-        double num = gameTypeSpecificWins.get(players[i].getClass().getName());
-        Double overall = overallWins.get(players[i].getClass().getName());
+        String s = players[i].getPlayerName();
+        double num = gameTypeSpecificWins.get(players[i].getPlayerName());
+        Double overall = overallWins.get(players[i].getPlayerName());
         boolean trackOverall = (overall != null);
         if (tieCount == 0) {
           num += 1.0;
@@ -3606,9 +3696,9 @@ public class Game {
             overall += 1.0 / (tieCount + 1);
           }
         }
-        gameTypeSpecificWins.put(players[i].getClass().getName(), num);
+        gameTypeSpecificWins.put(players[i].getPlayerName(), num);
         if (trackOverall) {
-          overallWins.put(players[i].getClass().getName(), overall);
+          overallWins.put(players[i].getPlayerName(), overall);
         }
       }
 
@@ -3667,31 +3757,31 @@ public class Game {
     Iterator<String> keyIter = wins.keySet().iterator();
 
     while (keyIter.hasNext()) {
-      String className = keyIter.next();
-      double num = wins.get(className);
+      String playerName = keyIter.next();
+      double num = wins.get(playerName);
       double val = Math.round((num * 100 / gameCount));
       if (val > high) {
         high = val;
-        winner = className;
+        winner = playerName;
       }
     }
 
     keyIter = wins.keySet().iterator();
     while (keyIter.hasNext()) {
-      String className = keyIter.next();
-      double num = wins.get(className);
+      String playerName = keyIter.next();
+      double num = wins.get(playerName);
       double val = Math.round((num * 100 / gameCount));
       String numStr = "" + (int) val;
       while (numStr.length() < 3) {
         numStr += " ";
       }
       sb.append(" ");
-      if (className.equals(winner)) {
+      if (playerName.equals(winner)) {
         sb.append("*");
       } else {
         sb.append(" ");
       }
-      sb.append(className + " " + numStr + "%");
+      sb.append(playerName + " " + numStr + "%");
     }
 
     Util.log(sb.toString());

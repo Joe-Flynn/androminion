@@ -25,18 +25,31 @@ public class Evaluator {
   protected double actionDeltaFactor   = -1.0;
   protected double victoryPointFactor  =  0.17;
 
+  // Buy Phase Evaluator-Compared-To-Plan Parameters
+  protected double planEvalActionMultiplier   = 8.0;
+  protected double planEvalTreasureMultiplier = 1.0;
+  protected double planEvalVictoryPointFactor = 0.17;
+
+  protected boolean isDefaultEvaluator = true;
+
   // DEFAULT Constructor
   public Evaluator(Player player) {
     this.player = player;
+    this.isDefaultEvaluator = true;
   }
 
   // TUNABLE Constructor (i.e. For Machine Learning)
   public Evaluator(Player player, double coinFactor, double potionFactor, double threeCostGainFactor,
                    double fourCostGainFactor, double fiveCostGainFactor, double coinTokenFactor,
                    double debtTokenFactor, double victoryTokenFactor, double enemyHandSizeFactor,
-                   double treasureDeltaFactor, double actionDeltaFactor, double victoryPointFactor) {
-                     
-    this.player              = player;
+                   double treasureDeltaFactor, double actionDeltaFactor, double victoryPointFactor,
+                   double planEvalActionMultiplier, double planEvalTreasureMultiplier,
+                   double planEvalVictoryPointFactor) {
+
+    this.player = player;
+    this.isDefaultEvaluator = false;
+
+    // ACTION PHASE Parameters (PHIL)
     this.coinFactor          = coinFactor;
     this.potionFactor        = potionFactor;
     this.threeCostGainFactor = threeCostGainFactor;
@@ -46,9 +59,16 @@ public class Evaluator {
     this.debtTokenFactor     = debtTokenFactor;
     this.victoryTokenFactor  = victoryTokenFactor;
     this.enemyHandSizeFactor = enemyHandSizeFactor;
+
+    // BUY PHASE Parameters (PHIL)
     this.treasureDeltaFactor = treasureDeltaFactor;
     this.actionDeltaFactor   = actionDeltaFactor;
     this.victoryPointFactor  = victoryPointFactor;
+
+    // BUY PHASE Parameters (JARVIS), i.e. These compare to the Player's Plan
+    this.planEvalActionMultiplier   = planEvalActionMultiplier;
+    this.planEvalTreasureMultiplier = planEvalTreasureMultiplier;
+    this.planEvalVictoryPointFactor = planEvalVictoryPointFactor;
 
   }
 
@@ -62,7 +82,6 @@ public class Evaluator {
 
     int buyFactor = 8;
     if (context.game.isPlatInGame()) { buyFactor = 11; }
-    //if (context.game.isColonyInGame()) { buyFactor = 14; } - this should be dominate. Colony and Platinum are always together.
 
     int usableCoin       = Math.min(coin, context.getBuysLeft() * buyFactor);
     int potionGains      = Math.min(context.getPotions(), Math.min(context.getBuysLeft(), coin / 3));
@@ -85,7 +104,6 @@ public class Evaluator {
                          (enemyHandSize * enemyHandSizeFactor);
 
     // TODO: ADD A TURN DIMENSION (i.e. player.getTurnCount())
-    // TODO: ADD something that evaluates HOW CLOSE THE DECK IS to the Original Plan
 
     return turnEconomy;
 
@@ -160,19 +178,17 @@ public class Evaluator {
         }
         if (card.getKind() == Cards.Kind.Venture) {
           venturecount++;
-          coin += 1; //estimate: could draw potion or hornOfPlenty but also platinum
-          //Patrick estimates in getCurrencyTotal(list) coin += 1
+          coin += 1; // Estimate: could draw potion or hornOfPlenty but also platinum
+                     // Patrick estimates in getCurrencyTotal(list) coin += 1
         }
       }
     }
     coin += bankcount * (treasurecards + venturecount) - (bankcount*bankcount + bankcount) / 2;
     coin += context.player.getGuildsCoinTokenCount();
-    if(context.player.getMinusOneCoinToken() && coin > 0)
-    coin--;
+    if(context.player.getMinusOneCoinToken() && coin > 0) {
+      coin--;
+    }
     coin += context.getCoins();
-
-    //TODO: estimate coin to get from actions in hand
-
     return coin;
   }
 }
