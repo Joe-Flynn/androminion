@@ -281,4 +281,26 @@ public class VDomPlayerPhil extends BasePlayer  {
 
   }
 
+
+  // ---------------------------------------------------------------------
+  // Sets the Parameters for the Evaluator
+  // ---------------------------------------------------------------------
+
+  public void setEvaluator(double coinFactor, double potionFactor, double threeCostGainFactor,
+                           double fourCostGainFactor, double fiveCostGainFactor, double coinTokenFactor,
+                           double debtTokenFactor, double victoryTokenFactor, double enemyHandSizeFactor,
+                           double treasureDeltaFactor, double actionDeltaFactor, double victoryPointFactor,
+                           double planEvalActionMultiplier, double planEvalTreasureMultiplier,
+                           double planEvalVictoryPointFactor) {
+
+    this.gameEvaluator = new Evaluator(this, coinFactor, potionFactor, threeCostGainFactor, fourCostGainFactor,
+                                       fiveCostGainFactor, coinTokenFactor, debtTokenFactor, victoryTokenFactor,
+                                       enemyHandSizeFactor, treasureDeltaFactor, actionDeltaFactor, victoryPointFactor,
+                                       planEvalActionMultiplier, planEvalTreasureMultiplier, planEvalVictoryPointFactor);
+  }
+
+  public Evaluator getEvaluator() {
+    return this.gameEvaluator;
+  }
+
 }

@@ -68,6 +68,7 @@ public class VDomPlayerJarvis extends BasePlayer {
     if (gameEvaluator.isDefaultEvaluator == true) {
       gameEvaluator = new Evaluator(this);
     } else {
+      // Copy old params (in case they were tweaked)
       gameEvaluator = new Evaluator(this,
                                     gameEvaluator.coinFactor,
                                     gameEvaluator.potionFactor,
@@ -80,7 +81,10 @@ public class VDomPlayerJarvis extends BasePlayer {
                                     gameEvaluator.enemyHandSizeFactor,
                                     gameEvaluator.treasureDeltaFactor,
                                     gameEvaluator.actionDeltaFactor,
-                                    gameEvaluator.victoryPointFactor);
+                                    gameEvaluator.victoryPointFactor,
+                                    gameEvaluator.planEvalActionMultiplier,
+                                    gameEvaluator.planEvalTreasureMultiplier,
+                                    gameEvaluator.planEvalVictoryPointFactor);
     }
   }
 
@@ -232,7 +236,8 @@ public class VDomPlayerJarvis extends BasePlayer {
         } else {
           percent = 0.0;
         }
-        // continue to improve score for additional cards up to a certain tolerance threshold, but dampen this extra score.
+        // Continue to improve score for additional cards up to a certain tolerance
+        // threshold, but dampen this extra score.
         percent = Math.min(percent, idealDeck.getCardPercentages().get(c) * (1.0 + tolerance));
         percentDelta = percent - idealDeck.getCardPercentages().get(c);
         if (percentDelta > 0.0) {
@@ -244,9 +249,9 @@ public class VDomPlayerJarvis extends BasePlayer {
       }
     }
 
-    eval *= actionMultiplier;
+    eval *= gameEvaluator.planEvalActionMultiplier; // actionMultiplier
 
-    // not buying enough gold... lets try this: count sum of COST of treasure in deck.
+    // Not buying enough gold... lets try this: count sum of COST of treasure in deck.
     // subtract 2 to further increase relative value of gold, and to give copper a negative score.
     for(Card c : idealDeck.getCards())
     {
@@ -261,40 +266,15 @@ public class VDomPlayerJarvis extends BasePlayer {
       }
     }
 
-    // treasureDelta = totalTreasure / deckSize - idealTreasure / idealDeck.getCards().size();
-    // treasureDelta = totalTreasure  - idealTreasure * (deckSize / idealDeck.getCards().size());
-
     idealTreasure = idealTreasure * (deckSize / idealDeck.getCards().size());
     totalTreasure = Math.min(totalTreasure, idealTreasure * (1.0 + tolerance));
     treasureDelta = totalTreasure - idealTreasure;
     if(treasureDelta > 0) {treasureDelta *= dampening;}
 
-    // before treasure COST approach
-//    for(Card c : idealDeck.getCards())
-//    {
-//      if (c.is(Type.Treasure) && c != Cards.copper){
-//        idealTreasure  += c.getAddGold();
-//      }
-//    }
-//    for(Card c : getAllCards())
-//    {
-//      if (c.is(Type.Treasure) && c != Cards.copper){
-//        totalTreasure  += c.getAddGold();
-//      }
-//    }
-//
-//    // treasureDelta = totalTreasure / deckSize - idealTreasure / idealDeck.getCards().size();
-//    // treasureDelta = totalTreasure  - idealTreasure * (deckSize / idealDeck.getCards().size());
-//
-//    idealTreasure = idealTreasure * (deckSize / idealDeck.getCards().size());
-//    totalTreasure = Math.min(totalTreasure, idealTreasure * (1.0 + tolerance));
-//    treasureDelta = totalTreasure - idealTreasure;
-//    if(treasureDelta > 0) {treasureDelta *= dampening;}
+    eval += (treasureDelta * gameEvaluator.planEvalTreasureMultiplier);  // treasureMultiplier
 
-
-    eval += treasureDelta;  // multiply by a TREASURE MULTIPLIER
-
-    return (1.0 - gameProgression(context)) * eval + (gameProgression(context)) * context.player.getTotalVictoryPoints() / 6.0;
+    return ((1.0 - gameProgression(context)) * eval) +
+           ((gameProgression(context)) * context.player.getTotalVictoryPoints() * gameEvaluator.planEvalVictoryPointFactor);
   }
 
 
@@ -380,7 +360,6 @@ public class VDomPlayerJarvis extends BasePlayer {
     Card returnCard = null;
 
     // Buy Card that Improves Player's Evaluation Most
-    //double currentEvaluation = gameEvaluator.evaluateBuyPhase(context, this.getAllCards());
     double currentEvaluation = evaluateDeckAgainstIdeal(context);
     Card cardToBuy = null;
 
@@ -394,14 +373,11 @@ public class VDomPlayerJarvis extends BasePlayer {
           clonedSelf = (VDomPlayerJarvis) clonedPlayer;
         }
       }
-      //Evaluator clonedEvaluator = clonedSelf.gameEvaluator;
+
       MoveContext clonedContext = new MoveContext(context, clonedGame, clonedSelf);
 
       // Try the Buy
-      //Card supplyCard = c;
-      //Card buyCard = clonedGame.getPile(supplyCard).topCard();
-      Card buyCard = c;
-
+      Card buyCard = clonedGame.getPile(c).topCard();
 
       if (buyCard != null && clonedContext.canBuy(buyCard)) {
         clonedGame.broadcastEvent(new GameEvent(GameEvent.EventType.Status, clonedContext));
@@ -510,10 +486,9 @@ public class VDomPlayerJarvis extends BasePlayer {
       T choice = searchTree.get_next_option(options);
       return searchTree.get_next_option(options);
     } else {
-      return null; // lets assume this won't happen for now.
+      return null; // Let's assume this won't happen for now.
     }
   }
-
 
 
   // ---------------------------------------------------------------------
@@ -523,11 +498,18 @@ public class VDomPlayerJarvis extends BasePlayer {
   public void setEvaluator(double coinFactor, double potionFactor, double threeCostGainFactor,
                            double fourCostGainFactor, double fiveCostGainFactor, double coinTokenFactor,
                            double debtTokenFactor, double victoryTokenFactor, double enemyHandSizeFactor,
-                           double treasureDeltaFactor, double actionDeltaFactor, double victoryPointFactor) {
+                           double treasureDeltaFactor, double actionDeltaFactor, double victoryPointFactor,
+                           double planEvalActionMultiplier, double planEvalTreasureMultiplier,
+                           double planEvalVictoryPointFactor) {
 
     this.gameEvaluator = new Evaluator(this, coinFactor, potionFactor, threeCostGainFactor, fourCostGainFactor,
                                        fiveCostGainFactor, coinTokenFactor, debtTokenFactor, victoryTokenFactor,
-                                       enemyHandSizeFactor, treasureDeltaFactor, actionDeltaFactor, victoryPointFactor);
+                                       enemyHandSizeFactor, treasureDeltaFactor, actionDeltaFactor, victoryPointFactor,
+                                       planEvalActionMultiplier, planEvalTreasureMultiplier, planEvalVictoryPointFactor);
+  }
+
+  public Evaluator getEvaluator() {
+    return this.gameEvaluator;
   }
 
 }

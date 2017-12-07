@@ -151,20 +151,27 @@ public class Game {
     public boolean canBuyCards = true;
   }
 
-  // Evaluator Parameters to Tune        Good    Bad     Good
-  protected double coinFactor          =  1.0;  //-1.0;  //1.0;
-  protected double potionFactor        =  0.5;  //10.0;  //0.5;
-  protected double threeCostGainFactor =  1.0;  //-1.0;  //1.0;
-  protected double fourCostGainFactor  =  1.1;  // 0.0;   //0.0;
-  protected double fiveCostGainFactor  =  1.2;  //0.0;   //1.25;
-  protected double coinTokenFactor     =  1.0;  //0.0;   //1.0;
-  protected double debtTokenFactor     = -1.0;  //0.0;   //-1.0;
-  protected double victoryTokenFactor  =  1.0;  //0.0;   //1.0;
-  protected double enemyHandSizeFactor = -1.0;  //1.0;   //-1.0;
+  // -----------------------------------------------
+  // Evaluator Parameters to Tune (or Machine Learn)
+  // -----------------------------------------------
 
-  protected double treasureDeltaFactor =  1.0;  //-1.0;  //1.0;
-  protected double actionDeltaFactor   = -1.0;  //1.0;   //-1.0;
-  protected double victoryPointFactor  =  0.17; //0.0;   //0.17;
+  protected double coinFactor                 =  1.0;
+  protected double potionFactor               =  0.5;
+  protected double threeCostGainFactor        =  1.0;
+  protected double fourCostGainFactor         =  1.1;
+  protected double fiveCostGainFactor         =  1.2;
+  protected double coinTokenFactor            =  1.0;
+  protected double debtTokenFactor            = -1.0;
+  protected double victoryTokenFactor         =  1.0;
+  protected double enemyHandSizeFactor        = -1.0;
+
+  protected double treasureDeltaFactor        =  1.0;
+  protected double actionDeltaFactor          = -1.0;
+  protected double victoryPointFactor         =  0.17;
+
+  protected double planEvalActionMultiplier   = 8.0;
+  protected double planEvalTreasureMultiplier = 1.0;
+  protected double planEvalVictoryPointFactor = 0.17;
 
 
   /*
@@ -292,8 +299,8 @@ public class Game {
     }
 
     // Players to Play
-    String playerName1 = "Joe";
-    String playerName2 = "Joe Jr";
+    String playerName1 = "Jarvis";
+    String playerName2 = "Joe";
 
     for (int i = 0; i < 100; i++) {
 
@@ -366,7 +373,9 @@ public class Game {
       // ((VDomPlayerJarvis)player1).setEvaluator(coinFactor, potionFactor, threeCostGainFactor,
       //                                          fourCostGainFactor, fiveCostGainFactor, coinTokenFactor,
       //                                          debtTokenFactor, victoryTokenFactor, enemyHandSizeFactor,
-      //                                          treasureDeltaFactor, actionDeltaFactor, victoryPointFactor);
+      //                                          treasureDeltaFactor, actionDeltaFactor, victoryPointFactor,
+      //                                          planEvalActionMultiplier, planEvalTreasureMultiplier,
+      //                                          planEvalVictoryPointFactor);
 
       // Initialize the Game (incl. GameEventListeners, Players, and Cards)
       initGameBoard(player1, player2);
@@ -506,12 +515,11 @@ public class Game {
     while (pPlayer.hand.size() < 5)
       drawToHand(new MoveContext(this, pPlayer), null, 5 - pPlayer.hand.size(), false);
 
+    // Get the Planning Player's Evaluator
+    Evaluator evaluator = ((VDomPlayerJarvis)planningPlayer).getEvaluator();
 
-    // Make planningPlayer's evaluator
-    Evaluator evaluator = new Evaluator(planningPlayer);
-
-    //Set Dummies deck and hand with init starting cards to stop =errors with cards played by joe's that require dummy's
-    // hand/deck to exist
+    // Set Dummy's deck and hand with init starting cards to stop errors with cards
+    // played by the planning player, but that require dummy's hand/deck to exist
     Player dummy = players[1];
     ArrayList<Card> dummyDeck  = new ArrayList<>();
     for (int i = 0; i < 7; i++) {
