@@ -395,7 +395,6 @@ public class DomTree {
             return best_node;
         }
 
-
         public DomTreeNode getRoot() {
             DomTreeNode tn = this;
             while(tn.parent != null)
@@ -405,12 +404,10 @@ public class DomTree {
             return tn;
         }
 
-
         public Card get_top_play()
         {
             Card ret = null;
             DomTreeNode tn = this;
-
             while(tn.parent != null)
             {
                 if(tn.type == DomNodeType.play)
@@ -419,7 +416,6 @@ public class DomTree {
                 }
                 tn = tn.parent;
             }
-
             return ret;
         }
 
